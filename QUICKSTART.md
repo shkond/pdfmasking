@@ -18,7 +18,7 @@ pip install presidio-analyzer presidio-anonymizer pdfminer.six python-docx
 
 ## Usage
 
-### Basic Command
+### Single File Processing
 
 ```bash
 # Mask Japanese PDF resume
@@ -31,23 +31,28 @@ python main.py resume.docx --lang ja -o output.txt
 python main.py resume.pdf --lang ja --verbose
 ```
 
-### Python 3.14 Workaround
+### Batch Processing (NEW!)
 
-If you're using Python 3.14, you'll need to disable GiNZA:
+```bash
+# Process all PDF and Word files in current directory
+python batch_process.py
 
-1. Edit `main.py` line 24:
-   ```python
-   # Change this:
-   analyzer = create_analyzer(language)
-   
-   # To this:
-   analyzer = create_analyzer(language, use_ginza=False)
-   ```
+# Each file will be saved as: original_filename.txt
+# Example: resume.pdf → resume.txt
+#          履歴書.docx → 履歴書.txt
+```
 
-2. Run normally:
-   ```bash
-   python main.py resume.pdf --lang ja -o output.txt
-   ```
+**Options:**
+```bash
+# Process with GiNZA (Python 3.11/3.12 only)
+python batch_process.py --use-ginza
+
+# Process English documents
+python batch_process.py --lang en
+
+# Process files in specific directory
+python batch_process.py --dir C:\path\to\resumes
+```
 
 ## What Gets Masked
 
@@ -98,7 +103,7 @@ Total: 5 entities detected
 
 ### Error: "unable to infer type for attribute REGEX"
 - **Cause**: Python 3.14 incompatibility with spaCy
-- **Solution**: Use Python 3.11/3.12 OR use pattern-only mode (see above)
+- **Solution**: Use pattern-only mode (default in `batch_process.py`)
 
 ### No entities detected
 - Check language is set to `ja`: `--lang ja`
@@ -107,7 +112,7 @@ Total: 5 entities detected
 
 ### GiNZA installation fails
 - **Requires**: Rust compiler for SudachiPy
-- **Solution**: Use pattern-only mode OR install Rust from https://rustup.rs
+- **Solution**: Use pattern-only mode (don't use `--use-ginza` flag)
 
 ## Next Steps
 
