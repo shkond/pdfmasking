@@ -1,0 +1,75 @@
+# Configuration for Japanese PII Masking
+
+# Confidence score thresholds
+confidence_thresholds:
+  phone_number: 0.7
+  zip_code: 0.6
+  birth_date: 0.6
+  person_name: 0.6
+  address: 0.6
+
+# Context-aware scoring
+context_scoring:
+  # Context window size (characters before/after entity)
+  window_size: 50
+  
+  # Boost score when context words are found
+  boost_score: 0.9
+  
+  # Context words for person names
+  person_context:
+    - "氏名"
+    - "ふりがな"
+    - "フリガナ"
+    - "名前"
+    - "お名前"
+    - "姓名"
+  
+  # Context words for addresses
+  address_context:
+    - "住所"
+    - "現住所"
+    - "連絡先"
+    - "都道府県"
+    - "市区町村"
+    - "番地"
+    - "所在地"
+  
+  # Context words for phone numbers
+  phone_context:
+    - "TEL"
+    - "電話"
+    - "携帯"
+    - "自宅"
+    - "tel"
+    - "Tel"
+  
+  # Context words for zip codes
+  zip_context:
+    - "〒"
+    - "郵便番号"
+    - "郵便"
+    - "zip"
+    - "ZIP"
+  
+  # Context words for birth dates
+  birthdate_context:
+    - "生年月日"
+    - "年齢"
+    - "生まれ"
+    - "誕生日"
+    - "生年"
+    - "年月日"
+
+# Masking operators
+masking:
+  # Default mask value
+  default_mask: "****"
+  
+  # Entity-specific masks (optional)
+  entity_masks:
+    PHONE_NUMBER_JP: "***-****-****"
+    JP_ZIP_CODE: "***-****"
+    DATE_OF_BIRTH_JP: "****/**/**"
+    JP_PERSON: "****"
+    JP_ADDRESS: "****"
