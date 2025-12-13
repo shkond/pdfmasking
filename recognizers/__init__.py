@@ -4,6 +4,7 @@ from .japanese_patterns import (
     JapanesePhoneRecognizer,
     JapaneseZipCodeRecognizer,
     JapaneseBirthDateRecognizer,
+    JapaneseNameRecognizer,
 )
 from .japanese_ner import (
     GinzaPersonRecognizer,
@@ -14,6 +15,8 @@ __all__ = [
     "JapanesePhoneRecognizer",
     "JapaneseZipCodeRecognizer",
     "JapaneseBirthDateRecognizer",
+    "JapaneseNameRecognizer",
     "GinzaPersonRecognizer",
     "GinzaAddressRecognizer",
 ]
+

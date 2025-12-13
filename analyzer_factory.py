@@ -10,6 +10,7 @@ from recognizers import (
     JapanesePhoneRecognizer,
     JapaneseZipCodeRecognizer,
     JapaneseBirthDateRecognizer,
+    JapaneseNameRecognizer,
 )
 
 # Try to import GiNZA recognizers (optional)
@@ -39,13 +40,38 @@ def create_japanese_analyzer(use_ginza: bool = True) -> AnalyzerEngine:
     Returns:
         Configured AnalyzerEngine for Japanese
     """
-    # Create base analyzer
-    analyzer = AnalyzerEngine(supported_languages=["ja", "en"])
+    # Create NLP configuration for Japanese
+    # Even without GiNZA, we need to register 'ja' as a supported language
+    from presidio_analyzer.nlp_engine import NlpEngineProvider
+    
+    nlp_configuration = {
+        "nlp_engine_name": "spacy",
+        "models": [
+            {"lang_code": "en", "model_name": "en_core_web_lg"},
+            {"lang_code": "ja", "model_name": "en_core_web_lg"},  # Fallback to English model for Japanese
+        ],
+    }
+    
+    try:
+        nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
+    except Exception:
+        # If NLP engine creation fails, create analyzer without NLP engine
+        nlp_engine = None
+    
+    # Create analyzer with Japanese support
+    if nlp_engine:
+        analyzer = AnalyzerEngine(
+            nlp_engine=nlp_engine,
+            supported_languages=["ja", "en"]
+        )
+    else:
+        analyzer = AnalyzerEngine(supported_languages=["ja", "en"])
     
     # Register pattern-based recognizers (always available)
     analyzer.registry.add_recognizer(JapanesePhoneRecognizer())
     analyzer.registry.add_recognizer(JapaneseZipCodeRecognizer())
     analyzer.registry.add_recognizer(JapaneseBirthDateRecognizer())
+    analyzer.registry.add_recognizer(JapaneseNameRecognizer())  # Context-based name detection
     
     # Register GiNZA-based recognizers if available and requested
     if use_ginza and GINZA_AVAILABLE:
