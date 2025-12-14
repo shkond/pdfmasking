@@ -144,16 +144,131 @@ class JapaneseBirthDateRecognizer(PatternRecognizer):
         )
 
 
+class JapaneseAgeRecognizer(PatternRecognizer):
+    """
+    Recognizer for Japanese age patterns.
+    
+    Supports formats like: 29歳, 30才
+    """
+    
+    PATTERNS = [
+        Pattern(
+            name="japanese_age",
+            regex=r"\d{1,3}歳",
+            score=0.8,
+        ),
+        Pattern(
+            name="japanese_age_alt",
+            regex=r"\d{1,3}才",
+            score=0.8,
+        ),
+    ]
+    
+    CONTEXT = ["年齢", "生年月日", "（", "）", "歳"]
+    
+    def __init__(
+        self,
+        patterns: Optional[List[Pattern]] = None,
+        context: Optional[List[str]] = None,
+        supported_language: str = "ja",
+        supported_entity: str = "JP_AGE",
+    ):
+        patterns = patterns if patterns else self.PATTERNS
+        context = context if context else self.CONTEXT
+        super().__init__(
+            supported_entity=supported_entity,
+            patterns=patterns,
+            context=context,
+            supported_language=supported_language,
+        )
+
+
+class JapaneseGenderRecognizer(PatternRecognizer):
+    """
+    Recognizer for Japanese gender patterns.
+    
+    Detects: 男性, 女性
+    """
+    
+    PATTERNS = [
+        Pattern(
+            name="japanese_gender",
+            regex=r"(?:男性|女性)",
+            score=0.7,
+        ),
+    ]
+    
+    CONTEXT = ["性別"]
+    
+    def __init__(
+        self,
+        patterns: Optional[List[Pattern]] = None,
+        context: Optional[List[str]] = None,
+        supported_language: str = "ja",
+        supported_entity: str = "JP_GENDER",
+    ):
+        patterns = patterns if patterns else self.PATTERNS
+        context = context if context else self.CONTEXT
+        super().__init__(
+            supported_entity=supported_entity,
+            patterns=patterns,
+            context=context,
+            supported_language=supported_language,
+        )
+
+
+class JapaneseAddressRecognizer(PatternRecognizer):
+    """
+    Recognizer for Japanese addresses.
+    
+    Detects addresses like: 東京都千代田区千代田1-1
+    """
+    
+    PATTERNS = [
+        Pattern(
+            name="japanese_address_full",
+            regex=r"(?:東京都|北海道|(?:京都|大阪)府|[^\s]{2,3}県)[^\s\n]{3,30}",
+            score=0.7,
+        ),
+    ]
+    
+    CONTEXT = ["住所", "〒", "現住所", "所在地"]
+    
+    def __init__(
+        self,
+        patterns: Optional[List[Pattern]] = None,
+        context: Optional[List[str]] = None,
+        supported_language: str = "ja",
+        supported_entity: str = "JP_ADDRESS",
+    ):
+        patterns = patterns if patterns else self.PATTERNS
+        context = context if context else self.CONTEXT
+        super().__init__(
+            supported_entity=supported_entity,
+            patterns=patterns,
+            context=context,
+            supported_language=supported_language,
+        )
+
+
 class JapaneseNameRecognizer(EntityRecognizer):
     """
     Context-based recognizer for Japanese person names.
     
     Detects Japanese names (kanji, hiragana, katakana) when they appear
     near context keywords like "氏名", "ふりがな", etc.
+    Excludes the context keywords themselves from being detected as names.
     """
     
-    CONTEXT_KEYWORDS = ["氏名", "ふりがな", "フリガナ", "名前", "お名前", "姓名", "氏", "名"]
+    CONTEXT_KEYWORDS = ["氏名", "ふりがな", "フリガナ", "名前", "お名前", "姓名"]
     CONTEXT_WINDOW = 100  # characters before/after to search for context
+    
+    # Words to exclude from name detection (labels, common words)
+    EXCLUDE_WORDS = [
+        "氏名", "ふりがな", "フリガナ", "名前", "お名前", "姓名", "氏", "名",
+        "生年月日", "性別", "住所", "電話", "メール", "年齢", "連絡先",
+        "東京都", "北海道", "大阪府", "京都府"
+    ]
     
     # Pattern for Japanese names (kanji, hiragana, katakana with spaces)
     NAME_PATTERN = r'[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\u3000 ]{2,20}'
@@ -173,6 +288,14 @@ class JapaneseNameRecognizer(EntityRecognizer):
     def load(self) -> None:
         """Load is not needed for this recognizer."""
         pass
+    
+    def _is_excluded(self, text: str) -> bool:
+        """Check if text matches any excluded words."""
+        text_stripped = text.strip()
+        for exclude in self.EXCLUDE_WORDS:
+            if text_stripped == exclude or exclude in text_stripped:
+                return True
+        return False
     
     def analyze(
         self, text: str, entities: List[str], nlp_artifacts: Optional[NlpArtifacts] = None
@@ -200,6 +323,10 @@ class JapaneseNameRecognizer(EntityRecognizer):
             
             # Skip if too short or contains only spaces
             if len(name_text) < 2 or name_text.replace(' ', '').replace('　', '') == '':
+                continue
+            
+            # Skip if this is an excluded word (label, common word)
+            if self._is_excluded(name_text):
                 continue
             
             # Check if context keyword is nearby

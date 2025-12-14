@@ -44,7 +44,48 @@ ENTITIES_TO_MASK = [
     "JP_ZIP_CODE",
     "DATE_OF_BIRTH_JP",
     "JP_PERSON",
+    "JP_AGE",
+    "JP_GENDER",
+    "JP_ADDRESS",
 ]
+
+
+def deduplicate_results(results, text):
+    """
+    Remove duplicate/overlapping entity detections.
+    Keeps only the highest-scoring result for overlapping spans.
+    
+    Args:
+        results: List of RecognizerResult objects
+        text: The original text (for extracting entity text)
+    
+    Returns:
+        List of deduplicated RecognizerResult objects
+    """
+    if not results:
+        return results
+    
+    # Sort by score (descending), then by start position
+    sorted_results = sorted(results, key=lambda x: (-x.score, x.start))
+    
+    # Keep track of which positions have been covered
+    covered_positions = set()
+    deduplicated = []
+    
+    for result in sorted_results:
+        # Check if this result overlaps with already covered positions
+        result_positions = set(range(result.start, result.end))
+        if result_positions & covered_positions:
+            # This result overlaps with a higher-scoring result, skip it
+            continue
+        
+        # Add this result and mark its positions as covered
+        deduplicated.append(result)
+        covered_positions.update(result_positions)
+    
+    # Sort back by position for consistent ordering
+    deduplicated.sort(key=lambda x: x.start)
+    return deduplicated
 
 
 def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False) -> tuple:
@@ -69,6 +110,9 @@ def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False) -> 
         language=language,
         entities=ENTITIES_TO_MASK,  # Limit to specific entities (excludes ORG, LOC, GPE)
     )
+    
+    # Deduplicate overlapping results
+    results = deduplicate_results(results, text)
 
     # Log masked entities to file
     if results:
@@ -214,8 +258,8 @@ Examples:
         output_dir = root_dir / "output"
         output_dir.mkdir(exist_ok=True)
         
-        # Extensions to look for
-        extensions = ["*.pdf", "*.docx", "*.txt"]
+        # Extensions to look for (only PDF and DOCX)
+        extensions = ["*.pdf", "*.docx"]
         files_to_process = []
         
         for ext in extensions:

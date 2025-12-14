@@ -11,6 +11,9 @@ from recognizers import (
     JapaneseZipCodeRecognizer,
     JapaneseBirthDateRecognizer,
     JapaneseNameRecognizer,
+    JapaneseAgeRecognizer,
+    JapaneseGenderRecognizer,
+    JapaneseAddressRecognizer,
 )
 
 # Try to import GiNZA recognizers (optional)
@@ -72,6 +75,9 @@ def create_japanese_analyzer(use_ginza: bool = True) -> AnalyzerEngine:
     analyzer.registry.add_recognizer(JapaneseZipCodeRecognizer())
     analyzer.registry.add_recognizer(JapaneseBirthDateRecognizer())
     analyzer.registry.add_recognizer(JapaneseNameRecognizer())  # Context-based name detection
+    analyzer.registry.add_recognizer(JapaneseAgeRecognizer())
+    analyzer.registry.add_recognizer(JapaneseGenderRecognizer())
+    analyzer.registry.add_recognizer(JapaneseAddressRecognizer())
     
     # Register GiNZA-based recognizers if available and requested
     if use_ginza and GINZA_AVAILABLE:
