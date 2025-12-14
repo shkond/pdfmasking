@@ -1,0 +1,10 @@
+
+============================================================
+Masking Log - 2025-12-13 23:31:32
+============================================================
+[PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 13-26)
+[EMAIL_ADDRESS] "yamada@example.com" (score: 1.00, pos: 32-50)
+[JP_ZIP_CODE] "150-0001" (score: 0.95, pos: 79-87)
+[JP_ZIP_CODE] "090-1234" (score: 0.60, pos: 13-21)
+[PHONE_NUMBER] "090-1234-5678" (score: 0.40, pos: 13-26)
+Total: 5 entities masked

@@ -1,7 +1,9 @@
 """Batch process all PDF and Word files in the current directory."""
 
+import logging
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from presidio_anonymizer import AnonymizerEngine
@@ -9,6 +11,34 @@ from presidio_anonymizer.entities import OperatorConfig
 
 from analyzer_factory import create_analyzer
 from document_extractors import extract_text
+
+# Configure logging for masked entities
+LOG_FILE = Path(__file__).parent / "masking_log.txt"
+
+# Set up file logger
+masking_logger = logging.getLogger("masking")
+masking_logger.setLevel(logging.INFO)
+# Check if handler already exists to avoid duplicates
+if not masking_logger.handlers:
+    file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
+    file_handler.setFormatter(logging.Formatter("%(message)s"))
+    masking_logger.addHandler(file_handler)
+
+# Entities to mask (exclude ORG, LOC, GPE to keep organization names and locations visible)
+ENTITIES_TO_MASK = [
+    # Standard Presidio entities
+    "PERSON",
+    "PHONE_NUMBER",
+    "EMAIL_ADDRESS",
+    "DATE_TIME",
+    "CREDIT_CARD",
+    "IBAN_CODE",
+    # Japanese-specific entities
+    "PHONE_NUMBER_JP",
+    "JP_ZIP_CODE",
+    "DATE_OF_BIRTH_JP",
+    "JP_PERSON",
+]
 
 
 def mask_pii_in_text(text: str, language: str = "ja", use_ginza: bool = False) -> str:
@@ -27,12 +57,26 @@ def mask_pii_in_text(text: str, language: str = "ja", use_ginza: bool = False) -
     analyzer = create_analyzer(language, use_ginza=use_ginza)
     anonymizer = AnonymizerEngine()
 
-    # Analyze text for PII
+    # Analyze text for PII - only specified entities
     results = analyzer.analyze(
         text=text,
         language=language,
-        entities=None,
+        entities=ENTITIES_TO_MASK,  # Limit to specific entities (excludes ORG, LOC, GPE)
     )
+
+    # Log masked entities to file
+    if results:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        masking_logger.info(f"\n{'='*60}")
+        masking_logger.info(f"Masking Log - {timestamp}")
+        masking_logger.info(f"{'='*60}")
+        for result in results:
+            entity_text = text[result.start:result.end]
+            masking_logger.info(
+                f"[{result.entity_type}] \"{entity_text}\" "
+                f"(score: {result.score:.2f}, pos: {result.start}-{result.end})"
+            )
+        masking_logger.info(f"Total: {len(results)} entities masked")
 
     # Prepare operators for masking
     operators = {
