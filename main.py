@@ -267,7 +267,19 @@ Examples:
         action="store_true",
         help="Show detected PII entities before masking"
     )
+    parser.add_argument(
+        "--show-recognizers",
+        action="store_true",
+        help="Show registered recognizers and exit"
+    )
     args = parser.parse_args()
+
+    # Handle --show-recognizers
+    if args.show_recognizers:
+        from recognizer_registry import create_default_registry
+        registry = create_default_registry(use_ginza=True)
+        print(registry.summary())
+        sys.exit(0)
 
     if args.input_file:
         # Single file mode
