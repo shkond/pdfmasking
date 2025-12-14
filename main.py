@@ -1,5 +1,6 @@
 import argparse
 import logging
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -13,6 +14,32 @@ from document_extractors import extract_text
 # Configure logging for masked entities
 masking_logger = logging.getLogger("masking")
 masking_logger.setLevel(logging.INFO)
+
+
+def preprocess_text(text: str) -> str:
+    """
+    Preprocess text extracted from PDF to normalize whitespace and formatting.
+    
+    This helps improve context detection by:
+    - Collapsing multiple newlines into single spaces
+    - Normalizing whitespace
+    - Removing extra spaces while preserving structure
+    
+    Args:
+        text: Raw text extracted from PDF
+        
+    Returns:
+        Normalized text with consistent formatting
+    """
+    # Replace multiple consecutive newlines with a single space
+    text = re.sub(r'\n{2,}', ' ', text)
+    # Replace single newlines with space
+    text = re.sub(r'\n', ' ', text)
+    # Collapse multiple spaces into single space
+    text = re.sub(r' {2,}', ' ', text)
+    # Normalize full-width spaces to regular spaces
+    text = text.replace('\u3000', ' ')
+    return text.strip()
 
 
 def setup_logger(log_file_path: Path):
@@ -88,7 +115,7 @@ def deduplicate_results(results, text):
     return deduplicated
 
 
-def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False) -> tuple:
+def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False, preprocess: bool = False) -> tuple:
     """
     Mask PII in text using language-specific analyzer.
     
@@ -96,10 +123,15 @@ def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False) -> 
         text: Text to analyze and mask
         language: Language code ("en" or "ja")
         verbose: If True, return detected entities info
+        preprocess: If True, normalize text before analysis (recommended for PDF text)
         
     Returns:
         Tuple of (masked_text, detected_entities_info)
     """
+    # Preprocess text if requested (useful for PDF-extracted text)
+    if preprocess:
+        text = preprocess_text(text)
+    
     # Create language-specific analyzer
     analyzer = create_analyzer(language)
     anonymizer = AnonymizerEngine()
@@ -244,10 +276,14 @@ Examples:
             print(f"Error: File {input_path} not found.", file=sys.stderr)
             sys.exit(1)
         
-        output_path = Path(args.output) if args.output else None
-        # Use default log file for single mode if not specified (or should we use local?)
-        # For backward compatibility/simplicity, let's just use a default log in current dir
-        log_path = Path("masking_log.txt")
+        # Create output directory
+        output_dir = Path("output")
+        output_dir.mkdir(exist_ok=True)
+        
+        stem = input_path.stem
+        # Use specified output path or default to output/<stem>.txt
+        output_path = Path(args.output) if args.output else output_dir / f"{stem}.txt"
+        log_path = output_dir / f"{stem}_log.txt"
         
         process_file(input_path, output_path, log_path, args.lang, args.verbose)
         
