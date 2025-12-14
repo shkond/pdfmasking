@@ -8,7 +8,7 @@ from pathlib import Path
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 
-from analyzer_factory import create_analyzer
+from analyzer_factory import create_analyzer, create_multilingual_analyzer
 from document_extractors import extract_text
 
 # Configure logging for masked entities
@@ -115,13 +115,55 @@ def deduplicate_results(results, text):
     return deduplicated
 
 
-def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False, preprocess: bool = False) -> tuple:
+def _merge_results(results_en, results_ja):
     """
-    Mask PII in text using language-specific analyzer.
+    Merge results from English and Japanese analysis.
+    
+    Combines results from both languages and removes duplicates
+    by keeping the higher-scoring result for overlapping spans.
+    
+    Args:
+        results_en: RecognizerResult list from English analysis
+        results_ja: RecognizerResult list from Japanese analysis
+        
+    Returns:
+        Combined list of RecognizerResult objects
+    """
+    all_results = list(results_en) + list(results_ja)
+    
+    if not all_results:
+        return all_results
+    
+    # Sort by score descending, then by span length (prefer longer matches)
+    sorted_results = sorted(all_results, key=lambda x: (-x.score, -(x.end - x.start), x.start))
+    
+    # Remove overlapping results, keeping higher-scoring ones
+    covered_positions = set()
+    merged = []
+    
+    for result in sorted_results:
+        result_positions = set(range(result.start, result.end))
+        # Check for significant overlap (more than 50% of the smaller span)
+        overlap = result_positions & covered_positions
+        if len(overlap) > len(result_positions) * 0.5:
+            # Significant overlap with a higher-scoring result, skip
+            continue
+        
+        merged.append(result)
+        covered_positions.update(result_positions)
+    
+    # Sort by position for consistent ordering
+    merged.sort(key=lambda x: x.start)
+    return merged
+
+
+def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, preprocess: bool = False) -> tuple:
+    """
+    Mask PII in text using language-specific or multilingual analyzer.
     
     Args:
         text: Text to analyze and mask
-        language: Language code ("en" or "ja")
+        language: Language code ("en", "ja", or "auto" for multilingual)
         verbose: If True, return detected entities info
         preprocess: If True, normalize text before analysis (recommended for PDF text)
         
@@ -132,16 +174,34 @@ def mask_pii_in_text(text: str, language: str = "en", verbose: bool = False, pre
     if preprocess:
         text = preprocess_text(text)
     
-    # Create language-specific analyzer
-    analyzer = create_analyzer(language)
     anonymizer = AnonymizerEngine()
 
-    # Analyze text for PII - only specified entities
-    results = analyzer.analyze(
-        text=text,
-        language=language,
-        entities=ENTITIES_TO_MASK,  # Limit to specific entities (excludes ORG, LOC, GPE)
-    )
+    if language == "auto":
+        # Multilingual mode: analyze in both English and Japanese
+        analyzer = create_multilingual_analyzer(use_ginza=True)
+        
+        # Analyze in both languages
+        results_en = analyzer.analyze(
+            text=text,
+            language="en",
+            entities=ENTITIES_TO_MASK,
+        )
+        results_ja = analyzer.analyze(
+            text=text,
+            language="ja",
+            entities=ENTITIES_TO_MASK,
+        )
+        
+        # Merge results from both languages
+        results = _merge_results(results_en, results_ja)
+    else:
+        # Single language mode
+        analyzer = create_analyzer(language)
+        results = analyzer.analyze(
+            text=text,
+            language=language,
+            entities=ENTITIES_TO_MASK,
+        )
     
     # Deduplicate overlapping results
     results = deduplicate_results(results, text)
@@ -258,9 +318,9 @@ Examples:
     )
     parser.add_argument(
         "--lang",
-        default="en",
-        choices=["en", "ja"],
-        help="Language code (default: en)"
+        default="auto",
+        choices=["en", "ja", "auto"],
+        help="Language code: 'en' (English), 'ja' (Japanese), or 'auto' (both) (default: auto)"
     )
     parser.add_argument(
         "--verbose", "-v",
