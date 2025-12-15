@@ -1,7 +1,7 @@
 """Centralized registry for managing recognizers with clear categorization."""
 
 from dataclasses import dataclass
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Dict, Any
 import warnings
 
 from presidio_analyzer import EntityRecognizer, AnalyzerEngine
@@ -14,6 +14,7 @@ from recognizers import (
     JapaneseAgeRecognizer,
     JapaneseGenderRecognizer,
     JapaneseAddressRecognizer,
+    TRANSFORMER_AVAILABLE,
 )
 
 # Try to import GiNZA recognizers (optional)
@@ -25,7 +26,14 @@ try:
 except ImportError:
     pass
 
-RecognizerType = Literal["pattern", "ner_ginza", "ner_presidio"]
+# Try to import Transformer recognizers
+if TRANSFORMER_AVAILABLE:
+    from recognizers import (
+        create_english_transformer_recognizer,
+        create_japanese_transformer_recognizer,
+    )
+
+RecognizerType = Literal["pattern", "ner_ginza", "ner_presidio", "ner_transformer"]
 
 
 @dataclass
@@ -35,7 +43,7 @@ class RecognizerConfig:
     
     Attributes:
         recognizer: The EntityRecognizer instance
-        type: Classification of recognizer ("pattern", "ner_ginza", "ner_presidio")
+        type: Classification of recognizer ("pattern", "ner_ginza", "ner_presidio", "ner_transformer")
         language: Supported language code
         entity_type: Entity type string this recognizer detects
         description: Human-readable description
@@ -105,7 +113,7 @@ class RecognizerRegistry:
     def summary(self) -> str:
         """Generate a human-readable summary of registered recognizers."""
         lines = ["Recognizer Registry Summary:"]
-        for rtype in ["pattern", "ner_ginza", "ner_presidio"]:
+        for rtype in ["pattern", "ner_ginza", "ner_presidio", "ner_transformer"]:
             configs = self.get_by_type(rtype)
             if configs:
                 lines.append(f"\n{rtype.upper()}:")
@@ -115,17 +123,36 @@ class RecognizerRegistry:
         return "\n".join(lines)
 
 
-def create_default_registry(use_ginza: bool = True) -> RecognizerRegistry:
+def create_default_registry(
+    use_ginza: bool = True,
+    use_transformer: bool = False,
+    transformer_config: Optional[Dict[str, Any]] = None
+) -> RecognizerRegistry:
     """
     Create a registry with all available recognizers.
     
     Args:
         use_ginza: Whether to include GiNZA-based recognizers
+        use_transformer: Whether to include Transformer-based recognizers
+        transformer_config: Configuration for Transformer recognizers:
+            - device: "cpu" or "cuda"
+            - min_confidence: Minimum confidence threshold (default: 0.8)
+            - english_model: Model name for English (default: dslim/bert-base-NER)
+            - japanese_model: Model name for Japanese (default: knosing/japanese_ner_model)
         
     Returns:
         RecognizerRegistry with all recognizers registered
     """
     registry = RecognizerRegistry()
+    
+    # Default transformer config
+    if transformer_config is None:
+        transformer_config = {}
+    
+    device = transformer_config.get("device", "cpu")
+    min_confidence = transformer_config.get("min_confidence", 0.8)
+    english_model = transformer_config.get("english_model", "dslim/bert-base-NER")
+    japanese_model = transformer_config.get("japanese_model", "knosing/japanese_ner_model")
     
     # === Pattern-based recognizers (Japanese) ===
     registry.register(RecognizerConfig(
@@ -211,4 +238,40 @@ def create_default_registry(use_ginza: bool = True) -> RecognizerRegistry:
             requires_nlp=True
         ))
     
+    # === Transformer-based recognizers (if available and enabled) ===
+    if use_transformer and TRANSFORMER_AVAILABLE:
+        # English Transformer recognizer
+        registry.register(RecognizerConfig(
+            recognizer=create_english_transformer_recognizer(
+                model_name=english_model,
+                min_confidence=min_confidence,
+                device=device
+            ),
+            type="ner_transformer",
+            language="en",
+            entity_type="PERSON,LOCATION,ORGANIZATION",
+            description=f"English NER via {english_model}",
+            requires_nlp=False
+        ))
+        
+        # Japanese Transformer recognizer
+        registry.register(RecognizerConfig(
+            recognizer=create_japanese_transformer_recognizer(
+                model_name=japanese_model,
+                min_confidence=min_confidence,
+                device=device
+            ),
+            type="ner_transformer",
+            language="ja",
+            entity_type="JP_PERSON,JP_ADDRESS,JP_ORGANIZATION",
+            description=f"Japanese NER via {japanese_model}",
+            requires_nlp=False
+        ))
+    elif use_transformer and not TRANSFORMER_AVAILABLE:
+        warnings.warn(
+            "Transformer recognizers requested but 'torch' and 'transformers' libraries are not available. "
+            "Install them with: pip install torch transformers"
+        )
+    
     return registry
+

@@ -14,6 +14,18 @@ from .japanese_ner import (
     GinzaAddressRecognizer,
 )
 
+# Conditional import for Transformer recognizers (requires torch and transformers)
+TRANSFORMER_AVAILABLE = False
+try:
+    from .transformer_ner import (
+        TransformerNERRecognizer,
+        create_english_transformer_recognizer,
+        create_japanese_transformer_recognizer,
+    )
+    TRANSFORMER_AVAILABLE = True
+except ImportError:
+    pass
+
 __all__ = [
     "JapanesePhoneRecognizer",
     "JapaneseZipCodeRecognizer",
@@ -24,5 +36,13 @@ __all__ = [
     "JapaneseAddressRecognizer",
     "GinzaPersonRecognizer",
     "GinzaAddressRecognizer",
+    "TRANSFORMER_AVAILABLE",
 ]
+
+if TRANSFORMER_AVAILABLE:
+    __all__.extend([
+        "TransformerNERRecognizer",
+        "create_english_transformer_recognizer",
+        "create_japanese_transformer_recognizer",
+    ])
 

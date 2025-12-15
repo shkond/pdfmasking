@@ -24,7 +24,7 @@ class JapanesePhoneRecognizer(PatternRecognizer):
         ),
         Pattern(
             name="japanese_mobile",
-            regex=r"0[789]0-\d{4}-\d{4}",
+            regex=r"0[1-9]0-\d{4}-\d{4}",
             score=0.8,
         ),
     ]

@@ -73,3 +73,30 @@ masking:
     DATE_OF_BIRTH_JP: "****/**/**"
     JP_PERSON: "****"
     JP_ADDRESS: "****"
+
+# Transformer NER settings
+# Set enabled: true to use Transformer models for improved accuracy
+transformer:
+  enabled: True  # Set to true to enable Transformer NER
+  device: "cpu"   # "cpu" or "cuda" (GPU)
+  min_confidence: 0.8  # Minimum confidence score (0.0-1.0)
+  
+  # Dual detection: Only mask when BOTH pattern AND Transformer detect
+  require_dual_detection: true
+  
+  # English model
+  english:
+    model_name: "dslim/bert-base-NER"
+    entities:
+      - "PERSON"
+      - "LOCATION"
+      - "ORGANIZATION"
+  
+  # Japanese model
+  japanese:
+    model_name: "knosing/japanese_ner_model"
+    entities:
+      - "JP_PERSON"
+      - "JP_ADDRESS"
+      - "JP_ORGANIZATION"
+
