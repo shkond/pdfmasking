@@ -57,7 +57,7 @@ def setup_logger(log_file_path: Path):
     masking_logger.addHandler(file_handler)
 
 
-# Entities to mask (exclude ORG, LOC, GPE to keep organization names and locations visible)
+# Entities to mask (including ORGANIZATION/LOCATION for dual detection comparison)
 ENTITIES_TO_MASK = [
     # Standard Presidio entities
     "PERSON",
@@ -66,6 +66,8 @@ ENTITIES_TO_MASK = [
     "DATE_TIME",
     "CREDIT_CARD",
     "IBAN_CODE",
+    "LOCATION",       # Added for Transformer dual detection
+    "ORGANIZATION",   # Added for Transformer dual detection
     # Japanese-specific entities
     "PHONE_NUMBER_JP",
     "JP_ZIP_CODE",
@@ -74,7 +76,9 @@ ENTITIES_TO_MASK = [
     "JP_AGE",
     "JP_GENDER",
     "JP_ADDRESS",
+    "JP_ORGANIZATION",  # Added for Transformer dual detection
 ]
+
 
 
 def deduplicate_results(results, text):
@@ -251,10 +255,13 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
             # Check if we have dual scores for this entity
             if (result.start, result.end) in dual_scores:
                 scores = dual_scores[(result.start, result.end)]
+                p_type = scores.get('p_type', result.entity_type)
+                t_type = scores.get('t_type', '?')
                 masking_logger.info(
                     f"[{result.entity_type}] \"{entity_text}\" "
-                    f"(pattern: {scores['pattern']:.2f}, transformer: {scores['transformer']:.2f}, pos: {result.start}-{result.end})"
+                    f"(pattern: {p_type}={scores['pattern']:.2f}, transformer: {t_type}={scores['transformer']:.2f}, pos: {result.start}-{result.end})"
                 )
+
             else:
                 masking_logger.info(
                     f"[{result.entity_type}] \"{entity_text}\" "
@@ -334,34 +341,72 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
             ],
         }
         nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
+        # Pattern analyzer uses default + custom recognizers
         pattern_analyzer = AnalyzerEngine(nlp_engine=nlp_engine, supported_languages=["en", "ja"])
-        transformer_analyzer = AnalyzerEngine(nlp_engine=nlp_engine, supported_languages=["en", "ja"])
-    except Exception:
+        # Transformer analyzer: use empty registry to exclude all default recognizers (including SpacyRecognizer)
+        from presidio_analyzer import RecognizerRegistry as PresidioRegistry
+        empty_registry = PresidioRegistry()
+        empty_registry.recognizers = []  # Clear all default recognizers
+        empty_registry.supported_languages = ["en", "ja"]  # Match analyzer languages
+        transformer_analyzer = AnalyzerEngine(
+            nlp_engine=nlp_engine, 
+            supported_languages=["en", "ja"],
+            registry=empty_registry
+        )
+    except Exception as e:
+        print(f"Error creating analyzers: {e}")
         pattern_analyzer = AnalyzerEngine(supported_languages=["en", "ja"])
-        transformer_analyzer = AnalyzerEngine(supported_languages=["en", "ja"])
+        from presidio_analyzer import RecognizerRegistry as PresidioRegistry
+        empty_registry = PresidioRegistry()
+        empty_registry.recognizers = []
+        empty_registry.supported_languages = ["en", "ja"]
+        transformer_analyzer = AnalyzerEngine(supported_languages=["en", "ja"], registry=empty_registry)
+
     
     # Apply recognizers
     pattern_registry.apply_to_analyzer(pattern_analyzer)
-    transformer_registry.apply_to_analyzer(transformer_analyzer)
     
+    # Get Transformer recognizers directly (don't use AnalyzerEngine to avoid default recognizers)
+    transformer_recognizers = [
+        config.recognizer for config in transformer_registry.configs 
+        if config.type == "ner_transformer"
+    ]
+
     # Analyze with both
     if language == "auto":
-        # Multiligual: analyze in both languages
+        # Multilingual: analyze in both languages
         pattern_results_en = pattern_analyzer.analyze(text=text, language="en", entities=ENTITIES_TO_MASK)
         pattern_results_ja = pattern_analyzer.analyze(text=text, language="ja", entities=ENTITIES_TO_MASK)
         pattern_results = list(pattern_results_en) + list(pattern_results_ja)
         
-        transformer_results_en = transformer_analyzer.analyze(text=text, language="en", entities=ENTITIES_TO_MASK)
-        transformer_results_ja = transformer_analyzer.analyze(text=text, language="ja", entities=ENTITIES_TO_MASK)
-        transformer_results = list(transformer_results_en) + list(transformer_results_ja)
+        # Call Transformer recognizers directly
+        transformer_results = []
+        for recognizer in transformer_recognizers:
+            try:
+                results = recognizer.analyze(text=text, entities=ENTITIES_TO_MASK)
+                transformer_results.extend(results)
+            except Exception as e:
+                pass  # Skip on error
     else:
         pattern_results = list(pattern_analyzer.analyze(text=text, language=language, entities=ENTITIES_TO_MASK))
-        transformer_results = list(transformer_analyzer.analyze(text=text, language=language, entities=ENTITIES_TO_MASK))
+        
+        # Call Transformer recognizers directly for specific language
+        transformer_results = []
+        for recognizer in transformer_recognizers:
+            if recognizer.supported_language == language or language == "auto":
+                try:
+                    results = recognizer.analyze(text=text, entities=ENTITIES_TO_MASK)
+                    transformer_results.extend(results)
+                except Exception as e:
+                    pass
+
     
     # Find overlapping entities (detected by both)
-    # An entity is considered a match if the spans overlap significantly
+    # An entity is considered a match if:
+    # 1. The spans overlap significantly (>50%)
+    # 2. The entity_type matches (PERSON must match PERSON, etc.)
     confirmed_results = []
-    dual_scores = {}  # Maps (start, end) -> {"pattern": score, "transformer": score}
+    dual_scores = {}  # Maps (start, end) -> {"pattern": score, "transformer": score, "p_type": type, "t_type": type}
     
     for p_result in pattern_results:
         p_span = set(range(p_result.start, p_result.end))
@@ -374,16 +419,49 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
             min_span_len = min(len(p_span), len(t_span))
             
             if min_span_len > 0 and len(overlap) >= min_span_len * 0.5:
-                # Store both scores
-                dual_scores[(p_result.start, p_result.end)] = {
-                    "pattern": p_result.score,
-                    "transformer": t_result.score
-                }
-                # Use the pattern result's span (usually more accurate for boundaries)
-                confirmed_results.append(p_result)
-                break  # Only add once per pattern result
+                # CRITICAL: Also check entity_type matches
+                # Map similar types (e.g., PERSON must match PERSON, LOCATION matches LOCATION)
+                p_type_normalized = _normalize_entity_type(p_result.entity_type)
+                t_type_normalized = _normalize_entity_type(t_result.entity_type)
+                
+                if p_type_normalized == t_type_normalized:
+                    # Types match - this is a valid dual detection
+                    dual_scores[(p_result.start, p_result.end)] = {
+                        "pattern": p_result.score,
+                        "transformer": t_result.score,
+                        "p_type": p_result.entity_type,
+                        "t_type": t_result.entity_type
+                    }
+                    # Use the pattern result's span (usually more accurate for boundaries)
+                    confirmed_results.append(p_result)
+                    break  # Only add once per pattern result
     
     return confirmed_results, dual_scores
+
+
+def _normalize_entity_type(entity_type: str) -> str:
+    """Normalize entity types for comparison across different recognizers."""
+    # Map various entity types to common categories
+    type_mapping = {
+        # Person types
+        "PERSON": "PERSON",
+        "PER": "PERSON",
+        "JP_PERSON": "PERSON",
+        # Location types
+        "LOCATION": "LOCATION",
+        "LOC": "LOCATION",
+        "JP_ADDRESS": "LOCATION",
+        "GPE": "LOCATION",
+        # Organization types
+        "ORGANIZATION": "ORGANIZATION",
+        "ORG": "ORGANIZATION",
+        "JP_ORGANIZATION": "ORGANIZATION",
+        # Misc types
+        "MISC": "MISC",
+    }
+    return type_mapping.get(entity_type, entity_type)
+
+
 
 
 
