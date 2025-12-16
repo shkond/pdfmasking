@@ -91,14 +91,42 @@ python main.py resume.docx --lang ja -o output.txt
 
 ### アーキテクチャ
 
+詳細は [doc/ARCHITECTURE.md](doc/ARCHITECTURE.md) を参照してください。
+
 ```
-main.py
-├── analyzer_factory.py      # 言語別アナライザーの作成
-├── document_extractors.py   # PDF/Word からテキスト抽出
-└── recognizers/
-    ├── japanese_patterns.py  # パターンベース認識器
-    └── japanese_ner.py       # GiNZA ベース認識器
+pdfmasking/
+├── main.py                    # CLIエントリーポイント
+├── config.yaml                # 設定ファイル
+├── config/                    # 設定読み込み
+│   └── loader.py              
+├── core/                      # マスキングコアロジック
+│   ├── masker.py              # PIIMasker
+│   ├── analyzer.py            # Analyzer作成
+│   └── processors/            # テキスト・結果処理
+├── file_io/                        # ファイル入出力
+│   ├── extractors.py          # PDF/Word抽出
+│   └── file_processor.py      
+├── masking_logging/           # ロギング
+├── recognizers/               # PII認識器
+│   ├── registry.py            # Registry
+│   ├── japanese_patterns.py   # パターンベース
+│   ├── japanese_ner.py        # GiNZA NER
+│   └── transformer_ner.py     # Transformer NER
+└── tests/
 ```
+
+### マスキング対象（8種類）
+
+| エンティティ | コード |
+|-------------|--------|
+| 名前 | `JP_PERSON`, `PERSON` |
+| メールアドレス | `EMAIL_ADDRESS` |
+| 郵便番号 | `JP_ZIP_CODE` |
+| 電話番号 | `PHONE_NUMBER_JP` |
+| 生年月日 | `DATE_OF_BIRTH_JP` |
+| 住所 | `JP_ADDRESS`, `LOCATION` |
+| 性別 | `JP_GENDER` |
+| 年齢 | `JP_AGE` |
 
 ### パターンベース認識器
 

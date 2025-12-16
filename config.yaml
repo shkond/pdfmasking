@@ -1,175 +1,94 @@
-# Configuration for Japanese PII Masking
-
-# =============================================================================
-# Entities to mask - List of entity types that will be masked
-# =============================================================================
-entities_to_mask:
-  # Japanese-specific entities
-  - JP_PERSON
-  - JP_ADDRESS
-  - JP_ORGANIZATION
-  - PHONE_NUMBER_JP
-  - JP_ZIP_CODE
-  - DATE_OF_BIRTH_JP
-  - JP_AGE
-  - JP_GENDER
-  # English entities (NER - for Dual Detection)
-  - PERSON
-  - LOCATION
-  - ORGANIZATION
-  # English pattern entities
-  - EMAIL_ADDRESS
-  - PHONE_NUMBER
-  - DATE_TIME
-  - CREDIT_CARD
-  - IBAN_CODE
-
-# =============================================================================
-# Entity categories - Groups of equivalent entity types for Dual Detection
-# =============================================================================
-entity_categories:
-  person:
-    - PERSON
-    - JP_PERSON
-    - PER
-  location:
-    - LOCATION
-    - JP_ADDRESS
-    - LOC
-    - GPE
-  organization:
-    - ORGANIZATION
-    - JP_ORGANIZATION
-    - ORG
-
-# Confidence score thresholds
 confidence_thresholds:
-  phone_number: 0.7
-  zip_code: 0.6
+  address: 0.6
   birth_date: 0.6
   person_name: 0.6
-  address: 0.6
-
-# Context-aware scoring
+  phone_number: 0.7
+  zip_code: 0.6
 context_scoring:
-  # Context window size (characters before/after entity)
-  window_size: 50
-  
-  # Boost score when context words are found
-  boost_score: 0.9
-  
-  # Context words for person names
-  person_context:
-    - "氏名"
-    - "ふりがな"
-    - "フリガナ"
-    - "名前"
-    - "お名前"
-    - "姓名"
-  
-  # Context words for addresses
   address_context:
-    - "住所"
-    - "現住所"
-    - "連絡先"
-    - "都道府県"
-    - "市区町村"
-    - "番地"
-    - "所在地"
-  
-  # Context words for phone numbers
-  phone_context:
-    - "TEL"
-    - "電話"
-    - "携帯"
-    - "自宅"
-    - "tel"
-    - "Tel"
-  
-  # Context words for zip codes
-  zip_context:
-    - "〒"
-    - "郵便番号"
-    - "郵便"
-    - "zip"
-    - "ZIP"
-  
-  # Context words for birth dates
+  - 住所
+  - 現住所
+  - 連絡先
+  - 都道府県
+  - 市区町村
+  - 番地
+  - 所在地
   birthdate_context:
-    - "生年月日"
-    - "年齢"
-    - "生まれ"
-    - "誕生日"
-    - "生年"
-    - "年月日"
-
-# Masking operators
+  - 生年月日
+  - 年齢
+  - 生まれ
+  - 誕生日
+  - 生年
+  - 年月日
+  boost_score: 0.9
+  person_context:
+  - 氏名
+  - ふりがな
+  - フリガナ
+  - 名前
+  - お名前
+  - 姓名
+  phone_context:
+  - TEL
+  - 電話
+  - 携帯
+  - 自宅
+  - tel
+  - Tel
+  window_size: 50
+  zip_context:
+  - 〒
+  - 郵便番号
+  - 郵便
+  - zip
+  - ZIP
+entities_to_mask:
+- JP_PERSON
+- JP_ADDRESS
+- PHONE_NUMBER_JP
+- JP_ZIP_CODE
+- DATE_OF_BIRTH_JP
+- JP_AGE
+- JP_GENDER
+- EMAIL_ADDRESS
+- PERSON
+- LOCATION
+entity_categories:
+  location:
+  - LOCATION
+  - JP_ADDRESS
+  - LOC
+  - GPE
+  organization:
+  - ORGANIZATION
+  - JP_ORGANIZATION
+  - ORG
+  person:
+  - PERSON
+  - JP_PERSON
+  - PER
 masking:
-  # Default mask value
-  default_mask: "****"
-  
-  # Entity-specific masks (optional)
+  default_mask: '****'
   entity_masks:
-    PHONE_NUMBER_JP: "***-****-****"
-    JP_ZIP_CODE: "***-****"
-    DATE_OF_BIRTH_JP: "****/**/**"
-    JP_PERSON: "****"
-    JP_ADDRESS: "****"
-
-# Transformer NER settings
-# Set enabled: true to use Transformer models for improved accuracy
+    DATE_OF_BIRTH_JP: '****/**/**'
+    JP_ADDRESS: '****'
+    JP_PERSON: '****'
+    JP_ZIP_CODE: '***-****'
+    PHONE_NUMBER_JP: '***-****-****'
 transformer:
-  enabled: True  # Set to true to enable Transformer NER
-  device: "cpu"   # "cpu" or "cuda" (GPU)
-  min_confidence: 0.8  # Minimum confidence score (0.0-1.0)
-  
-  # Dual detection: Only mask when BOTH pattern AND Transformer detect
-  require_dual_detection: true
-  
-  # English model
+  device: cpu
+  enabled: true
   english:
-    model_name: "dslim/bert-base-NER"
     entities:
-      - "PERSON"
-      - "LOCATION"
-      - "ORGANIZATION"
-  
-  # Japanese model
+    - PERSON
+    - LOCATION
+    - ORGANIZATION
+    model_name: dslim/bert-base-NER
   japanese:
-    model_name: "knosing/japanese_ner_model"
-    tokenizer_name: "tohoku-nlp/bert-base-japanese-v3"
     entities:
-      - "JP_PERSON"
-      - "JP_ADDRESS"
-      - "JP_ORGANIZATION"
-  
-  # Label mapping: BIO tags from models -> Entity types
-  label_mapping:
-    en:
-      B-PER: PERSON
-      I-PER: PERSON
-      B-LOC: LOCATION
-      I-LOC: LOCATION
-      B-ORG: ORGANIZATION
-      I-ORG: ORGANIZATION
-      B-MISC: MISC
-      I-MISC: MISC
-    ja:
-      B-PER: JP_PERSON
-      I-PER: JP_PERSON
-      B-PERSON: JP_PERSON
-      I-PERSON: JP_PERSON
-      B-LOC: JP_ADDRESS
-      I-LOC: JP_ADDRESS
-      B-LOCATION: JP_ADDRESS
-      I-LOCATION: JP_ADDRESS
-      B-ORG: JP_ORGANIZATION
-      I-ORG: JP_ORGANIZATION
-      B-ORGANIZATION: JP_ORGANIZATION
-      I-ORGANIZATION: JP_ORGANIZATION
-      B-人名: JP_PERSON
-      I-人名: JP_PERSON
-      B-地名: JP_ADDRESS
-      I-地名: JP_ADDRESS
-      B-組織: JP_ORGANIZATION
-      I-組織: JP_ORGANIZATION
+    - JP_PERSON
+    - JP_ADDRESS
+    - JP_ORGANIZATION
+    model_name: knosing/japanese_ner_model
+  min_confidence: 0.8
+  require_dual_detection: true
