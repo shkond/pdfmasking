@@ -22,44 +22,9 @@ class TransformerNERRecognizer(EntityRecognizer):
     サポートモデル:
     - dslim/bert-base-NER (英語)
     - knosing/japanese_ner_model (日本語)
-    """
     
-    # ラベルマッピング: モデルのラベル → Presidioエンティティタイプ
-    LABEL_MAPPINGS = {
-        "en": {
-            # dslim/bert-base-NER labels
-            "B-PER": "PERSON",
-            "I-PER": "PERSON",
-            "B-LOC": "LOCATION", 
-            "I-LOC": "LOCATION",
-            "B-ORG": "ORGANIZATION",
-            "I-ORG": "ORGANIZATION",
-            "B-MISC": "MISC",
-            "I-MISC": "MISC",
-        },
-        "ja": {
-            # knosing/japanese_ner_model labels (adjust based on actual model output)
-            "B-PER": "JP_PERSON",
-            "I-PER": "JP_PERSON",
-            "B-PERSON": "JP_PERSON",
-            "I-PERSON": "JP_PERSON",
-            "B-LOC": "JP_ADDRESS",
-            "I-LOC": "JP_ADDRESS",
-            "B-LOCATION": "JP_ADDRESS",
-            "I-LOCATION": "JP_ADDRESS",
-            "B-ORG": "JP_ORGANIZATION",
-            "I-ORG": "JP_ORGANIZATION",
-            "B-ORGANIZATION": "JP_ORGANIZATION",
-            "I-ORGANIZATION": "JP_ORGANIZATION",
-            # Additional common Japanese NER labels
-            "B-人名": "JP_PERSON",
-            "I-人名": "JP_PERSON",
-            "B-地名": "JP_ADDRESS",
-            "I-地名": "JP_ADDRESS",
-            "B-組織": "JP_ORGANIZATION",
-            "I-組織": "JP_ORGANIZATION",
-        }
-    }
+    ラベルマッピングは設定ファイル (config.yaml) から読み込まれます。
+    """
     
     def __init__(
         self,
@@ -68,16 +33,18 @@ class TransformerNERRecognizer(EntityRecognizer):
         supported_entities: Optional[List[str]] = None,
         min_confidence: float = 0.8,
         device: str = "cpu",
-        tokenizer_name: Optional[str] = None
+        tokenizer_name: Optional[str] = None,
+        label_mapping: Optional[Dict[str, str]] = None
     ):
         """
         Args:
             model_name: Hugging Faceモデル名
             supported_language: "en" or "ja"
-            supported_entities: 検出対象エンティティ(None=全て)
+            supported_entities: 検出対象エンティティ(None=設定から取得)
             min_confidence: 最小信頼度スコア
             device: "cpu" or "cuda"
             tokenizer_name: トークナイザー名(Noneの場合はmodel_nameと同じ)
+            label_mapping: BIOタグ→エンティティタイプのマッピング (config.yamlから渡される)
         """
         if not TORCH_AVAILABLE:
             raise ImportError("torch and transformers are required for TransformerNERRecognizer")
@@ -88,13 +55,11 @@ class TransformerNERRecognizer(EntityRecognizer):
         self.device = device
         self._model = None
         self._tokenizer = None
+        self.label_mapping = label_mapping or {}
         
-        # デフォルトエンティティ設定
+        # supported_entities が指定されていない場合はエラー (設定から渡すべき)
         if supported_entities is None:
-            if supported_language == "en":
-                supported_entities = ["PERSON", "LOCATION", "ORGANIZATION"]
-            else:
-                supported_entities = ["JP_PERSON", "JP_ADDRESS", "JP_ORGANIZATION"]
+            raise ValueError("supported_entities must be provided (from config.yaml)")
         
         super().__init__(
             supported_entities=supported_entities,
@@ -216,7 +181,7 @@ class TransformerNERRecognizer(EntityRecognizer):
         """
         entities = []
         current_entity = None
-        label_map = self.LABEL_MAPPINGS.get(self.supported_language, {})
+        label_map = self.label_mapping
         
         for i, (label_id, score, (token_start, token_end)) in enumerate(
             zip(label_ids, scores, offset_mapping)
@@ -278,7 +243,7 @@ class TransformerNERRecognizer(EntityRecognizer):
         
         テキスト全体をエンティティとして返す簡易実装
         """
-        label_map = self.LABEL_MAPPINGS.get(self.supported_language, {})
+        label_map = self.label_mapping
         entities = []
         current_entity = None
         
@@ -343,42 +308,30 @@ class TransformerNERRecognizer(EntityRecognizer):
 
 
 
-def create_english_transformer_recognizer(
-    model_name: str = "dslim/bert-base-NER",
-    min_confidence: float = 0.8,
-    device: str = "cpu"
+def create_transformer_recognizer(
+    model_config: Dict,
+    language: str,
+    transformer_config: Dict
 ) -> TransformerNERRecognizer:
     """
-    英語用Transformer認識器
+    設定駆動のTransformer認識器ファクトリー
     
-    デフォルトモデル: dslim/bert-base-NER
+    Args:
+        model_config: モデル設定 (model_name, tokenizer_name, entities)
+        language: 言語コード ("en" or "ja")
+        transformer_config: Transformer全体設定 (min_confidence, device, label_mapping)
+        
+    Returns:
+        設定に基づいたTransformerNERRecognizer
     """
-    return TransformerNERRecognizer(
-        model_name=model_name,
-        supported_language="en",
-        supported_entities=["PERSON", "LOCATION", "ORGANIZATION"],
-        min_confidence=min_confidence,
-        device=device
-    )
-
-
-def create_japanese_transformer_recognizer(
-    model_name: str = "knosing/japanese_ner_model",
-    tokenizer_name: str = "tohoku-nlp/bert-base-japanese-v3",
-    min_confidence: float = 0.8,
-    device: str = "cpu"
-) -> TransformerNERRecognizer:
-    """
-    日本語用Transformer認識器
+    label_mapping = transformer_config.get("label_mapping", {}).get(language, {})
     
-    デフォルトモデル: knosing/japanese_ner_model
-    トークナイザー: tohoku-nlp/bert-base-japanese-v3
-    """
     return TransformerNERRecognizer(
-        model_name=model_name,
-        tokenizer_name=tokenizer_name,
-        supported_language="ja",
-        supported_entities=["JP_PERSON", "JP_ADDRESS", "JP_ORGANIZATION"],
-        min_confidence=min_confidence,
-        device=device
+        model_name=model_config.get("model_name"),
+        tokenizer_name=model_config.get("tokenizer_name"),
+        supported_language=language,
+        supported_entities=model_config.get("entities", []),
+        min_confidence=transformer_config.get("min_confidence", 0.8),
+        device=transformer_config.get("device", "cpu"),
+        label_mapping=label_mapping
     )

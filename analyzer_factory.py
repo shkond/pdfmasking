@@ -47,6 +47,32 @@ def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def get_entities_to_mask(config: Dict[str, Any]) -> list:
+    """
+    Get the list of entity types to mask from config.
+    
+    Args:
+        config: Configuration dictionary
+        
+    Returns:
+        List of entity type strings
+    """
+    return config.get("entities_to_mask", [])
+
+
+def get_entity_categories(config: Dict[str, Any]) -> Dict[str, list]:
+    """
+    Get entity categories for type normalization in Dual Detection.
+    
+    Args:
+        config: Configuration dictionary
+        
+    Returns:
+        Dict mapping category name to list of entity types
+    """
+    return config.get("entity_categories", {})
+
+
 def create_japanese_analyzer(
     use_ginza: bool = True, 
     use_transformer: bool = False,

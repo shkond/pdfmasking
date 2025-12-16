@@ -57,29 +57,6 @@ def setup_logger(log_file_path: Path):
     masking_logger.addHandler(file_handler)
 
 
-# Entities to mask (including ORGANIZATION/LOCATION for dual detection comparison)
-ENTITIES_TO_MASK = [
-    # Standard Presidio entities
-    "PERSON",
-    "PHONE_NUMBER",
-    "EMAIL_ADDRESS",
-    "DATE_TIME",
-    "CREDIT_CARD",
-    "IBAN_CODE",
-    "LOCATION",       # Added for Transformer dual detection
-    "ORGANIZATION",   # Added for Transformer dual detection
-    # Japanese-specific entities
-    "PHONE_NUMBER_JP",
-    "JP_ZIP_CODE",
-    "DATE_OF_BIRTH_JP",
-    "JP_PERSON",
-    "JP_AGE",
-    "JP_GENDER",
-    "JP_ADDRESS",
-    "JP_ORGANIZATION",  # Added for Transformer dual detection
-]
-
-
 
 def deduplicate_results(results, text):
     """
@@ -178,11 +155,13 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
     Returns:
         Tuple of (masked_text, detected_entities_info)
     """
-    from analyzer_factory import load_config, get_transformer_config
+    from analyzer_factory import load_config, get_transformer_config, get_entities_to_mask, get_entity_categories
     
     # Load configuration
     config = load_config()
     transformer_cfg = get_transformer_config(config)
+    entities_to_mask = get_entities_to_mask(config)
+    entity_categories = get_entity_categories(config)
     
     use_transformer = transformer_cfg.get("enabled", False)
     require_dual_detection = transformer_cfg.get("require_dual_detection", True)
@@ -198,7 +177,9 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
         # Multilingual mode: analyze in both English and Japanese
         if use_transformer and require_dual_detection:
             # Dual detection mode: run pattern-only and Transformer-only analyzers
-            results, dual_scores = _dual_detection_analyze(text, transformer_cfg, language="auto")
+            results, dual_scores = _dual_detection_analyze(
+                text, transformer_cfg, entities_to_mask, entity_categories, language="auto"
+            )
         else:
             # Standard mode
             analyzer = create_multilingual_analyzer(
@@ -211,12 +192,12 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
             results_en = analyzer.analyze(
                 text=text,
                 language="en",
-                entities=ENTITIES_TO_MASK,
+                entities=entities_to_mask,
             )
             results_ja = analyzer.analyze(
                 text=text,
                 language="ja",
-                entities=ENTITIES_TO_MASK,
+                entities=entities_to_mask,
             )
             
             # Merge results from both languages
@@ -225,7 +206,9 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
         # Single language mode
         if use_transformer and require_dual_detection:
             # Dual detection mode
-            results, dual_scores = _dual_detection_analyze(text, transformer_cfg, language=language)
+            results, dual_scores = _dual_detection_analyze(
+                text, transformer_cfg, entities_to_mask, entity_categories, language=language
+            )
         else:
             # Standard mode
             analyzer = create_analyzer(
@@ -236,7 +219,7 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
             results = analyzer.analyze(
                 text=text,
                 language=language,
-                entities=ENTITIES_TO_MASK,
+                entities=entities_to_mask,
             )
     
     # Deduplicate overlapping results
@@ -300,7 +283,13 @@ def mask_pii_in_text(text: str, language: str = "auto", verbose: bool = False, p
     return anonymized.text, entities_info
 
 
-def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "ja") -> tuple:
+def _dual_detection_analyze(
+    text: str, 
+    transformer_cfg: dict, 
+    entities_to_mask: list, 
+    entity_categories: dict,
+    language: str = "ja"
+) -> tuple:
     """
     Dual detection mode: Only keep entities detected by BOTH pattern AND Transformer.
     
@@ -310,6 +299,8 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
     Args:
         text: Text to analyze
         transformer_cfg: Transformer configuration dict
+        entities_to_mask: List of entity types to mask (from config)
+        entity_categories: Dict of entity categories for type matching (from config)
         language: Language code ("en", "ja", or "auto")
         
     Returns:
@@ -375,40 +366,53 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
     # Analyze with both
     if language == "auto":
         # Multilingual: analyze in both languages
-        pattern_results_en = pattern_analyzer.analyze(text=text, language="en", entities=ENTITIES_TO_MASK)
-        pattern_results_ja = pattern_analyzer.analyze(text=text, language="ja", entities=ENTITIES_TO_MASK)
+        pattern_results_en = pattern_analyzer.analyze(text=text, language="en", entities=entities_to_mask)
+        pattern_results_ja = pattern_analyzer.analyze(text=text, language="ja", entities=entities_to_mask)
         pattern_results = list(pattern_results_en) + list(pattern_results_ja)
         
         # Call Transformer recognizers directly
         transformer_results = []
         for recognizer in transformer_recognizers:
             try:
-                results = recognizer.analyze(text=text, entities=ENTITIES_TO_MASK)
+                results = recognizer.analyze(text=text, entities=entities_to_mask)
                 transformer_results.extend(results)
             except Exception as e:
                 pass  # Skip on error
     else:
-        pattern_results = list(pattern_analyzer.analyze(text=text, language=language, entities=ENTITIES_TO_MASK))
+        pattern_results = list(pattern_analyzer.analyze(text=text, language=language, entities=entities_to_mask))
         
         # Call Transformer recognizers directly for specific language
         transformer_results = []
         for recognizer in transformer_recognizers:
             if recognizer.supported_language == language or language == "auto":
                 try:
-                    results = recognizer.analyze(text=text, entities=ENTITIES_TO_MASK)
+                    results = recognizer.analyze(text=text, entities=entities_to_mask)
                     transformer_results.extend(results)
                 except Exception as e:
                     pass
 
     
-    # Find overlapping entities (detected by both)
-    # An entity is considered a match if:
+    # Entity types that require dual detection (NER entities that can be detected by both pattern and Transformer)
+    # All other entity types are pattern-only and should pass through without dual detection
+    dual_detection_entity_types = set()
+    for category, types in entity_categories.items():
+        dual_detection_entity_types.update(types)
+    
+    # Find overlapping entities (detected by both) for NER entity types
+    # Pattern-only entities pass through directly
+    # An entity is considered a dual detection match if:
     # 1. The spans overlap significantly (>50%)
     # 2. The entity_type matches (PERSON must match PERSON, etc.)
     confirmed_results = []
     dual_scores = {}  # Maps (start, end) -> {"pattern": score, "transformer": score, "p_type": type, "t_type": type}
     
     for p_result in pattern_results:
+        # Check if this entity type requires dual detection
+        if p_result.entity_type not in dual_detection_entity_types:
+            # Pattern-only entity (phone, zip, date, etc.) - include directly
+            confirmed_results.append(p_result)
+            continue
+        
         p_span = set(range(p_result.start, p_result.end))
         
         for t_result in transformer_results:
@@ -421,8 +425,8 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
             if min_span_len > 0 and len(overlap) >= min_span_len * 0.5:
                 # CRITICAL: Also check entity_type matches
                 # Map similar types (e.g., PERSON must match PERSON, LOCATION matches LOCATION)
-                p_type_normalized = _normalize_entity_type(p_result.entity_type)
-                t_type_normalized = _normalize_entity_type(t_result.entity_type)
+                p_type_normalized = _normalize_entity_type(p_result.entity_type, entity_categories)
+                t_type_normalized = _normalize_entity_type(t_result.entity_type, entity_categories)
                 
                 if p_type_normalized == t_type_normalized:
                     # Types match - this is a valid dual detection
@@ -439,27 +443,24 @@ def _dual_detection_analyze(text: str, transformer_cfg: dict, language: str = "j
     return confirmed_results, dual_scores
 
 
-def _normalize_entity_type(entity_type: str) -> str:
-    """Normalize entity types for comparison across different recognizers."""
-    # Map various entity types to common categories
-    type_mapping = {
-        # Person types
-        "PERSON": "PERSON",
-        "PER": "PERSON",
-        "JP_PERSON": "PERSON",
-        # Location types
-        "LOCATION": "LOCATION",
-        "LOC": "LOCATION",
-        "JP_ADDRESS": "LOCATION",
-        "GPE": "LOCATION",
-        # Organization types
-        "ORGANIZATION": "ORGANIZATION",
-        "ORG": "ORGANIZATION",
-        "JP_ORGANIZATION": "ORGANIZATION",
-        # Misc types
-        "MISC": "MISC",
-    }
-    return type_mapping.get(entity_type, entity_type)
+def _normalize_entity_type(entity_type: str, entity_categories: dict) -> str:
+    """
+    Normalize entity types for comparison across different recognizers.
+    
+    Uses entity_categories from config.yaml to determine which entity types
+    belong to the same category.
+    
+    Args:
+        entity_type: The entity type to normalize
+        entity_categories: Dict mapping category name to list of entity types
+        
+    Returns:
+        Normalized category name (uppercase) or original entity_type if no match
+    """
+    for category, types in entity_categories.items():
+        if entity_type in types:
+            return category.upper()
+    return entity_type
 
 
 

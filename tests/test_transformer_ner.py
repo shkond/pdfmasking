@@ -14,12 +14,32 @@ class TestTransformerNERRecognizer:
         assert TRANSFORMER_AVAILABLE, "TRANSFORMER_AVAILABLE should be True when torch/transformers are installed"
     
     def test_create_english_recognizer(self):
-        """Test creating English Transformer recognizer."""
-        from recognizers import create_english_transformer_recognizer
+        """Test creating English Transformer recognizer via config-driven factory."""
+        from recognizers import create_transformer_recognizer
         
-        recognizer = create_english_transformer_recognizer(
-            model_name="dslim/bert-base-NER",
-            min_confidence=0.8
+        model_config = {
+            "model_name": "dslim/bert-base-NER",
+            "entities": ["PERSON", "LOCATION", "ORGANIZATION"]
+        }
+        transformer_config = {
+            "min_confidence": 0.8,
+            "device": "cpu",
+            "label_mapping": {
+                "en": {
+                    "B-PER": "PERSON",
+                    "I-PER": "PERSON",
+                    "B-LOC": "LOCATION",
+                    "I-LOC": "LOCATION",
+                    "B-ORG": "ORGANIZATION",
+                    "I-ORG": "ORGANIZATION"
+                }
+            }
+        }
+        
+        recognizer = create_transformer_recognizer(
+            model_config=model_config,
+            language="en",
+            transformer_config=transformer_config
         )
         
         assert recognizer.supported_language == "en"
@@ -28,12 +48,33 @@ class TestTransformerNERRecognizer:
         assert recognizer.min_confidence == 0.8
     
     def test_create_japanese_recognizer(self):
-        """Test creating Japanese Transformer recognizer."""
-        from recognizers import create_japanese_transformer_recognizer
+        """Test creating Japanese Transformer recognizer via config-driven factory."""
+        from recognizers import create_transformer_recognizer
         
-        recognizer = create_japanese_transformer_recognizer(
-            model_name="knosing/japanese_ner_model",
-            min_confidence=0.8
+        model_config = {
+            "model_name": "knosing/japanese_ner_model",
+            "tokenizer_name": "tohoku-nlp/bert-base-japanese-v3",
+            "entities": ["JP_PERSON", "JP_ADDRESS", "JP_ORGANIZATION"]
+        }
+        transformer_config = {
+            "min_confidence": 0.8,
+            "device": "cpu",
+            "label_mapping": {
+                "ja": {
+                    "B-PER": "JP_PERSON",
+                    "I-PER": "JP_PERSON",
+                    "B-LOC": "JP_ADDRESS",
+                    "I-LOC": "JP_ADDRESS",
+                    "B-ORG": "JP_ORGANIZATION",
+                    "I-ORG": "JP_ORGANIZATION"
+                }
+            }
+        }
+        
+        recognizer = create_transformer_recognizer(
+            model_config=model_config,
+            language="ja",
+            transformer_config=transformer_config
         )
         
         assert recognizer.supported_language == "ja"
@@ -47,13 +88,7 @@ class TestTransformerNERRecognizer:
         
         registry = create_default_registry(
             use_ginza=False,
-            use_transformer=True,
-            transformer_config={
-                "device": "cpu",
-                "min_confidence": 0.8,
-                "english_model": "dslim/bert-base-NER",
-                "japanese_model": "knosing/japanese_ner_model"
-            }
+            use_transformer=True
         )
         
         # Should have Transformer recognizers
@@ -79,8 +114,8 @@ class TestTransformerNERRecognizer:
         assert "english_model" in transformer_cfg
         assert "japanese_model" in transformer_cfg
         
-        # Config file has enabled: false by default
-        assert transformer_cfg["enabled"] == False
+        # Config file has enabled: True (updated in refactoring)
+        assert transformer_cfg["enabled"] == True
         assert transformer_cfg["min_confidence"] == 0.8
     
     def test_summary_includes_transformer(self):
@@ -89,8 +124,7 @@ class TestTransformerNERRecognizer:
         
         registry = create_default_registry(
             use_ginza=False,
-            use_transformer=True,
-            transformer_config={"device": "cpu", "min_confidence": 0.8}
+            use_transformer=True
         )
         
         summary = registry.summary()
@@ -100,3 +134,4 @@ class TestTransformerNERRecognizer:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

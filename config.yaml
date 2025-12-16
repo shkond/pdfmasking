@@ -1,5 +1,47 @@
 # Configuration for Japanese PII Masking
 
+# =============================================================================
+# Entities to mask - List of entity types that will be masked
+# =============================================================================
+entities_to_mask:
+  # Japanese-specific entities
+  - JP_PERSON
+  - JP_ADDRESS
+  - JP_ORGANIZATION
+  - PHONE_NUMBER_JP
+  - JP_ZIP_CODE
+  - DATE_OF_BIRTH_JP
+  - JP_AGE
+  - JP_GENDER
+  # English entities (NER - for Dual Detection)
+  - PERSON
+  - LOCATION
+  - ORGANIZATION
+  # English pattern entities
+  - EMAIL_ADDRESS
+  - PHONE_NUMBER
+  - DATE_TIME
+  - CREDIT_CARD
+  - IBAN_CODE
+
+# =============================================================================
+# Entity categories - Groups of equivalent entity types for Dual Detection
+# =============================================================================
+entity_categories:
+  person:
+    - PERSON
+    - JP_PERSON
+    - PER
+  location:
+    - LOCATION
+    - JP_ADDRESS
+    - LOC
+    - GPE
+  organization:
+    - ORGANIZATION
+    - JP_ORGANIZATION
+    - ORG
+
 # Confidence score thresholds
 confidence_thresholds:
   phone_number: 0.7
@@ -95,8 +137,39 @@ transformer:
   # Japanese model
   japanese:
     model_name: "knosing/japanese_ner_model"
+    tokenizer_name: "tohoku-nlp/bert-base-japanese-v3"
     entities:
       - "JP_PERSON"
       - "JP_ADDRESS"
       - "JP_ORGANIZATION"
-
+  
+  # Label mapping: BIO tags from models -> Entity types
+  label_mapping:
+    en:
+      B-PER: PERSON
+      I-PER: PERSON
+      B-LOC: LOCATION
+      I-LOC: LOCATION
+      B-ORG: ORGANIZATION
+      I-ORG: ORGANIZATION
+      B-MISC: MISC
+      I-MISC: MISC
+    ja:
+      B-PER: JP_PERSON
+      I-PER: JP_PERSON
+      B-PERSON: JP_PERSON
+      I-PERSON: JP_PERSON
+      B-LOC: JP_ADDRESS
+      I-LOC: JP_ADDRESS
+      B-LOCATION: JP_ADDRESS
+      I-LOCATION: JP_ADDRESS
+      B-ORG: JP_ORGANIZATION
+      I-ORG: JP_ORGANIZATION
+      B-ORGANIZATION: JP_ORGANIZATION
+      I-ORGANIZATION: JP_ORGANIZATION
+      B-人名: JP_PERSON
+      I-人名: JP_PERSON
+      B-地名: JP_ADDRESS
+      I-地名: JP_ADDRESS
+      B-組織: JP_ORGANIZATION
+      I-組織: JP_ORGANIZATION

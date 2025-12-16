@@ -19,8 +19,7 @@ TRANSFORMER_AVAILABLE = False
 try:
     from .transformer_ner import (
         TransformerNERRecognizer,
-        create_english_transformer_recognizer,
-        create_japanese_transformer_recognizer,
+        create_transformer_recognizer,
     )
     TRANSFORMER_AVAILABLE = True
 except ImportError:
@@ -42,7 +41,6 @@ __all__ = [
 if TRANSFORMER_AVAILABLE:
     __all__.extend([
         "TransformerNERRecognizer",
-        "create_english_transformer_recognizer",
-        "create_japanese_transformer_recognizer",
+        "create_transformer_recognizer",
     ])
 

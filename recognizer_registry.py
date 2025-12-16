@@ -28,10 +28,7 @@ except ImportError:
 
 # Try to import Transformer recognizers
 if TRANSFORMER_AVAILABLE:
-    from recognizers import (
-        create_english_transformer_recognizer,
-        create_japanese_transformer_recognizer,
-    )
+    from recognizers import create_transformer_recognizer
 
 RecognizerType = Literal["pattern", "ner_ginza", "ner_presidio", "ner_transformer"]
 
@@ -126,7 +123,8 @@ class RecognizerRegistry:
 def create_default_registry(
     use_ginza: bool = True,
     use_transformer: bool = False,
-    transformer_config: Optional[Dict[str, Any]] = None
+    transformer_config: Optional[Dict[str, Any]] = None,
+    app_config: Optional[Dict[str, Any]] = None
 ) -> RecognizerRegistry:
     """
     Create a registry with all available recognizers.
@@ -134,25 +132,22 @@ def create_default_registry(
     Args:
         use_ginza: Whether to include GiNZA-based recognizers
         use_transformer: Whether to include Transformer-based recognizers
-        transformer_config: Configuration for Transformer recognizers:
-            - device: "cpu" or "cuda"
-            - min_confidence: Minimum confidence threshold (default: 0.8)
-            - english_model: Model name for English (default: dslim/bert-base-NER)
-            - japanese_model: Model name for Japanese (default: knosing/japanese_ner_model)
+        transformer_config: Configuration for Transformer recognizers (legacy, use app_config)
+        app_config: Full application config (from config.yaml). If provided, 
+                    transformer settings are read from app_config["transformer"]
         
     Returns:
         RecognizerRegistry with all recognizers registered
     """
     registry = RecognizerRegistry()
     
-    # Default transformer config
-    if transformer_config is None:
-        transformer_config = {}
+    # Load config if not provided
+    if app_config is None:
+        from analyzer_factory import load_config
+        app_config = load_config()
     
-    device = transformer_config.get("device", "cpu")
-    min_confidence = transformer_config.get("min_confidence", 0.8)
-    english_model = transformer_config.get("english_model", "dslim/bert-base-NER")
-    japanese_model = transformer_config.get("japanese_model", "knosing/japanese_ner_model")
+    # Get transformer config from app_config
+    transformer_section = app_config.get("transformer", {})
     
     # === Pattern-based recognizers (Japanese) ===
     registry.register(RecognizerConfig(
@@ -240,31 +235,41 @@ def create_default_registry(
     
     # === Transformer-based recognizers (if available and enabled) ===
     if use_transformer and TRANSFORMER_AVAILABLE:
+        # English model config
+        en_model_config = transformer_section.get("english", {})
+        en_model_name = en_model_config.get("model_name", "dslim/bert-base-NER")
+        en_entities = en_model_config.get("entities", ["PERSON", "LOCATION", "ORGANIZATION"])
+        
+        # Japanese model config
+        ja_model_config = transformer_section.get("japanese", {})
+        ja_model_name = ja_model_config.get("model_name", "knosing/japanese_ner_model")
+        ja_entities = ja_model_config.get("entities", ["JP_PERSON", "JP_ADDRESS", "JP_ORGANIZATION"])
+        
         # English Transformer recognizer
         registry.register(RecognizerConfig(
-            recognizer=create_english_transformer_recognizer(
-                model_name=english_model,
-                min_confidence=min_confidence,
-                device=device
+            recognizer=create_transformer_recognizer(
+                model_config=en_model_config,
+                language="en",
+                transformer_config=transformer_section
             ),
             type="ner_transformer",
             language="en",
-            entity_type="PERSON,LOCATION,ORGANIZATION",
-            description=f"English NER via {english_model}",
+            entity_type=",".join(en_entities),
+            description=f"English NER via {en_model_name}",
             requires_nlp=False
         ))
         
         # Japanese Transformer recognizer
         registry.register(RecognizerConfig(
-            recognizer=create_japanese_transformer_recognizer(
-                model_name=japanese_model,
-                min_confidence=min_confidence,
-                device=device
+            recognizer=create_transformer_recognizer(
+                model_config=ja_model_config,
+                language="ja",
+                transformer_config=transformer_section
             ),
             type="ner_transformer",
             language="ja",
-            entity_type="JP_PERSON,JP_ADDRESS,JP_ORGANIZATION",
-            description=f"Japanese NER via {japanese_model}",
+            entity_type=",".join(ja_entities),
+            description=f"Japanese NER via {ja_model_name}",
             requires_nlp=False
         ))
     elif use_transformer and not TRANSFORMER_AVAILABLE:
