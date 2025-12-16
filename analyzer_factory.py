@@ -1,18 +1,17 @@
 """Factory for creating language-specific analyzer engines."""
 
-from typing import Optional, Dict, Any
 import warnings
+from pathlib import Path
+from typing import Any
 
 import yaml
-from pathlib import Path
-
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import NlpEngineProvider
 
-from recognizer_registry import create_default_registry, RecognizerRegistry, GINZA_AVAILABLE
+from recognizer_registry import GINZA_AVAILABLE, create_default_registry
 
 
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_config(config_path: str | None = None) -> dict[str, Any]:
     """
     Load configuration from YAML file.
     
@@ -26,28 +25,30 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
         config_path = Path(__file__).parent / "config.yaml"
     else:
         config_path = Path(config_path)
-    
+
     if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
     return {}
 
 
-def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
+def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
     """Extract transformer configuration from main config."""
     transformer = config.get("transformer", {})
-    
+    models = config.get("models", {})
+
     return {
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
         "min_confidence": transformer.get("min_confidence", 0.8),
         "require_dual_detection": transformer.get("require_dual_detection", True),
-        "english_model": transformer.get("english", {}).get("model_name", "dslim/bert-base-NER"),
-        "japanese_model": transformer.get("japanese", {}).get("model_name", "knosing/japanese_ner_model"),
+        # Model Registry info
+        "models_registry": models.get("registry", {}),
+        "models_defaults": models.get("defaults", {}),
     }
 
 
-def get_entities_to_mask(config: Dict[str, Any]) -> list:
+def get_entities_to_mask(config: dict[str, Any]) -> list:
     """
     Get the list of entity types to mask from config.
     
@@ -60,7 +61,7 @@ def get_entities_to_mask(config: Dict[str, Any]) -> list:
     return config.get("entities_to_mask", [])
 
 
-def get_entity_categories(config: Dict[str, Any]) -> Dict[str, list]:
+def get_entity_categories(config: dict[str, Any]) -> dict[str, list]:
     """
     Get entity categories for type normalization in Dual Detection.
     
@@ -74,9 +75,9 @@ def get_entity_categories(config: Dict[str, Any]) -> Dict[str, list]:
 
 
 def create_japanese_analyzer(
-    use_ginza: bool = True, 
+    use_ginza: bool = True,
     use_transformer: bool = False,
-    transformer_config: Optional[Dict[str, Any]] = None,
+    transformer_config: dict[str, Any] | None = None,
     verbose: bool = False
 ) -> AnalyzerEngine:
     """
@@ -102,10 +103,10 @@ def create_japanese_analyzer(
         use_transformer=use_transformer,
         transformer_config=transformer_config
     )
-    
+
     if verbose:
         print(registry.summary())
-    
+
     # Create NLP configuration for Japanese
     nlp_configuration = {
         "nlp_engine_name": "spacy",
@@ -114,12 +115,12 @@ def create_japanese_analyzer(
             {"lang_code": "ja", "model_name": "ja_ginza" if use_ginza and GINZA_AVAILABLE else "en_core_web_lg"},
         ],
     }
-    
+
     try:
         nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
     except Exception:
         nlp_engine = None
-    
+
     # Create analyzer with Japanese support
     if nlp_engine:
         analyzer = AnalyzerEngine(
@@ -128,22 +129,22 @@ def create_japanese_analyzer(
         )
     else:
         analyzer = AnalyzerEngine(supported_languages=["ja", "en"])
-    
+
     # Apply recognizers from registry (Japanese only)
     registry.apply_to_analyzer(analyzer, language="ja")
-    
+
     if verbose:
         ja_count = len(registry.get_by_language("ja"))
         print(f"✓ Japanese analyzer created with {ja_count} recognizers")
-    
+
     return analyzer
 
 
 def create_analyzer(
-    language: str = "en", 
-    use_ginza: bool = True, 
+    language: str = "en",
+    use_ginza: bool = True,
     use_transformer: bool = False,
-    transformer_config: Optional[Dict[str, Any]] = None,
+    transformer_config: dict[str, Any] | None = None,
     verbose: bool = False
 ) -> AnalyzerEngine:
     """
@@ -161,30 +162,29 @@ def create_analyzer(
     """
     if language == "ja":
         return create_japanese_analyzer(
-            use_ginza=use_ginza, 
+            use_ginza=use_ginza,
             use_transformer=use_transformer,
             transformer_config=transformer_config,
             verbose=verbose
         )
+    # English analyzer with optional Transformer support
+    elif use_transformer:
+        registry = create_default_registry(
+            use_ginza=False,
+            use_transformer=True,
+            transformer_config=transformer_config
+        )
+        analyzer = AnalyzerEngine()
+        registry.apply_to_analyzer(analyzer, language="en")
+        return analyzer
     else:
-        # English analyzer with optional Transformer support
-        if use_transformer:
-            registry = create_default_registry(
-                use_ginza=False,
-                use_transformer=True,
-                transformer_config=transformer_config
-            )
-            analyzer = AnalyzerEngine()
-            registry.apply_to_analyzer(analyzer, language="en")
-            return analyzer
-        else:
-            return AnalyzerEngine()
+        return AnalyzerEngine()
 
 
 def create_multilingual_analyzer(
-    use_ginza: bool = True, 
+    use_ginza: bool = True,
     use_transformer: bool = False,
-    transformer_config: Optional[Dict[str, Any]] = None,
+    transformer_config: dict[str, Any] | None = None,
     verbose: bool = False
 ) -> AnalyzerEngine:
     """
@@ -208,11 +208,11 @@ def create_multilingual_analyzer(
         use_transformer=use_transformer,
         transformer_config=transformer_config
     )
-    
+
     if verbose:
         print("=== Multilingual Analyzer Configuration ===")
         print(registry.summary())
-    
+
     # Configure NLP engine with both language models
     nlp_configuration = {
         "nlp_engine_name": "spacy",
@@ -221,13 +221,13 @@ def create_multilingual_analyzer(
             {"lang_code": "ja", "model_name": "ja_ginza" if use_ginza and GINZA_AVAILABLE else "en_core_web_lg"},
         ],
     }
-    
+
     try:
         nlp_engine = NlpEngineProvider(nlp_configuration=nlp_configuration).create_engine()
     except Exception as e:
         warnings.warn(f"Failed to create multi-language NLP engine: {e}. Falling back to basic engine.")
         nlp_engine = None
-    
+
     # Create analyzer with both language support
     if nlp_engine:
         analyzer = AnalyzerEngine(
@@ -236,12 +236,12 @@ def create_multilingual_analyzer(
         )
     else:
         analyzer = AnalyzerEngine(supported_languages=["en", "ja"])
-    
+
     # Apply ALL recognizers from registry (no double-registration)
     registry.apply_to_analyzer(analyzer)
-    
+
     if verbose:
         print(f"✓ Multilingual analyzer created with {len(registry.configs)} recognizers")
-    
+
     return analyzer
 

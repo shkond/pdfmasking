@@ -5,12 +5,12 @@ This package handles document extraction and file processing:
 - file_processor: Batch file processing
 """
 
-from .extractors import extract_text, extract_text_from_pdf, extract_text_from_docx
+from .extractors import extract_text, extract_text_from_docx, extract_text_from_pdf
 from .file_processor import process_file
 
 __all__ = [
     "extract_text",
-    "extract_text_from_pdf",
     "extract_text_from_docx",
+    "extract_text_from_pdf",
     "process_file",
 ]

@@ -5,18 +5,42 @@ for detecting and masking personally identifiable information.
 """
 
 from datetime import datetime
-from typing import Optional, Tuple, List, Dict, Any
+from typing import Any
 
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 
-from config import load_config, get_transformer_config, get_entities_to_mask, get_entity_categories
+from config import get_entities_to_mask, get_entity_categories, get_transformer_config, load_config
 from core.analyzer import create_analyzer, create_multilingual_analyzer
-from core.processors.text import preprocess_text
-from core.processors.result import deduplicate_results, merge_results
 from core.processors.dual_detection import dual_detection_analyze
+from core.processors.result import deduplicate_results, merge_results
+from core.processors.text import preprocess_text
 from masking_logging import MaskingLogger
 
+
+def build_operators(config: dict[str, Any]) -> dict:
+    """
+    Build anonymizer operators from config.
+    
+    Reads masking.entity_masks from config.yaml to create entity-specific
+    mask patterns (e.g., phone: ***-****-****, zip: ***-****).
+    
+    Args:
+        config: Configuration dictionary
+        
+    Returns:
+        Dict of entity_type -> OperatorConfig for AnonymizerEngine
+    """
+    masking_cfg = config.get("masking", {})
+    default_mask = masking_cfg.get("default_mask", "****")
+    entity_masks = masking_cfg.get("entity_masks", {})
+    
+    operators = {
+        "DEFAULT": OperatorConfig("replace", {"new_value": default_mask})
+    }
+    for entity_type, mask in entity_masks.items():
+        operators[entity_type] = OperatorConfig("replace", {"new_value": mask})
+    return operators
 
 class PIIMasker:
     """
@@ -32,8 +56,8 @@ class PIIMasker:
     - 性別 (JP_GENDER)
     - 年齢 (JP_AGE)
     """
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the masker with configuration.
         
@@ -46,14 +70,14 @@ class PIIMasker:
         self.entity_categories = get_entity_categories(self.config)
         self.anonymizer = AnonymizerEngine()
         self.logger = MaskingLogger()
-    
+
     def mask(
         self,
         text: str,
         language: str = "auto",
         verbose: bool = False,
         do_preprocess: bool = False
-    ) -> Tuple[str, Optional[List[Dict[str, Any]]]]:
+    ) -> tuple[str, list[dict[str, Any]] | None]:
         """
         Mask PII in text.
         
@@ -80,8 +104,8 @@ def mask_pii_in_text(
     language: str = "auto",
     verbose: bool = False,
     preprocess: bool = False,
-    config: Optional[Dict[str, Any]] = None
-) -> Tuple[str, Optional[List[Dict[str, Any]]]]:
+    config: dict[str, Any] | None = None
+) -> tuple[str, list[dict[str, Any]] | None]:
     """
     Mask PII in text using language-specific or multilingual analyzer.
     
@@ -102,18 +126,18 @@ def mask_pii_in_text(
     # Load configuration
     if config is None:
         config = load_config()
-    
+
     transformer_cfg = get_transformer_config(config)
     entities_to_mask = get_entities_to_mask(config)
     entity_categories = get_entity_categories(config)
-    
+
     use_transformer = transformer_cfg.get("enabled", False)
     require_dual_detection = transformer_cfg.get("require_dual_detection", True)
-    
+
     # Preprocess text if requested (useful for PDF-extracted text)
     if preprocess:
         text = preprocess_text(text)
-    
+
     anonymizer = AnonymizerEngine()
     dual_scores = {}  # Will hold dual scores if available
 
@@ -127,11 +151,11 @@ def mask_pii_in_text(
         else:
             # Standard mode
             analyzer = create_multilingual_analyzer(
-                use_ginza=True, 
+                use_ginza=True,
                 use_transformer=use_transformer,
                 transformer_config=transformer_cfg if use_transformer else None
             )
-            
+
             # Analyze in both languages
             results_en = analyzer.analyze(
                 text=text,
@@ -143,29 +167,28 @@ def mask_pii_in_text(
                 language="ja",
                 entities=entities_to_mask,
             )
-            
+
             # Merge results from both languages
             results = merge_results(results_en, results_ja)
+    # Single language mode
+    elif use_transformer and require_dual_detection:
+        # Dual detection mode
+        results, dual_scores = dual_detection_analyze(
+            text, transformer_cfg, entities_to_mask, entity_categories, language=language
+        )
     else:
-        # Single language mode
-        if use_transformer and require_dual_detection:
-            # Dual detection mode
-            results, dual_scores = dual_detection_analyze(
-                text, transformer_cfg, entities_to_mask, entity_categories, language=language
-            )
-        else:
-            # Standard mode
-            analyzer = create_analyzer(
-                language=language,
-                use_transformer=use_transformer,
-                transformer_config=transformer_cfg if use_transformer else None
-            )
-            results = analyzer.analyze(
-                text=text,
-                language=language,
-                entities=entities_to_mask,
-            )
-    
+        # Standard mode
+        analyzer = create_analyzer(
+            language=language,
+            use_transformer=use_transformer,
+            transformer_config=transformer_cfg if use_transformer else None
+        )
+        results = analyzer.analyze(
+            text=text,
+            language=language,
+            entities=entities_to_mask,
+        )
+
     # Deduplicate overlapping results
     results = deduplicate_results(results, text)
 
@@ -198,11 +221,9 @@ def mask_pii_in_text(
         logger.log(f"Total: {len(results)} entities masked")
 
 
-    # Prepare operators for masking
-    operators = {
-        # Mask all entities with "****"
-        "DEFAULT": OperatorConfig("replace", {"new_value": "****"})
-    }
+    # Prepare operators for masking (from config.yaml)
+    operators = build_operators(config)
+
 
     # Anonymize the text
     anonymized = anonymizer.anonymize(
@@ -210,7 +231,7 @@ def mask_pii_in_text(
         analyzer_results=results,
         operators=operators,
     )
-    
+
     # Prepare verbose output if requested
     entities_info = None
     if verbose and results:
@@ -224,5 +245,5 @@ def mask_pii_in_text(
                 "start": result.start,
                 "end": result.end,
             })
-    
+
     return anonymized.text, entities_info

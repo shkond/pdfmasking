@@ -78,17 +78,53 @@ masking:
 transformer:
   device: cpu
   enabled: true
-  english:
-    entities:
-    - PERSON
-    - LOCATION
-    - ORGANIZATION
-    model_name: dslim/bert-base-NER
-  japanese:
-    entities:
-    - JP_PERSON
-    - JP_ADDRESS
-    - JP_ORGANIZATION
-    model_name: knosing/japanese_ner_model
   min_confidence: 0.8
   require_dual_detection: true
+
+# Model Registry: すべてのTransformerモデル定義
+models:
+  registry:
+    # 英語NERモデル
+    bert_ner_en:
+      type: transformer
+      model_name: dslim/bert-base-NER
+      tokenizer_name: null
+      language: en
+      entities:
+        - PERSON
+        - LOCATION
+        - ORGANIZATION
+      label_mapping:
+        B-PER: PERSON
+        I-PER: PERSON
+        B-LOC: LOCATION
+        I-LOC: LOCATION
+        B-ORG: ORGANIZATION
+        I-ORG: ORGANIZATION
+        B-MISC: MISC
+        I-MISC: MISC
+      description: "English NER - dslim/bert-base-NER (CoNLL-2003)"
+
+    # 日本語NERモデル
+    knosing_ner_ja:
+      type: transformer
+      model_name: knosing/japanese_ner_model
+      tokenizer_name: tohoku-nlp/bert-base-japanese-v3
+      language: ja
+      entities:
+        - JP_PERSON
+        - JP_ADDRESS
+        - JP_ORGANIZATION
+      label_mapping:
+        B-PER: JP_PERSON
+        I-PER: JP_PERSON
+        B-LOC: JP_ADDRESS
+        I-LOC: JP_ADDRESS
+        B-ORG: JP_ORGANIZATION
+        I-ORG: JP_ORGANIZATION
+      description: "Japanese NER - knosing/japanese_ner_model"
+
+  # 言語ごとのデフォルトモデルID
+  defaults:
+    en: bert_ner_en
+    ja: knosing_ner_ja

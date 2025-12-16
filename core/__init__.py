@@ -6,17 +6,17 @@ This package contains the main masking logic:
 - processors: Text preprocessing and result processing
 """
 
-from .masker import PIIMasker, mask_pii_in_text
 from .analyzer import (
     create_analyzer,
-    create_multilingual_analyzer,
     create_japanese_analyzer,
+    create_multilingual_analyzer,
 )
+from .masker import PIIMasker, mask_pii_in_text
 
 __all__ = [
     "PIIMasker",
-    "mask_pii_in_text",
     "create_analyzer",
-    "create_multilingual_analyzer",
     "create_japanese_analyzer",
+    "create_multilingual_analyzer",
+    "mask_pii_in_text",
 ]

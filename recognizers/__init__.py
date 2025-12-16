@@ -7,24 +7,24 @@ This package contains:
 - registry: Centralized recognizer registry
 """
 
+from .japanese_ner import (
+    GinzaAddressRecognizer,
+    GinzaPersonRecognizer,
+)
 from .japanese_patterns import (
+    JapaneseAddressRecognizer,
+    JapaneseAgeRecognizer,
+    JapaneseBirthDateRecognizer,
+    JapaneseGenderRecognizer,
+    JapaneseNameRecognizer,
     JapanesePhoneRecognizer,
     JapaneseZipCodeRecognizer,
-    JapaneseBirthDateRecognizer,
-    JapaneseNameRecognizer,
-    JapaneseAgeRecognizer,
-    JapaneseGenderRecognizer,
-    JapaneseAddressRecognizer,
-)
-from .japanese_ner import (
-    GinzaPersonRecognizer,
-    GinzaAddressRecognizer,
 )
 from .registry import (
-    RecognizerRegistry,
-    RecognizerConfig,
-    create_default_registry,
     GINZA_AVAILABLE,
+    RecognizerConfig,
+    RecognizerRegistry,
+    create_default_registry,
 )
 
 # Conditional import for Transformer recognizers (requires torch and transformers)

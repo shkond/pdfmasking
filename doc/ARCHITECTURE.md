@@ -67,7 +67,7 @@ pdfmasking/
 ```mermaid
 graph TD
     main[main.py] --> core[core/]
-    main --> io[io/]
+    main --> file_io[file_io/]
     main --> recognizers[recognizers/]
     main --> masking_logging[masking_logging/]
     
@@ -75,8 +75,8 @@ graph TD
     core --> recognizers
     core --> masking_logging
     
-    io --> core
-    io --> masking_logging
+    file_io --> core
+    file_io --> masking_logging
     
     recognizers --> config
 ```
@@ -108,7 +108,7 @@ graph TD
 - `RecognizerConfig`: Recognizer metadata
 - `create_default_registry()`: Factory for default recognizers
 
-### io/
+### file_io/
 - `extractors.py`: PDF and Word text extraction
 - `file_processor.py`: Single file processing logic
 

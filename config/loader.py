@@ -3,13 +3,13 @@
 This module handles loading and parsing of config.yaml settings.
 """
 
-from typing import Dict, Any, Optional
 from pathlib import Path
+from typing import Any
 
 import yaml
 
 
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_config(config_path: str | None = None) -> dict[str, Any]:
     """
     Load configuration from YAML file.
     
@@ -24,14 +24,14 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
         config_path = Path(__file__).parent.parent / "config.yaml"
     else:
         config_path = Path(config_path)
-    
+
     if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
     return {}
 
 
-def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
+def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
     """
     Extract transformer configuration from main config.
     
@@ -48,7 +48,7 @@ def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
         - japanese_model: str
     """
     transformer = config.get("transformer", {})
-    
+
     return {
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
@@ -59,7 +59,7 @@ def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_entities_to_mask(config: Dict[str, Any]) -> list:
+def get_entities_to_mask(config: dict[str, Any]) -> list:
     """
     Get the list of entity types to mask from config.
     
@@ -82,7 +82,7 @@ def get_entities_to_mask(config: Dict[str, Any]) -> list:
     return config.get("entities_to_mask", [])
 
 
-def get_entity_categories(config: Dict[str, Any]) -> Dict[str, list]:
+def get_entity_categories(config: dict[str, Any]) -> dict[str, list]:
     """
     Get entity categories for type normalization in Dual Detection.
     

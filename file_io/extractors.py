@@ -6,7 +6,6 @@ Supports:
 """
 
 import os
-from typing import Optional
 
 from pdfminer.high_level import extract_text as pdf_extract_text
 
@@ -41,19 +40,19 @@ def extract_text_from_docx(file_path: str) -> str:
             "python-docx is required for Word document support. "
             "Install it with: pip install python-docx"
         )
-    
+
     doc = Document(file_path)
-    
+
     # Extract text from paragraphs
     paragraphs = [para.text for para in doc.paragraphs]
-    
+
     # Extract text from tables
     table_text = []
     for table in doc.tables:
         for row in table.rows:
             row_text = [cell.text for cell in row.cells]
             table_text.append(" | ".join(row_text))
-    
+
     # Combine all text
     all_text = "\n".join(paragraphs + table_text)
     return all_text
@@ -79,10 +78,10 @@ def extract_text(file_path: str) -> str:
     """
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
-    
+
     _, ext = os.path.splitext(file_path)
     ext = ext.lower()
-    
+
     if ext == ".pdf":
         return extract_text_from_pdf(file_path)
     elif ext == ".docx":

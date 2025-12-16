@@ -5,10 +5,9 @@ Handles processing of individual files and batch operations.
 
 import sys
 from pathlib import Path
-from typing import Optional
 
-from file_io.extractors import extract_text
 from core.masker import mask_pii_in_text
+from .extractors import extract_text
 from masking_logging import MaskingLogger
 
 
@@ -33,11 +32,11 @@ def process_file(
         # Setup logger for this file
         logger = MaskingLogger()
         logger.setup_file_handler(log_path)
-        
+
         # 1) Extract text from document
         print(f"Extracting text from {input_path.name}...", file=sys.stderr)
         text = extract_text(str(input_path))
-        
+
         if not text.strip():
             print(f"Warning: No text extracted from {input_path.name}.", file=sys.stderr)
             return
@@ -61,6 +60,6 @@ def process_file(
         else:
             print("\n=== Masked Text ===", file=sys.stderr)
             print(masked)
-            
+
     except Exception as e:
         print(f"Error processing {input_path.name}: {e}", file=sys.stderr)
