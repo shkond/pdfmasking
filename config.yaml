@@ -1,3 +1,9 @@
+# Allow list configuration - exclude these terms from PII detection
+allow_list:
+  enabled: true
+  dictionary_path: "doc/softwaretec.dic"
+  additional_terms: []
+
 confidence_thresholds:
   address: 0.6
   birth_date: 0.6
@@ -77,9 +83,25 @@ masking:
     PHONE_NUMBER_JP: '***-****-****'
 transformer:
   device: cpu
-  enabled: true
+  enabled: false
   min_confidence: 0.8
-  require_dual_detection: true
+
+# 検出戦略: エンティティごとに使用するRecognizerを指定
+detection_strategy:
+  # Transformer NERが担当するエンティティ（高精度NER）
+  transformer_entities:
+    - JP_PERSON
+    - JP_ADDRESS
+    - PERSON
+    - LOCATION
+  # Pattern/GiNZA認識器が担当するエンティティ（ルールベース）
+  pattern_entities:
+    - PHONE_NUMBER_JP
+    - JP_ZIP_CODE
+    - DATE_OF_BIRTH_JP
+    - JP_AGE
+    - JP_GENDER
+    - EMAIL_ADDRESS
 
 # Model Registry: すべてのTransformerモデル定義
 models:
@@ -106,6 +128,7 @@ models:
       description: "English NER - dslim/bert-base-NER (CoNLL-2003)"
 
     # 日本語NERモデル
+    # このモデルはBIO形式ではなく、日本語エンティティラベルを直接出力
     knosing_ner_ja:
       type: transformer
       model_name: knosing/japanese_ner_model
@@ -116,6 +139,14 @@ models:
         - JP_ADDRESS
         - JP_ORGANIZATION
       label_mapping:
+        # 実際のモデル出力ラベル（日本語）
+        人名: JP_PERSON
+        地名: JP_ADDRESS
+        法人名: JP_ORGANIZATION
+        その他の組織名: JP_ORGANIZATION
+        政治的組織名: JP_ORGANIZATION
+        施設名: JP_ADDRESS
+        # BIO形式も念のため残す（将来のモデル変更対応）
         B-PER: JP_PERSON
         I-PER: JP_PERSON
         B-LOC: JP_ADDRESS

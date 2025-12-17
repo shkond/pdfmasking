@@ -41,7 +41,6 @@ def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
         "min_confidence": transformer.get("min_confidence", 0.8),
-        "require_dual_detection": transformer.get("require_dual_detection", True),
         # Model Registry info
         "models_registry": models.get("registry", {}),
         "models_defaults": models.get("defaults", {}),

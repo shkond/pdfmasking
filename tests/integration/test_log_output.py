@@ -224,7 +224,7 @@ class TestDocumentPdfOutput:
         from document_extractors import extract_text
 
         # Path to document.pdf
-        pdf_path = Path(__file__).parent.parent / "document.pdf"
+        pdf_path = Path(__file__).parent.parent.parent / "document.pdf"
 
         if not pdf_path.exists():
             pytest.skip("document.pdf not found")

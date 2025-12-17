@@ -16,7 +16,6 @@ class TestModelRegistry:
                 "enabled": True,
                 "device": "cpu",
                 "min_confidence": 0.8,
-                "require_dual_detection": True,
             },
             "models": {
                 "registry": {

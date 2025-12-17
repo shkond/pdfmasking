@@ -41,3 +41,10 @@ section-order = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration"]
+markers = [
+    "accuracy: marks tests as accuracy tests (deselect with '-m not accuracy')",
+    "slow: marks tests as slow (deselect with '-m not slow')",
+]

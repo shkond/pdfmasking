@@ -1,5 +1,9 @@
 __pycache__/*
 venv312/*
 */__pycache__/*
-English Resume Sample*
+
 models/*
+*/*/__pycache__/*
+
+.ruff_cache/*
+Presidio

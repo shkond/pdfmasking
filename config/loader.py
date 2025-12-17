@@ -43,9 +43,6 @@ def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
         - enabled: bool
         - device: str ("cpu" or "cuda")
         - min_confidence: float
-        - require_dual_detection: bool
-        - english_model: str
-        - japanese_model: str
     """
     transformer = config.get("transformer", {})
 
@@ -53,9 +50,32 @@ def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
         "min_confidence": transformer.get("min_confidence", 0.8),
-        "require_dual_detection": transformer.get("require_dual_detection", True),
-        "english_model": transformer.get("english", {}).get("model_name", "dslim/bert-base-NER"),
-        "japanese_model": transformer.get("japanese", {}).get("model_name", "knosing/japanese_ner_model"),
+    }
+
+
+def get_detection_strategy(config: dict[str, Any]) -> dict[str, list]:
+    """
+    Get detection strategy configuration.
+    
+    Defines which entities are handled by Transformer NER vs Pattern recognizers.
+    
+    Args:
+        config: Configuration dictionary
+        
+    Returns:
+        Dict with keys:
+        - transformer_entities: list of entity types for Transformer
+        - pattern_entities: list of entity types for Pattern/GiNZA
+    """
+    strategy = config.get("detection_strategy", {})
+    return {
+        "transformer_entities": strategy.get("transformer_entities", [
+            "JP_PERSON", "JP_ADDRESS", "PERSON", "LOCATION"
+        ]),
+        "pattern_entities": strategy.get("pattern_entities", [
+            "PHONE_NUMBER_JP", "JP_ZIP_CODE", "DATE_OF_BIRTH_JP",
+            "JP_AGE", "JP_GENDER", "EMAIL_ADDRESS"
+        ]),
     }
 
 

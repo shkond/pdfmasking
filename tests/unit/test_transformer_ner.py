@@ -115,8 +115,8 @@ class TestTransformerNERRecognizer:
         assert "models_registry" in transformer_cfg
         assert "models_defaults" in transformer_cfg
 
-        # Config file has enabled: True (updated in refactoring)
-        assert transformer_cfg["enabled"] == True
+        # Config file has enabled: False (Transformer disabled by default)
+        assert transformer_cfg["enabled"] == False
         assert transformer_cfg["min_confidence"] == 0.8
 
         # Check models_defaults contains language mappings

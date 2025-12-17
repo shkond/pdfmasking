@@ -172,7 +172,11 @@ class TransformerNERRecognizer(EntityRecognizer):
         text: str
     ) -> list[dict]:
         """
-        BIOタグからエンティティを構築
+        BIOタグおよび非BIO形式ラベルからエンティティを構築
+        
+        対応ラベル形式:
+        - BIO形式: B-PER, I-PER, B-LOC, I-LOC など
+        - 非BIO形式: 人名, 地名, 法人名 など（日本語モデル用）
         
         Returns:
             [{"entity_type": str, "start": int, "end": int, "score": float}, ...]
@@ -190,8 +194,14 @@ class TransformerNERRecognizer(EntityRecognizer):
 
             label = self._model.config.id2label.get(label_id, "O")
 
-            if label.startswith("B-"):
-                # 新しいエンティティの開始
+            # BIO形式か非BIO形式かを判定
+            is_bio_begin = label.startswith("B-")
+            is_bio_inside = label.startswith("I-")
+            is_outside = label == "O"
+            is_non_bio_entity = not is_bio_begin and not is_bio_inside and not is_outside
+
+            if is_bio_begin:
+                # BIO形式: 新しいエンティティの開始
                 if current_entity:
                     entities.append(current_entity)
 
@@ -207,8 +217,8 @@ class TransformerNERRecognizer(EntityRecognizer):
                 else:
                     current_entity = None
 
-            elif label.startswith("I-") and current_entity:
-                # 既存エンティティの継続
+            elif is_bio_inside and current_entity:
+                # BIO形式: 既存エンティティの継続
                 entity_type = label_map.get(label, None)
                 if entity_type == current_entity["entity_type"]:
                     current_entity["end"] = int(token_end)
@@ -218,7 +228,36 @@ class TransformerNERRecognizer(EntityRecognizer):
                     )
                     current_entity["token_count"] += 1
 
-            elif label == "O":
+            elif is_non_bio_entity:
+                # 非BIO形式（日本語モデル: 人名, 地名, etc.）
+                entity_type = label_map.get(label, None)
+                if entity_type:
+                    if current_entity and current_entity["entity_type"] == entity_type:
+                        # 同じエンティティタイプ → 継続
+                        current_entity["end"] = int(token_end)
+                        current_entity["score"] = (
+                            (current_entity["score"] * current_entity["token_count"] + float(score)) /
+                            (current_entity["token_count"] + 1)
+                        )
+                        current_entity["token_count"] += 1
+                    else:
+                        # 異なるエンティティタイプ または 新規 → 新しいエンティティ開始
+                        if current_entity:
+                            entities.append(current_entity)
+                        current_entity = {
+                            "entity_type": entity_type,
+                            "start": int(token_start),
+                            "end": int(token_end),
+                            "score": float(score),
+                            "token_count": 1
+                        }
+                else:
+                    # マッピングにないラベル → エンティティ終了
+                    if current_entity:
+                        entities.append(current_entity)
+                        current_entity = None
+
+            elif is_outside:
                 # エンティティ外
                 if current_entity:
                     entities.append(current_entity)
@@ -230,6 +269,7 @@ class TransformerNERRecognizer(EntityRecognizer):
 
         return entities
 
+
     def _build_entities_from_tokens(
         self,
         label_ids: list[int],
@@ -239,7 +279,9 @@ class TransformerNERRecognizer(EntityRecognizer):
         """
         トークンベースでエンティティを構築 (offset_mapping非対応時のフォールバック)
         
-        テキスト全体をエンティティとして返す簡易実装
+        対応ラベル形式:
+        - BIO形式: B-PER, I-PER, B-LOC, I-LOC など
+        - 非BIO形式: 人名, 地名, 法人名 など（日本語モデル用）
         """
         label_map = self.label_mapping
         entities = []
@@ -254,7 +296,13 @@ class TransformerNERRecognizer(EntityRecognizer):
 
             label = self._model.config.id2label.get(label_id, "O")
 
-            if label.startswith("B-"):
+            # BIO形式か非BIO形式かを判定
+            is_bio_begin = label.startswith("B-")
+            is_bio_inside = label.startswith("I-")
+            is_outside = label == "O"
+            is_non_bio_entity = not is_bio_begin and not is_bio_inside and not is_outside
+
+            if is_bio_begin:
                 if current_entity:
                     entities.append(current_entity)
 
@@ -269,7 +317,7 @@ class TransformerNERRecognizer(EntityRecognizer):
                 else:
                     current_entity = None
 
-            elif label.startswith("I-") and current_entity:
+            elif is_bio_inside and current_entity:
                 entity_type = label_map.get(label, None)
                 if entity_type == current_entity["entity_type"]:
                     current_entity["tokens"].append(tokens[i])
@@ -279,7 +327,34 @@ class TransformerNERRecognizer(EntityRecognizer):
                     )
                     current_entity["token_count"] += 1
 
-            elif label == "O":
+            elif is_non_bio_entity:
+                # 非BIO形式（日本語モデル: 人名, 地名, etc.）
+                entity_type = label_map.get(label, None)
+                if entity_type:
+                    if current_entity and current_entity["entity_type"] == entity_type:
+                        # 同じエンティティタイプ → 継続
+                        current_entity["tokens"].append(tokens[i])
+                        current_entity["score"] = (
+                            (current_entity["score"] * current_entity["token_count"] + float(score)) /
+                            (current_entity["token_count"] + 1)
+                        )
+                        current_entity["token_count"] += 1
+                    else:
+                        # 異なるエンティティタイプ または 新規 → 新しいエンティティ開始
+                        if current_entity:
+                            entities.append(current_entity)
+                        current_entity = {
+                            "entity_type": entity_type,
+                            "tokens": [tokens[i]],
+                            "score": float(score),
+                            "token_count": 1
+                        }
+                else:
+                    if current_entity:
+                        entities.append(current_entity)
+                        current_entity = None
+
+            elif is_outside:
                 if current_entity:
                     entities.append(current_entity)
                     current_entity = None
@@ -292,8 +367,18 @@ class TransformerNERRecognizer(EntityRecognizer):
         for entity in entities:
             # Reconstruct the entity text from tokens
             entity_text = self._tokenizer.convert_tokens_to_string(entity["tokens"])
+            
             # Find the entity in the original text
+            # For Japanese (and CJK), tokenizer may add spaces between characters
+            # Try matching without the spaces first
             start_pos = text.find(entity_text)
+            if start_pos < 0:
+                # Try without spaces (for Japanese)
+                entity_text_no_space = entity_text.replace(" ", "")
+                start_pos = text.find(entity_text_no_space)
+                if start_pos >= 0:
+                    entity_text = entity_text_no_space
+            
             if start_pos >= 0:
                 result_entities.append({
                     "entity_type": entity["entity_type"],

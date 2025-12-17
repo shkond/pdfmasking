@@ -10,9 +10,10 @@ from typing import Any
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 
-from config import get_entities_to_mask, get_entity_categories, get_transformer_config, load_config
+from config import get_detection_strategy, get_entities_to_mask, get_entity_categories, get_transformer_config, load_config
+from core.allow_list import get_allow_list
 from core.analyzer import create_analyzer, create_multilingual_analyzer
-from core.processors.dual_detection import dual_detection_analyze
+from core.processors.hybrid_detection import hybrid_detection_analyze
 from core.processors.result import deduplicate_results, merge_results
 from core.processors.text import preprocess_text
 from masking_logging import MaskingLogger
@@ -107,11 +108,10 @@ def mask_pii_in_text(
     config: dict[str, Any] | None = None
 ) -> tuple[str, list[dict[str, Any]] | None]:
     """
-    Mask PII in text using language-specific or multilingual analyzer.
+    Mask PII in text using hybrid detection strategy.
     
-    When Transformer NER is enabled with dual-detection mode:
-    - Runs both pattern-based and Transformer-based analysis
-    - Only masks entities detected by BOTH recognizers
+    Uses Transformer NER for PERSON/ADDRESS entities and
+    Pattern recognizers for PHONE/ZIP/DATE/etc.
     
     Args:
         text: Text to analyze and mask
@@ -128,66 +128,43 @@ def mask_pii_in_text(
         config = load_config()
 
     transformer_cfg = get_transformer_config(config)
-    entities_to_mask = get_entities_to_mask(config)
-    entity_categories = get_entity_categories(config)
-
+    detection_strategy = get_detection_strategy(config)
+    
     use_transformer = transformer_cfg.get("enabled", False)
-    require_dual_detection = transformer_cfg.get("require_dual_detection", True)
+    transformer_entities = detection_strategy.get("transformer_entities", [])
+    pattern_entities = detection_strategy.get("pattern_entities", [])
+    
+    # Load allow list
+    allow_list = get_allow_list(config)
 
     # Preprocess text if requested (useful for PDF-extracted text)
     if preprocess:
         text = preprocess_text(text)
 
     anonymizer = AnonymizerEngine()
-    dual_scores = {}  # Will hold dual scores if available
 
-    if language == "auto":
-        # Multilingual mode: analyze in both English and Japanese
-        if use_transformer and require_dual_detection:
-            # Dual detection mode: run pattern-only and Transformer-only analyzers
-            results, dual_scores = dual_detection_analyze(
-                text, transformer_cfg, entities_to_mask, entity_categories, language="auto"
-            )
-        else:
-            # Standard mode
-            analyzer = create_multilingual_analyzer(
-                use_ginza=True,
-                use_transformer=use_transformer,
-                transformer_config=transformer_cfg if use_transformer else None
-            )
-
-            # Analyze in both languages
-            results_en = analyzer.analyze(
-                text=text,
-                language="en",
-                entities=entities_to_mask,
-            )
-            results_ja = analyzer.analyze(
-                text=text,
-                language="ja",
-                entities=entities_to_mask,
-            )
-
-            # Merge results from both languages
-            results = merge_results(results_en, results_ja)
-    # Single language mode
-    elif use_transformer and require_dual_detection:
-        # Dual detection mode
-        results, dual_scores = dual_detection_analyze(
-            text, transformer_cfg, entities_to_mask, entity_categories, language=language
+    # Use hybrid detection when Transformer is enabled
+    if use_transformer:
+        results = hybrid_detection_analyze(
+            text=text,
+            transformer_entities=transformer_entities,
+            pattern_entities=pattern_entities,
+            language=language,
+            app_config=config,
+            allow_list=allow_list
         )
     else:
-        # Standard mode
-        analyzer = create_analyzer(
-            language=language,
-            use_transformer=use_transformer,
-            transformer_config=transformer_cfg if use_transformer else None
-        )
-        results = analyzer.analyze(
-            text=text,
-            language=language,
-            entities=entities_to_mask,
-        )
+        # Transformer disabled - use only pattern recognizers
+        all_entities = transformer_entities + pattern_entities
+        
+        if language == "auto":
+            analyzer = create_multilingual_analyzer(use_ginza=True, use_transformer=False)
+            results_en = analyzer.analyze(text=text, language="en", entities=all_entities, allow_list=allow_list)
+            results_ja = analyzer.analyze(text=text, language="ja", entities=all_entities, allow_list=allow_list)
+            results = merge_results(results_en, results_ja)
+        else:
+            analyzer = create_analyzer(language=language, use_transformer=False)
+            results = analyzer.analyze(text=text, language=language, entities=all_entities, allow_list=allow_list)
 
     # Deduplicate overlapping results
     results = deduplicate_results(results, text)
@@ -198,26 +175,13 @@ def mask_pii_in_text(
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         logger.log(f"\n{'='*60}")
         logger.log(f"Masking Log - {timestamp}")
-        if dual_scores:
-            logger.log("Mode: Dual Detection (Pattern + Transformer)")
         logger.log(f"{'='*60}")
         for result in results:
             entity_text = text[result.start:result.end]
-            # Check if we have dual scores for this entity
-            if (result.start, result.end) in dual_scores:
-                scores = dual_scores[(result.start, result.end)]
-                p_type = scores.get('p_type', result.entity_type)
-                t_type = scores.get('t_type', '?')
-                logger.log(
-                    f"[{result.entity_type}] \"{entity_text}\" "
-                    f"(pattern: {p_type}={scores['pattern']:.2f}, transformer: {t_type}={scores['transformer']:.2f}, pos: {result.start}-{result.end})"
-                )
-
-            else:
-                logger.log(
-                    f"[{result.entity_type}] \"{entity_text}\" "
-                    f"(score: {result.score:.2f}, pos: {result.start}-{result.end})"
-                )
+            logger.log(
+                f"[{result.entity_type}] \"{entity_text}\" "
+                f"(score: {result.score:.2f}, pos: {result.start}-{result.end})"
+            )
         logger.log(f"Total: {len(results)} entities masked")
 
 
