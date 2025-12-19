@@ -1,0 +1,43 @@
+Jane Smith
+
+Email: ****
+
+Phone: +1-892-***-****
+
+Address: 456 Main Ave, New York, NY
+
+Postal Code: 23434
+
+Date of Birth: 1986-12-14
+
+PROFESSIONAL SUMMARY
+
+Experienced Frontend Engineer with expertise in React, Webpack, Vue.js.
+
+EDUCATION
+
+University of Melbourne - Bachelor of Science in Computer Science (2016)
+
+WORK EXPERIENCE
+
+Microsoft - Frontend Engineer (2***-****)
+
+Responsible for frontend engineer tasks using modern technologies.
+
+Oracle - Senior Frontend Engineer (2021-nn)
+
+Leading technical initiatives and mentoring junior engineers in frontend engineer domain.
+
+TECHNICAL SKILLS
+
+React, Webpack, Vue.js, HTML5, TypeScript
+
+CERTIFICATIONS
+
+(cid:127) AWS Certified Solutions Architect
+
+(cid:127) Cloud Practitioner Certification
+
+(cid:127) Kubernetes Administrator
+
+

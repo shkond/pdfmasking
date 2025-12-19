@@ -1,0 +1,8 @@
+
+============================================================
+Masking Log - 2025-12-19 13:58:39
+============================================================
+[EMAIL_ADDRESS] "jessica_martinez384@gmail.com" (score: 1.00, pos: 25-54)
+[JP_ZIP_CODE] "420-6514" (score: 0.60, pos: 70-78)
+[JP_ZIP_CODE] "017-2023" (score: 0.60, pos: 384-392)
+Total: 3 entities masked

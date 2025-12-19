@@ -1,5 +1,6 @@
 """Test that masked words are logged correctly in output log files."""
 
+import logging
 import re
 import shutil
 import tempfile
@@ -7,16 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from core.masker import mask_pii_in_text
+from core.masker import Masker
 from masking_logging import MaskingLogger
 
-# Create module-level logger instance for tests
-masking_logger = MaskingLogger().logger
-
-def setup_logger(log_path):
-    """Setup logger handler for tests."""
-    logger_instance = MaskingLogger()
-    logger_instance.setup_file_handler(log_path)
 
 # Expected 9 PII entities that should be masked from the sample text (no spaces)
 # These are the core PII values we want to ensure are detected
@@ -60,6 +54,14 @@ Email: taro.yamada@example.com
 """
 
 
+def create_masker_with_logger(log_path: Path) -> tuple[Masker, MaskingLogger]:
+    """Create a Masker with a logger configured to write to log_path."""
+    logger = MaskingLogger()
+    logger.setup_file_handler(log_path)
+    masker = Masker(logger=logger)
+    return masker, logger
+
+
 class TestLogOutput:
     """Test that log files contain expected masked words."""
 
@@ -70,9 +72,11 @@ class TestLogOutput:
         yield Path(temp_dir)
 
         # Close all logger handlers before cleanup
-        for handler in masking_logger.handlers[:]:
+        masking_logger_name = "masking"
+        logger = logging.getLogger(masking_logger_name)
+        for handler in logger.handlers[:]:
             handler.close()
-            masking_logger.removeHandler(handler)
+            logger.removeHandler(handler)
 
         # Clean up temp directory, ignore errors on Windows
         shutil.rmtree(temp_dir, ignore_errors=True)
@@ -85,15 +89,14 @@ class TestLogOutput:
         """
         log_path = temp_output_dir / "test_log.txt"
 
-        # Setup logger for this test
-        setup_logger(log_path)
+        # Create masker with logger
+        masker, logger = create_masker_with_logger(log_path)
 
         # Run masking
-        masked_text, _ = mask_pii_in_text(SAMPLE_TEXT, language="ja", verbose=True)
+        result = masker.mask(SAMPLE_TEXT, language="ja")
 
-        # Flush and close handlers to ensure all log content is written
-        for handler in masking_logger.handlers:
-            handler.flush()
+        # Flush handlers
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         # Read log file content
         log_content = log_path.read_text(encoding="utf-8")
@@ -125,13 +128,12 @@ class TestLogOutput:
     def test_phone_number_in_log(self, temp_output_dir):
         """Test that phone numbers are detected and logged."""
         log_path = temp_output_dir / "phone_log.txt"
-        setup_logger(log_path)
+        masker, logger = create_masker_with_logger(log_path)
 
         text = "電話: 090-1234-5678"
-        mask_pii_in_text(text, language="ja", verbose=True)
+        masker.mask(text, language="ja")
 
-        for handler in masking_logger.handlers:
-            handler.flush()
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         log_content = log_path.read_text(encoding="utf-8")
         assert "090-1234-5678" in log_content
@@ -140,13 +142,12 @@ class TestLogOutput:
     def test_zip_code_in_log(self, temp_output_dir):
         """Test that zip codes are detected and logged."""
         log_path = temp_output_dir / "zip_log.txt"
-        setup_logger(log_path)
+        masker, logger = create_masker_with_logger(log_path)
 
         text = "〒100-0001"
-        mask_pii_in_text(text, language="ja", verbose=True)
+        masker.mask(text, language="ja")
 
-        for handler in masking_logger.handlers:
-            handler.flush()
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         log_content = log_path.read_text(encoding="utf-8")
         assert "100-0001" in log_content
@@ -155,13 +156,12 @@ class TestLogOutput:
     def test_date_in_log(self, temp_output_dir):
         """Test that dates are detected and logged."""
         log_path = temp_output_dir / "date_log.txt"
-        setup_logger(log_path)
+        masker, logger = create_masker_with_logger(log_path)
 
         text = "生年月日: 1995年4月15日"
-        mask_pii_in_text(text, language="ja", verbose=True)
+        masker.mask(text, language="ja")
 
-        for handler in masking_logger.handlers:
-            handler.flush()
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         log_content = log_path.read_text(encoding="utf-8")
         assert "1995年4月15日" in log_content
@@ -170,13 +170,12 @@ class TestLogOutput:
     def test_email_in_log(self, temp_output_dir):
         """Test that email addresses are detected and logged."""
         log_path = temp_output_dir / "email_log.txt"
-        setup_logger(log_path)
+        masker, logger = create_masker_with_logger(log_path)
 
         text = "Email: test@example.com"
-        mask_pii_in_text(text, language="ja", verbose=True)
+        masker.mask(text, language="ja")
 
-        for handler in masking_logger.handlers:
-            handler.flush()
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         log_content = log_path.read_text(encoding="utf-8")
         assert "test@example.com" in log_content
@@ -185,15 +184,16 @@ class TestLogOutput:
     def test_person_name_in_log(self, temp_output_dir):
         """Test that person names are detected and logged."""
         log_path = temp_output_dir / "person_log.txt"
-        setup_logger(log_path)
+        masker, logger = create_masker_with_logger(log_path)
 
         text = "氏名: 山田太郎"
-        mask_pii_in_text(text, language="ja", verbose=True)
+        masker.mask(text, language="ja")
 
-        for handler in masking_logger.handlers:
-            handler.flush()
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         log_content = log_path.read_text(encoding="utf-8")
+        # Person names require Transformer - check if detected
+        # This may fail if Transformer is not enabled
         assert "山田太郎" in log_content
         assert "PERSON" in log_content
 
@@ -208,9 +208,11 @@ class TestDocumentPdfOutput:
         yield Path(temp_dir)
 
         # Close all logger handlers before cleanup
-        for handler in masking_logger.handlers[:]:
+        masking_logger_name = "masking"
+        logger = logging.getLogger(masking_logger_name)
+        for handler in logger.handlers[:]:
             handler.close()
-            masking_logger.removeHandler(handler)
+            logger.removeHandler(handler)
 
         # Clean up temp directory, ignore errors on Windows
         shutil.rmtree(temp_dir, ignore_errors=True)
@@ -231,18 +233,17 @@ class TestDocumentPdfOutput:
 
         log_path = temp_output_dir / "document_log.txt"
 
-        # Setup logger for this test
-        setup_logger(log_path)
+        # Create masker with logger
+        masker, logger = create_masker_with_logger(log_path)
 
         # Extract text from PDF
         text = extract_text(str(pdf_path))
 
         # Run masking with Japanese language and preprocessing for PDF text
-        masked_text, _ = mask_pii_in_text(text, language="ja", verbose=True, preprocess=True)
+        result = masker.mask(text, language="ja", do_preprocess=True)
 
-        # Flush and close handlers to ensure all log content is written
-        for handler in masking_logger.handlers:
-            handler.flush()
+        # Flush handlers
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         # Read log file content
         log_content = log_path.read_text(encoding="utf-8")
@@ -274,5 +275,6 @@ class TestDocumentPdfOutput:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
 
 

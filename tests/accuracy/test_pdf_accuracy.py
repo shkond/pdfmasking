@@ -8,10 +8,14 @@ Excluded from CI by default due to:
 - File dependencies (requires document.pdf)
 """
 
+import logging
 import re
 from pathlib import Path
 
 import pytest
+
+from core.masker import Masker
+from masking_logging import MaskingLogger
 
 
 # Mark all tests in this module as accuracy tests
@@ -56,15 +60,15 @@ class TestPdfAccuracy:
 
     def test_pdf_pii_detection_recall(self, pdf_text, temp_output_dir):
         """Test that all expected PII is detected."""
-        from core.masker import mask_pii_in_text
-        from conftest import setup_logger
-
         log_path = temp_output_dir / "pdf_accuracy_log.txt"
-        setup_logger(log_path)
+        logger = MaskingLogger()
+        logger.setup_file_handler(log_path)
+        masker = Masker(logger=logger)
 
-        masked_text, entities = mask_pii_in_text(
-            pdf_text, language="ja", verbose=True, preprocess=True
-        )
+        result = masker.mask(pdf_text, language="ja", do_preprocess=True)
+
+        # Flush handlers
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         # Read log content
         log_content = log_path.read_text(encoding="utf-8")
@@ -97,15 +101,15 @@ class TestPdfAccuracy:
 
     def test_pdf_pii_detection_precision(self, pdf_text, temp_output_dir):
         """Test that not too many false positives are detected."""
-        from core.masker import mask_pii_in_text
-        from conftest import setup_logger
-
         log_path = temp_output_dir / "pdf_precision_log.txt"
-        setup_logger(log_path)
+        logger = MaskingLogger()
+        logger.setup_file_handler(log_path)
+        masker = Masker(logger=logger)
 
-        masked_text, entities = mask_pii_in_text(
-            pdf_text, language="ja", verbose=True, preprocess=True
-        )
+        result = masker.mask(pdf_text, language="ja", do_preprocess=True)
+
+        # Flush handlers
+        logger.logger.handlers[0].flush() if logger.logger.handlers else None
 
         # Read log content
         log_content = log_path.read_text(encoding="utf-8")
@@ -121,3 +125,4 @@ class TestPdfAccuracy:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

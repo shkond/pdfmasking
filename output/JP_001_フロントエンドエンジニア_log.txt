@@ -16,3 +16,12 @@ Masking Log (Preprocessor) - 2025-12-17 11:32:09
 [JP_ZIP_CODE] " 357-1188" (score: 0.95, pos: 99-108)
 [DATE_OF_BIRTH_JP] "1992-08-18" (score: 0.90, pos: 125-135)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-19 13:59:09
+============================================================
+[EMAIL_ADDRESS] "nnnn710@gmail.com" (score: 1.00, pos: 13-30)
+[PHONE_NUMBER_JP] "091-9797-5371" (score: 0.70, pos: 39-52)
+[JP_ZIP_CODE] "357-1188" (score: 0.60, pos: 100-108)
+[JP_ZIP_CODE] "016-2024" (score: 0.60, pos: 263-271)
+Total: 4 entities masked

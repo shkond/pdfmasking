@@ -1,0 +1,43 @@
+Jane Rodriguez
+
+Email: ****
+
+Phone: +1-246-***-****
+
+Address: 789 Tech Blvd, Austin, NY
+
+Postal Code: 19116
+
+Date of Birth: 1991-06-29
+
+PROFESSIONAL SUMMARY
+
+Experienced Data Engineer with expertise in BigQuery, Spark, Hadoop.
+
+EDUCATION
+
+Stanford University - Bachelor of Science in Computer Science (2013)
+
+WORK EXPERIENCE
+
+Apple - Data Engineer (2***-****)
+
+Responsible for data engineer tasks using modern technologies.
+
+Databricks - Senior Data Engineer (2023-nn)
+
+Leading technical initiatives and mentoring junior engineers in data engineer domain.
+
+TECHNICAL SKILLS
+
+BigQuery, Spark, Hadoop, Kafka, Snowflake
+
+CERTIFICATIONS
+
+(cid:127) AWS Certified Solutions Architect
+
+(cid:127) Cloud Practitioner Certification
+
+(cid:127) GCP Professional Data Engineer
+
+

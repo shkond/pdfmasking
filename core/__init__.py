@@ -13,7 +13,7 @@ from .analyzer import (
     create_japanese_analyzer,
     create_multilingual_analyzer,
 )
-from .masker import Masker, PIIMasker, mask_pii_in_text
+from .masker import Masker
 from .masking_result import EntityInfo, MaskingResult, MaskingStats
 from .protocols import AnonymizerProtocol, LoggerProtocol, NullLogger, TextExtractorProtocol
 
@@ -32,8 +32,6 @@ __all__ = [
     "AnonymizerProtocol",
     "TextExtractorProtocol",
     "NullLogger",
-    # Backward compatibility (deprecated)
-    "PIIMasker",
-    "mask_pii_in_text",
 ]
+
 
