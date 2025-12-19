@@ -1,5 +1,6 @@
 """Shared fixtures for pdfmasking tests."""
 
+import logging
 import shutil
 import tempfile
 from pathlib import Path
@@ -15,11 +16,13 @@ def temp_output_dir():
     temp_dir = tempfile.mkdtemp()
     yield Path(temp_dir)
 
-    # Close all logger handlers before cleanup
-    masking_logger = MaskingLogger().logger
-    for handler in masking_logger.handlers[:]:
+    # Close all masking loggers to release file handles
+    # With non-singleton pattern, we need to clean up the underlying logger
+    masking_logger_name = "masking"
+    logger = logging.getLogger(masking_logger_name)
+    for handler in logger.handlers[:]:
         handler.close()
-        masking_logger.removeHandler(handler)
+        logger.removeHandler(handler)
 
     # Clean up temp directory, ignore errors on Windows
     shutil.rmtree(temp_dir, ignore_errors=True)
@@ -78,16 +81,37 @@ def sample_config():
                 "ja": "knosing_ner_ja",
             },
         },
+        "masking": {
+            "default_mask": "****",
+            "entity_masks": {}
+        },
+        "allow_list": {
+            "enabled": False,
+            "dictionary_path": None
+        }
     }
 
 
 @pytest.fixture
-def masking_logger_instance():
-    """Get a masking logger instance."""
-    return MaskingLogger()
+def masking_logger_instance(tmp_path):
+    """Get a masking logger instance with temporary file handler."""
+    logger = MaskingLogger()
+    log_path = tmp_path / "test_masking.log"
+    logger.setup_file_handler(log_path)
+    yield logger
+    logger.close()
+
+
+@pytest.fixture
+def null_logger():
+    """Get a NullLogger for tests that don't need logging."""
+    from core.protocols import NullLogger
+    return NullLogger()
 
 
 def setup_logger(log_path):
     """Setup logger handler for tests."""
     logger_instance = MaskingLogger()
     logger_instance.setup_file_handler(log_path)
+    return logger_instance
+

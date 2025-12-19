@@ -61,6 +61,16 @@ Examples:
         help="Show detected PII entities before masking"
     )
     parser.add_argument(
+        "--use-preprocessor",
+        action="store_true",
+        help="Use structure-aware preprocessing pipeline (experimental)"
+    )
+    parser.add_argument(
+        "--use-ner",
+        action="store_true",
+        help="Enable NER engines (GiNZA/Transformer) with preprocessor"
+    )
+    parser.add_argument(
         "--show-recognizers",
         action="store_true",
         help="Show registered recognizers and exit"
@@ -89,7 +99,10 @@ Examples:
         output_path = Path(args.output) if args.output else output_dir / f"{stem}.txt"
         log_path = output_dir / f"{stem}_log.txt"
 
-        process_file(input_path, output_path, log_path, args.lang, args.verbose)
+        process_file(
+            input_path, output_path, log_path, args.lang, args.verbose,
+            use_preprocessor=args.use_preprocessor, use_ner=args.use_ner
+        )
 
     else:
         # Batch mode
@@ -128,7 +141,11 @@ Examples:
             processed_output_path = output_dir / f"{stem}.txt"
             processed_log_path = output_dir / f"{stem}_log.txt"
 
-            process_file(input_path, processed_output_path, processed_log_path, args.lang, args.verbose)
+            process_file(
+                input_path, processed_output_path, processed_log_path,
+                args.lang, args.verbose,
+                use_preprocessor=args.use_preprocessor, use_ner=args.use_ner
+            )
 
         print(f"\nBatch processing complete. Results in '{output_dir.absolute()}'", file=sys.stderr)
 

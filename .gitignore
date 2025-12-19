@@ -7,3 +7,4 @@ models/*
 
 .ruff_cache/*
 Presidio
+models/*

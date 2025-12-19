@@ -1,6 +1,6 @@
 
 ============================================================
-Masking Log - 2025-12-16 03:34:47
+Masking Log - 2025-12-17 09:19:31
 ============================================================
 [DATE_OF_BIRTH_JP] "1995年4月15日" (score: 1.00, pos: 74-84)
 [JP_AGE] "29歳" (score: 0.80, pos: 85-88)
@@ -11,7 +11,7 @@ Masking Log - 2025-12-16 03:34:47
 Total: 6 entities masked
 
 ============================================================
-Masking Log - 2025-12-17 00:28:51
+Masking Log - 2025-12-17 09:28:12
 ============================================================
 [DATE_OF_BIRTH_JP] "1995年4月15日" (score: 1.00, pos: 74-84)
 [JP_AGE] "29歳" (score: 0.80, pos: 85-88)
@@ -19,35 +19,4 @@ Masking Log - 2025-12-17 00:28:51
 [JP_ZIP_CODE] "100-0001" (score: 0.95, pos: 104-112)
 [PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 134-147)
 [EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
-[JP_ADDRESS] "東京都立第一高等学校" (score: 0.94, pos: 210-220)
-Total: 7 entities masked
-
-============================================================
-Masking Log - 2025-12-17 00:36:49
-============================================================
-[JP_PERSON] "山田 太郎" (score: 0.85, pos: 46-51)
-[JP_PERSON] "やまだ たろう" (score: 0.85, pos: 59-66)
-[DATE_OF_BIRTH_JP] "1995年4月15日" (score: 1.00, pos: 74-84)
-[JP_AGE] "29歳" (score: 0.80, pos: 85-88)
-[JP_GENDER] "男性" (score: 1.00, pos: 99-101)
-[JP_ZIP_CODE] "100-0001" (score: 0.95, pos: 104-112)
-[JP_ADDRESS] "東京都千代田区千代田1-1" (score: 0.70, pos: 113-126)
-[PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 134-147)
-[EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
-[LOCATION] "と考えております" (score: 0.85, pos: 1054-1062)
-Total: 10 entities masked
-
-============================================================
-Masking Log - 2025-12-17 01:23:35
-============================================================
-[JP_PERSON] "山田 太郎" (score: 0.85, pos: 46-51)
-[JP_PERSON] "やまだ たろう" (score: 0.85, pos: 59-66)
-[DATE_OF_BIRTH_JP] "1995年4月15日" (score: 1.00, pos: 74-84)
-[JP_AGE] "29歳" (score: 0.80, pos: 85-88)
-[JP_GENDER] "男性" (score: 1.00, pos: 99-101)
-[JP_ZIP_CODE] "100-0001" (score: 0.95, pos: 104-112)
-[JP_ADDRESS] "東京都千代田区千代田1-1" (score: 0.70, pos: 113-126)
-[PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 134-147)
-[EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
-[LOCATION] "と考えております" (score: 0.85, pos: 1054-1062)
-Total: 10 entities masked
+Total: 6 entities masked

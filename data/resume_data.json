@@ -1,0 +1,462 @@
+[
+  {
+    "id": "EN_001",
+    "language": "English",
+    "job_title": "Frontend Engineer",
+    "personal_info": {
+      "name": "Jane Smith",
+      "email": "jane_smith859@outlook.com",
+      "address": "456 Main Ave, New York, NY",
+      "postal_code": "23434",
+      "phone": "+1-892-958-9935",
+      "date_of_birth": "1986-12-14"
+    },
+    "education": {
+      "university": "University of Melbourne",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation_year": 2016
+    },
+    "work_experience": [
+      {
+        "company": "Microsoft",
+        "position": "Frontend Engineer",
+        "start_year": 2015,
+        "end_year": 2021,
+        "description": "Responsible for frontend engineer tasks using modern technologies."
+      },
+      {
+        "company": "Oracle",
+        "position": "Senior Frontend Engineer",
+        "start_year": 2021,
+        "end_year": null,
+        "description": "Leading technical initiatives and mentoring junior engineers in frontend engineer domain."
+      }
+    ],
+    "technologies": [
+      "React",
+      "Webpack",
+      "Vue.js",
+      "HTML5",
+      "TypeScript"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Cloud Practitioner Certification",
+      "Kubernetes Administrator"
+    ]
+  },
+  {
+    "id": "EN_002",
+    "language": "English",
+    "job_title": "Backend Engineer",
+    "personal_info": {
+      "name": "Jessica Martinez",
+      "email": "jessica_martinez384@gmail.com",
+      "address": "456 Main Ave, Boston, WA",
+      "postal_code": "46421",
+      "phone": "+1-359-420-6514",
+      "date_of_birth": "1987-04-18"
+    },
+    "education": {
+      "university": "Stanford University",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation_year": 2016
+    },
+    "work_experience": [
+      {
+        "company": "Apple",
+        "position": "Backend Engineer",
+        "start_year": 2017,
+        "end_year": 2023,
+        "description": "Responsible for backend engineer tasks using modern technologies."
+      },
+      {
+        "company": "Figma",
+        "position": "Senior Backend Engineer",
+        "start_year": 2022,
+        "end_year": null,
+        "description": "Leading technical initiatives and mentoring junior engineers in backend engineer domain."
+      }
+    ],
+    "technologies": [
+      "Python",
+      "Spring Boot",
+      ".NET",
+      "FastAPI",
+      "Go"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Cloud Practitioner Certification",
+      "CISSP"
+    ]
+  },
+  {
+    "id": "EN_003",
+    "language": "English",
+    "job_title": "Data Engineer",
+    "personal_info": {
+      "name": "Jane Rodriguez",
+      "email": "jane_rodriguez400@techmail.jp",
+      "address": "789 Tech Blvd, Austin, NY",
+      "postal_code": "19116",
+      "phone": "+1-246-877-4733",
+      "date_of_birth": "1991-06-29"
+    },
+    "education": {
+      "university": "Stanford University",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation_year": 2013
+    },
+    "work_experience": [
+      {
+        "company": "Apple",
+        "position": "Data Engineer",
+        "start_year": 2018,
+        "end_year": 2023,
+        "description": "Responsible for data engineer tasks using modern technologies."
+      },
+      {
+        "company": "Databricks",
+        "position": "Senior Data Engineer",
+        "start_year": 2023,
+        "end_year": null,
+        "description": "Leading technical initiatives and mentoring junior engineers in data engineer domain."
+      }
+    ],
+    "technologies": [
+      "BigQuery",
+      "Spark",
+      "Hadoop",
+      "Kafka",
+      "Snowflake"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Cloud Practitioner Certification",
+      "GCP Professional Data Engineer"
+    ]
+  },
+  {
+    "id": "EN_004",
+    "language": "English",
+    "job_title": "Infrastructure Engineer",
+    "personal_info": {
+      "name": "David Johnson",
+      "email": "david_johnson723@yahoo.com",
+      "address": "654 Digital Ln, New York, NY",
+      "postal_code": "70589",
+      "phone": "+1-588-476-4598",
+      "date_of_birth": "1992-04-10"
+    },
+    "education": {
+      "university": "University of Tokyo",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation_year": 2013
+    },
+    "work_experience": [
+      {
+        "company": "Microsoft",
+        "position": "Infrastructure Engineer",
+        "start_year": 2017,
+        "end_year": 2024,
+        "description": "Responsible for infrastructure engineer tasks using modern technologies."
+      },
+      {
+        "company": "VMware",
+        "position": "Senior Infrastructure Engineer",
+        "start_year": 2021,
+        "end_year": null,
+        "description": "Leading technical initiatives and mentoring junior engineers in infrastructure engineer domain."
+      }
+    ],
+    "technologies": [
+      "Kubernetes",
+      "Docker",
+      "Terraform",
+      "GCP",
+      "Azure"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Cloud Practitioner Certification",
+      "GCP Professional Data Engineer"
+    ]
+  },
+  {
+    "id": "EN_005",
+    "language": "English",
+    "job_title": "Security Engineer",
+    "personal_info": {
+      "name": "Jessica Miller",
+      "email": "jessica_miller758@company.com",
+      "address": "456 Main Ave, Seattle, NY",
+      "postal_code": "42325",
+      "phone": "+1-962-774-9830",
+      "date_of_birth": "1990-11-23"
+    },
+    "education": {
+      "university": "University of Melbourne",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation_year": 2016
+    },
+    "work_experience": [
+      {
+        "company": "Zoom",
+        "position": "Security Engineer",
+        "start_year": 2018,
+        "end_year": 2023,
+        "description": "Responsible for security engineer tasks using modern technologies."
+      },
+      {
+        "company": "Cisco",
+        "position": "Senior Security Engineer",
+        "start_year": 2021,
+        "end_year": null,
+        "description": "Leading technical initiatives and mentoring junior engineers in security engineer domain."
+      }
+    ],
+    "technologies": [
+      "OWASP",
+      "Linux",
+      "OAuth2",
+      "SSL/TLS",
+      "Penetration Testing"
+    ],
+    "certifications": [
+      "AWS Certified Solutions Architect",
+      "Cloud Practitioner Certification",
+      "GCP Professional Data Engineer"
+    ]
+  },
+  {
+    "id": "JP_001",
+    "language": "Japanese",
+    "job_title": "フロントエンドエンジニア",
+    "personal_info": {
+      "name": "佐藤翔太",
+      "email": "佐藤翔太710@gmail.com",
+      "address": "埼玉県中央区10-11-12オフィス401号",
+      "postal_code": "357-1188",
+      "phone": "091-9797-5371",
+      "date_of_birth": "1992-08-18"
+    },
+    "education": {
+      "university": "京都大学",
+      "degree": "コンピュータサイエンス学士号",
+      "graduation_year": 2014
+    },
+    "work_experience": [
+      {
+        "company": "Rakuten",
+        "position": "フロントエンドエンジニア",
+        "start_year": 2016,
+        "end_year": 2024,
+        "description": "フロントエンドエンジニアとして、最新技術を用いた業務に従事。"
+      },
+      {
+        "company": "Sony",
+        "position": "シニアフロントエンドエンジニア",
+        "start_year": 2023,
+        "end_year": null,
+        "description": "フロントエンドエンジニア領域でのリード業務と後進の指導を実施。"
+      }
+    ],
+    "technologies": [
+      "Webpack",
+      "GraphQL",
+      "Vue.js",
+      "HTML5",
+      "React"
+    ],
+    "certifications": [
+      "AWSソリューションアーキテクト",
+      "クラウドプラクティショナー認定",
+      "GCP Professional Data Engineer"
+    ]
+  },
+  {
+    "id": "JP_002",
+    "language": "Japanese",
+    "job_title": "バックエンドエンジニア",
+    "personal_info": {
+      "name": "高橋大輔",
+      "email": "高橋大輔723@yahoo.com",
+      "address": "神奈川県港区4-5-6オフィス401号",
+      "postal_code": "897-9689",
+      "phone": "090-6310-9005",
+      "date_of_birth": "1985-06-09"
+    },
+    "education": {
+      "university": "京都大学",
+      "degree": "コンピュータサイエンス学士号",
+      "graduation_year": 2015
+    },
+    "work_experience": [
+      {
+        "company": "Accenture Japan",
+        "position": "バックエンドエンジニア",
+        "start_year": 2016,
+        "end_year": 2021,
+        "description": "バックエンドエンジニアとして、最新技術を用いた業務に従事。"
+      },
+      {
+        "company": "Fujitsu",
+        "position": "シニアバックエンドエンジニア",
+        "start_year": 2023,
+        "end_year": null,
+        "description": "バックエンドエンジニア領域でのリード業務と後進の指導を実施。"
+      }
+    ],
+    "technologies": [
+      "Java",
+      "Python",
+      "Spring Boot",
+      ".NET",
+      "Node.js"
+    ],
+    "certifications": [
+      "AWSソリューションアーキテクト",
+      "クラウドプラクティショナー認定",
+      "GCP Professional Data Engineer"
+    ]
+  },
+  {
+    "id": "JP_003",
+    "language": "Japanese",
+    "job_title": "データエンジニア",
+    "personal_info": {
+      "name": "佐藤次郎",
+      "email": "佐藤次郎775@company.com",
+      "address": "神奈川県港区10-11-12ビル301号",
+      "postal_code": "652-4295",
+      "phone": "094-7537-7118",
+      "date_of_birth": "1994-10-29"
+    },
+    "education": {
+      "university": "明治大学",
+      "degree": "コンピュータサイエンス学士号",
+      "graduation_year": 2017
+    },
+    "work_experience": [
+      {
+        "company": "Honda",
+        "position": "データエンジニア",
+        "start_year": 2016,
+        "end_year": 2022,
+        "description": "データエンジニアとして、最新技術を用いた業務に従事。"
+      },
+      {
+        "company": "Toyota",
+        "position": "シニアデータエンジニア",
+        "start_year": 2022,
+        "end_year": null,
+        "description": "データエンジニア領域でのリード業務と後進の指導を実施。"
+      }
+    ],
+    "technologies": [
+      "Python",
+      "SQL",
+      "Snowflake",
+      "Spark",
+      "BigQuery"
+    ],
+    "certifications": [
+      "AWSソリューションアーキテクト",
+      "クラウドプラクティショナー認定",
+      "Kubernetes管理者認定"
+    ]
+  },
+  {
+    "id": "JP_004",
+    "language": "Japanese",
+    "job_title": "インフラエンジニア",
+    "personal_info": {
+      "name": "山田太郎",
+      "email": "山田太郎334@gmail.com",
+      "address": "東京都港区1-2-3オフィス401号",
+      "postal_code": "343-5562",
+      "phone": "097-4510-9834",
+      "date_of_birth": "1987-12-20"
+    },
+    "education": {
+      "university": "立教大学",
+      "degree": "コンピュータサイエンス学士号",
+      "graduation_year": 2019
+    },
+    "work_experience": [
+      {
+        "company": "Mercari",
+        "position": "インフラエンジニア",
+        "start_year": 2016,
+        "end_year": 2024,
+        "description": "インフラエンジニアとして、最新技術を用いた業務に従事。"
+      },
+      {
+        "company": "Rakuten",
+        "position": "シニアインフラエンジニア",
+        "start_year": 2021,
+        "end_year": null,
+        "description": "インフラエンジニア領域でのリード業務と後進の指導を実施。"
+      }
+    ],
+    "technologies": [
+      "Azure",
+      "AWS",
+      "Terraform",
+      "Kubernetes",
+      "GCP"
+    ],
+    "certifications": [
+      "AWSソリューションアーキテクト",
+      "クラウドプラクティショナー認定",
+      "CISSP"
+    ]
+  },
+  {
+    "id": "JP_005",
+    "language": "Japanese",
+    "job_title": "セキュリティエンジニア",
+    "personal_info": {
+      "name": "渡辺優子",
+      "email": "渡辺優子984@gmail.com",
+      "address": "大阪府渋谷区10-11-12オフィス401号",
+      "postal_code": "447-2790",
+      "phone": "093-4139-4116",
+      "date_of_birth": "1997-01-11"
+    },
+    "education": {
+      "university": "上智大学",
+      "degree": "コンピュータサイエンス学士号",
+      "graduation_year": 2012
+    },
+    "work_experience": [
+      {
+        "company": "Rakuten",
+        "position": "セキュリティエンジニア",
+        "start_year": 2016,
+        "end_year": 2023,
+        "description": "セキュリティエンジニアとして、最新技術を用いた業務に従事。"
+      },
+      {
+        "company": "SoftBank",
+        "position": "シニアセキュリティエンジニア",
+        "start_year": 2021,
+        "end_year": null,
+        "description": "セキュリティエンジニア領域でのリード業務と後進の指導を実施。"
+      }
+    ],
+    "technologies": [
+      "Penetration Testing",
+      "SIEM",
+      "Firewall",
+      "Linux",
+      "SSL/TLS"
+    ],
+    "certifications": [
+      "AWSソリューションアーキテクト",
+      "クラウドプラクティショナー認定",
+      "GCP Professional Data Engineer"
+    ]
+  }
+]

@@ -159,3 +159,56 @@ models:
   defaults:
     en: bert_ner_en
     ja: knosing_ner_ja
+
+# Structure Restoration Configuration
+structure_restoration:
+  section_headings:
+    contact:
+      ja: ["連絡先", "住所", "基本情報", "個人情報"]
+      en: ["Contact", "Personal", "Personal Information"]
+    education:
+      ja: ["学歴"]
+      en: ["Education", "Academic", "EDUCATION"]
+    experience:
+      ja: ["職歴", "職務経歴", "経歴", "職務経歴書サマリー"]
+      en: ["Experience", "Work Experience", "Employment", "WORK EXPERIENCE", "PROFESSIONAL SUMMARY"]
+    skills:
+      ja: ["スキル", "技術", "技術スキル"]
+      en: ["Skills", "Technical Skills", "TECHNICAL SKILLS"]
+    certifications:
+      ja: ["資格", "認定"]
+      en: ["Certifications", "Licenses", "CERTIFICATIONS"]
+
+# Candidate Extraction Configuration
+candidate_extraction:
+  entity_priority:
+    - EMAIL_ADDRESS
+    - PHONE_NUMBER_JP
+    - PHONE_NUMBER
+    - JP_ZIP_CODE
+    - US_ZIP_CODE
+    - JP_ADDRESS
+    - LOCATION
+    - JP_PERSON
+    - PERSON
+    - DATE_OF_BIRTH_JP
+    - DATE
+    - JP_AGE
+    - JP_GENDER
+
+# Verification Configuration
+verification:
+  score_thresholds:
+    mask: 0.7
+    review: 0.5
+  section_policies:
+    education:
+      person_penalty: -0.3
+      address_penalty: -0.2
+    experience:
+      person_penalty: -0.3
+      address_penalty: -0.2
+    contact:
+      person_boost: 0.2
+      address_boost: 0.2
+
