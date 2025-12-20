@@ -104,7 +104,7 @@ class TestConfigurationHandling:
 
     def test_load_config(self):
         """D7: Configuration file loading."""
-        from analyzer_factory import load_config
+        from config import load_config
 
         config = load_config()
 

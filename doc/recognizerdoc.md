@@ -484,7 +484,7 @@ transformers>=4.30.0
 ```python
 # main.py の該当箇所を修正
 
-from analyzer_factory import create_analyzer, create_japanese_analyzer
+from core.analyzer import create_analyzer, create_japanese_analyzer
 
 # 既存のパターン+GiNZA
 analyzer_basic = create_japanese_analyzer(use_ginza=True, verbose=True)

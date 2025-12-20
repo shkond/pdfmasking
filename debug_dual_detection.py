@@ -8,7 +8,7 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import NlpEngineProvider
 
 from document_extractors import extract_text
-from recognizer_registry import create_default_registry
+from recognizers.registry import create_default_registry
 
 
 def debug_dual_detection():

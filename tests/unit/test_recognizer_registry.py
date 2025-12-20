@@ -2,7 +2,7 @@
 
 import pytest
 
-from recognizer_registry import (
+from recognizers.registry import (
     create_default_registry,
 )
 

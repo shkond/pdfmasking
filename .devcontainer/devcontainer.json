@@ -29,7 +29,7 @@
             }
         }
     },
-    "postCreateCommand": "pip install --no-cache-dir -e '.[dev]'",
+    "postCreateCommand": "pip install -r requirements.txt",
     "remoteUser": "vscode",
     "workspaceFolder": "/workspaces/pdfmasking",
     "mounts": [

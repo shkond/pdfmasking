@@ -84,7 +84,7 @@ class TestTransformerNERRecognizer:
 
     def test_registry_with_transformer(self):
         """Test that registry correctly includes Transformer recognizers."""
-        from recognizer_registry import create_default_registry
+        from recognizers.registry import create_default_registry
 
         registry = create_default_registry(
             use_ginza=False,
@@ -102,7 +102,7 @@ class TestTransformerNERRecognizer:
 
     def test_config_loading(self):
         """Test that configuration loading works correctly."""
-        from analyzer_factory import get_transformer_config, load_config
+        from config import get_transformer_config, load_config
 
         config = load_config()
         transformer_cfg = get_transformer_config(config)
@@ -125,7 +125,7 @@ class TestTransformerNERRecognizer:
 
     def test_summary_includes_transformer(self):
         """Test that registry summary includes Transformer section."""
-        from recognizer_registry import create_default_registry
+        from recognizers.registry import create_default_registry
 
         registry = create_default_registry(
             use_ginza=False,

@@ -7,3 +7,12 @@ Masking Log - 2025-12-19 13:59:23
 [JP_ZIP_CODE] "652-4295" (score: 0.60, pos: 100-108)
 [JP_ZIP_CODE] "016-2022" (score: 0.60, pos: 251-259)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-20 12:33:26
+============================================================
+[EMAIL_ADDRESS] "nnnn775@company.com" (score: 1.00, pos: 13-32)
+[PHONE_NUMBER_JP] "094-7537-7118" (score: 0.70, pos: 41-54)
+[JP_ZIP_CODE] "652-4295" (score: 0.60, pos: 100-108)
+[JP_ZIP_CODE] "016-2022" (score: 0.60, pos: 251-259)
+Total: 4 entities masked

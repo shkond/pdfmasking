@@ -39,7 +39,7 @@ def hybrid_detection_analyze(
     from presidio_analyzer import AnalyzerEngine
     from presidio_analyzer.nlp_engine import NlpEngineProvider
 
-    from recognizer_registry import create_default_registry
+    from recognizers.registry import create_default_registry
 
     all_results = []
 

@@ -6,3 +6,11 @@ Masking Log - 2025-12-19 13:58:51
 [JP_ZIP_CODE] "476-4598" (score: 0.60, pos: 64-72)
 [JP_ZIP_CODE] "017-2024" (score: 0.60, pos: 404-412)
 Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-20 12:33:03
+============================================================
+[EMAIL_ADDRESS] "david_johnson723@yahoo.com" (score: 1.00, pos: 22-48)
+[JP_ZIP_CODE] "476-4598" (score: 0.60, pos: 64-72)
+[JP_ZIP_CODE] "017-2024" (score: 0.60, pos: 404-412)
+Total: 3 entities masked

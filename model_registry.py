@@ -46,7 +46,7 @@ class ModelRegistry:
     
     Example:
         >>> from model_registry import ModelRegistry
-        >>> from analyzer_factory import load_config
+        >>> from config import load_config
         >>> 
         >>> config = load_config()
         >>> registry = ModelRegistry(config)

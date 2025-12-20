@@ -43,13 +43,19 @@ def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
         - enabled: bool
         - device: str ("cpu" or "cuda")
         - min_confidence: float
+        - models_registry: dict (from models.registry)
+        - models_defaults: dict (from models.defaults)
     """
     transformer = config.get("transformer", {})
+    models = config.get("models", {})
 
     return {
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
         "min_confidence": transformer.get("min_confidence", 0.8),
+        # Model Registry info
+        "models_registry": models.get("registry", {}),
+        "models_defaults": models.get("defaults", {}),
     }
 
 
