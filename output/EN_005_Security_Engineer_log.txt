@@ -1,0 +1,16 @@
+
+============================================================
+Masking Log - 2025-12-19 13:58:59
+============================================================
+[EMAIL_ADDRESS] "jessica_miller758@company.com" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "774-9830" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 383-391)
+Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-20 12:33:10
+============================================================
+[EMAIL_ADDRESS] "jessica_miller758@company.com" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "774-9830" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 383-391)
+Total: 3 entities masked

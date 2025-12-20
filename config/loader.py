@@ -3,13 +3,13 @@
 This module handles loading and parsing of config.yaml settings.
 """
 
-from typing import Dict, Any, Optional
 from pathlib import Path
+from typing import Any
 
 import yaml
 
 
-def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+def load_config(config_path: str | None = None) -> dict[str, Any]:
     """
     Load configuration from YAML file.
     
@@ -24,14 +24,14 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
         config_path = Path(__file__).parent.parent / "config.yaml"
     else:
         config_path = Path(config_path)
-    
+
     if config_path.exists():
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
     return {}
 
 
-def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
+def get_transformer_config(config: dict[str, Any]) -> dict[str, Any]:
     """
     Extract transformer configuration from main config.
     
@@ -43,23 +43,49 @@ def get_transformer_config(config: Dict[str, Any]) -> Dict[str, Any]:
         - enabled: bool
         - device: str ("cpu" or "cuda")
         - min_confidence: float
-        - require_dual_detection: bool
-        - english_model: str
-        - japanese_model: str
+        - models_registry: dict (from models.registry)
+        - models_defaults: dict (from models.defaults)
     """
     transformer = config.get("transformer", {})
-    
+    models = config.get("models", {})
+
     return {
         "enabled": transformer.get("enabled", False),
         "device": transformer.get("device", "cpu"),
         "min_confidence": transformer.get("min_confidence", 0.8),
-        "require_dual_detection": transformer.get("require_dual_detection", True),
-        "english_model": transformer.get("english", {}).get("model_name", "dslim/bert-base-NER"),
-        "japanese_model": transformer.get("japanese", {}).get("model_name", "knosing/japanese_ner_model"),
+        # Model Registry info
+        "models_registry": models.get("registry", {}),
+        "models_defaults": models.get("defaults", {}),
     }
 
 
-def get_entities_to_mask(config: Dict[str, Any]) -> list:
+def get_detection_strategy(config: dict[str, Any]) -> dict[str, list]:
+    """
+    Get detection strategy configuration.
+    
+    Defines which entities are handled by Transformer NER vs Pattern recognizers.
+    
+    Args:
+        config: Configuration dictionary
+        
+    Returns:
+        Dict with keys:
+        - transformer_entities: list of entity types for Transformer
+        - pattern_entities: list of entity types for Pattern/GiNZA
+    """
+    strategy = config.get("detection_strategy", {})
+    return {
+        "transformer_entities": strategy.get("transformer_entities", [
+            "JP_PERSON", "JP_ADDRESS", "PERSON", "LOCATION"
+        ]),
+        "pattern_entities": strategy.get("pattern_entities", [
+            "PHONE_NUMBER_JP", "JP_ZIP_CODE", "DATE_OF_BIRTH_JP",
+            "JP_AGE", "JP_GENDER", "EMAIL_ADDRESS"
+        ]),
+    }
+
+
+def get_entities_to_mask(config: dict[str, Any]) -> list:
     """
     Get the list of entity types to mask from config.
     
@@ -82,7 +108,7 @@ def get_entities_to_mask(config: Dict[str, Any]) -> list:
     return config.get("entities_to_mask", [])
 
 
-def get_entity_categories(config: Dict[str, Any]) -> Dict[str, list]:
+def get_entity_categories(config: dict[str, Any]) -> dict[str, list]:
     """
     Get entity categories for type normalization in Dual Detection.
     

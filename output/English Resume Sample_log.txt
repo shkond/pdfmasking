@@ -1,0 +1,104 @@
+
+============================================================
+Masking Log - 2025-12-15 12:18:27
+Mode: Dual Detection (Pattern + Transformer)
+============================================================
+[LOCATION] "Tokyo" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 53-58)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 60-65)
+[ORGANIZATION] "Computer Science
+Toyohashi University of Technology" (pattern: ORGANIZATION=0.85, transformer: ORGANIZATION=1.00, pos: 572-623)
+[LOCATION] "Aichi" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 625-630)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 632-637)
+[ORGANIZATION] "National Institute of Technology" (pattern: ORGANIZATION=0.85, transformer: ORGANIZATION=1.00, pos: 840-872)
+[LOCATION] "Aichi" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 874-879)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 881-886)
+Total: 8 entities masked
+
+============================================================
+Masking Log - 2025-12-16 03:35:01
+Mode: Dual Detection (Pattern + Transformer)
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+[LOCATION] "Tokyo" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 53-58)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 60-65)
+[LOCATION] "Aichi" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 625-630)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 632-637)
+[LOCATION] "Aichi" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 874-879)
+[LOCATION] "Japan" (pattern: LOCATION=0.85, transformer: LOCATION=1.00, pos: 881-886)
+Total: 7 entities masked
+
+============================================================
+Masking Log - 2025-12-17 00:29:02
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+[LOCATION] "Tokyo" (score: 1.00, pos: 53-58)
+[LOCATION] "Japan" (score: 1.00, pos: 60-65)
+[LOCATION] "Aichi" (score: 1.00, pos: 625-630)
+[LOCATION] "Japan" (score: 1.00, pos: 632-637)
+[LOCATION] "Aichi" (score: 1.00, pos: 874-879)
+[LOCATION] "Japan" (score: 1.00, pos: 881-886)
+Total: 7 entities masked
+
+============================================================
+Masking Log - 2025-12-17 00:36:59
+============================================================
+[PERSON] "TARO YAMAMOTO" (score: 0.85, pos: 0-13)
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+[LOCATION] "Tokyo" (score: 0.85, pos: 53-58)
+[LOCATION] "Japan" (score: 0.85, pos: 60-65)
+[LOCATION] "Aichi" (score: 0.85, pos: 625-630)
+[LOCATION] "Japan" (score: 0.85, pos: 632-637)
+[LOCATION] "Aichi" (score: 0.85, pos: 874-879)
+[LOCATION] "Japan" (score: 0.85, pos: 881-886)
+[LOCATION] "Tokyo" (score: 0.85, pos: 2450-2455)
+[LOCATION] "Japan" (score: 0.85, pos: 2457-2462)
+[LOCATION] "Keras" (score: 0.85, pos: 3026-3031)
+[PERSON] "Docker" (score: 0.85, pos: 3258-3264)
+[PERSON] "Git" (score: 0.85, pos: 3328-3331)
+[PERSON] "Jupyter Notebook" (score: 0.85, pos: 3342-3358)
+[LOCATION] "YouTube" (score: 0.85, pos: 3619-3626)
+[PERSON] "Docker" (score: 0.85, pos: 3826-3832)
+[PERSON] "Dean" (score: 0.85, pos: 4462-4466)
+Total: 17 entities masked
+
+============================================================
+Masking Log - 2025-12-17 01:23:43
+============================================================
+[PERSON] "TARO YAMAMOTO" (score: 0.85, pos: 0-13)
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+[LOCATION] "Tokyo" (score: 0.85, pos: 53-58)
+[LOCATION] "Japan" (score: 0.85, pos: 60-65)
+[LOCATION] "Aichi" (score: 0.85, pos: 625-630)
+[LOCATION] "Japan" (score: 0.85, pos: 632-637)
+[LOCATION] "Aichi" (score: 0.85, pos: 874-879)
+[LOCATION] "Japan" (score: 0.85, pos: 881-886)
+[LOCATION] "Tokyo" (score: 0.85, pos: 2450-2455)
+[LOCATION] "Japan" (score: 0.85, pos: 2457-2462)
+[PERSON] "Jupyter Notebook" (score: 0.85, pos: 3342-3358)
+[LOCATION] "YouTube" (score: 0.85, pos: 3619-3626)
+[PERSON] "Dean" (score: 0.85, pos: 4462-4466)
+Total: 13 entities masked
+
+============================================================
+Masking Log - 2025-12-17 09:28:21
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+Total: 1 entities masked
+
+============================================================
+Masking Log - 2025-12-19 13:57:43
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+Total: 1 entities masked
+
+============================================================
+Masking Log - 2025-12-19 13:58:29
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+Total: 1 entities masked
+
+============================================================
+Masking Log - 2025-12-20 12:32:40
+============================================================
+[JP_ZIP_CODE] "234-5678" (score: 0.60, pos: 22-30)
+Total: 1 entities masked

@@ -1,15 +1,15 @@
 """File processing utilities for batch PII masking.
 
-Handles processing of individual files and batch operations.
+Handles processing of individual files using the MaskingService layer.
+Delegates all masking logic to the MaskingService.
+
+Layer: Adapter (between CLI and Application layer)
 """
 
 import sys
 from pathlib import Path
-from typing import Optional
 
-from file_io.extractors import extract_text
-from core.masker import mask_pii_in_text
-from masking_logging import MaskingLogger
+from core.masking_service import MaskingServiceFactory
 
 
 def process_file(
@@ -17,10 +17,14 @@ def process_file(
     output_path: Path,
     log_path: Path,
     language: str,
-    verbose: bool
+    verbose: bool,
+    use_preprocessor: bool = False,
+    use_ner: bool = False
 ) -> None:
     """
     Process a single file: extract, mask, log, and save.
+    
+    Delegates to MaskingService for all masking operations.
     
     Args:
         input_path: Path to input document (PDF or Word)
@@ -28,39 +32,24 @@ def process_file(
         log_path: Path for masking log file
         language: Language code ("en", "ja", or "auto")
         verbose: If True, print detected entities
+        use_preprocessor: If True, use structure-aware TextPreprocessor pipeline
+        use_ner: If True (with use_preprocessor), enable NER engines
     """
     try:
-        # Setup logger for this file
-        logger = MaskingLogger()
-        logger.setup_file_handler(log_path)
+        # Create service with appropriate configuration
+        service = MaskingServiceFactory.create(
+            use_preprocessor=use_preprocessor,
+            use_ner=use_ner
+        )
         
-        # 1) Extract text from document
-        print(f"Extracting text from {input_path.name}...", file=sys.stderr)
-        text = extract_text(str(input_path))
+        # Delegate to MaskingService
+        service.process_file(
+            input_path=input_path,
+            output_path=output_path,
+            log_path=log_path,
+            language=language,
+            verbose=verbose
+        )
         
-        if not text.strip():
-            print(f"Warning: No text extracted from {input_path.name}.", file=sys.stderr)
-            return
-
-        # 2) Mask PII
-        print(f"Analyzing and masking PII (language: {language})...", file=sys.stderr)
-        masked, entities_info = mask_pii_in_text(text, language=language, verbose=verbose)
-
-        # 3) Show detected entities if verbose
-        if verbose and entities_info:
-            print(f"\n[{input_path.name}] Detected PII Entities:", file=sys.stderr)
-            for i, entity in enumerate(entities_info, 1):
-                print(f"{i}. {entity['type']}: '{entity['text']}' (score: {entity['score']:.2f})", file=sys.stderr)
-            print(f"Total: {len(entities_info)} entities detected", file=sys.stderr)
-
-        # 4) Output masked text
-        if output_path:
-            with open(output_path, "w", encoding="utf-8") as f:
-                f.write(masked)
-            print(f"Masked text saved to {output_path}", file=sys.stderr)
-        else:
-            print("\n=== Masked Text ===", file=sys.stderr)
-            print(masked)
-            
     except Exception as e:
         print(f"Error processing {input_path.name}: {e}", file=sys.stderr)

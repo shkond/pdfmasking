@@ -1,0 +1,43 @@
+Jessica Miller
+
+Email: ****
+
+Phone: +1-962-***-****
+
+Address: 456 Main Ave, Seattle, NY
+
+Postal Code: 42325
+
+Date of Birth: 1990-11-23
+
+PROFESSIONAL SUMMARY
+
+Experienced Security Engineer with expertise in OWASP, Linux, OAuth2.
+
+EDUCATION
+
+University of Melbourne - Bachelor of Science in Computer Science (2016)
+
+WORK EXPERIENCE
+
+Zoom - Security Engineer (2***-****)
+
+Responsible for security engineer tasks using modern technologies.
+
+Cisco - Senior Security Engineer (2021-nn)
+
+Leading technical initiatives and mentoring junior engineers in security engineer domain.
+
+TECHNICAL SKILLS
+
+OWASP, Linux, OAuth2, SSL/TLS, Penetration Testing
+
+CERTIFICATIONS
+
+(cid:127) AWS Certified Solutions Architect
+
+(cid:127) Cloud Practitioner Certification
+
+(cid:127) GCP Professional Data Engineer
+
+

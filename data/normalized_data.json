@@ -1,0 +1,497 @@
+[
+  {
+    "resume_id": "EN_001",
+    "language": "English",
+    "normalized_personal_info": {
+      "name": {
+        "original": "Jane Smith",
+        "format": "WESTERN",
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "full_name": "Jane Smith",
+        "alphabetic": true
+      },
+      "email": {
+        "original": "jane_smith859@outlook.com",
+        "local_part": "jane_smith859",
+        "domain": "outlook",
+        "tld": "com",
+        "normalized": "jane_smith859@outlook.com"
+      },
+      "address": {
+        "original": "456 Main Ave, New York, NY",
+        "format": "US",
+        "street": "456 Main Ave",
+        "city": "New York",
+        "state": "NY",
+        "normalized": "456 main ave, new york, ny"
+      },
+      "postal_code": {
+        "original": "23434",
+        "format": "US_5_DIGIT",
+        "normalized": "23434"
+      },
+      "phone": {
+        "original": "+1-892-958-9935",
+        "country_code": "+1",
+        "area_code": "892",
+        "number": "958-9935",
+        "normalized_format": "+1-892-958-9935"
+      },
+      "date_of_birth": {
+        "original": "1986-12-14",
+        "iso_format": "1986-12-14",
+        "year": 1986,
+        "month": 12,
+        "day": 14,
+        "age": 39,
+        "japanese_era": "昭和60"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_002",
+    "language": "English",
+    "normalized_personal_info": {
+      "name": {
+        "original": "Jessica Martinez",
+        "format": "WESTERN",
+        "first_name": "Jessica",
+        "last_name": "Martinez",
+        "full_name": "Jessica Martinez",
+        "alphabetic": true
+      },
+      "email": {
+        "original": "jessica_martinez384@gmail.com",
+        "local_part": "jessica_martinez384",
+        "domain": "gmail",
+        "tld": "com",
+        "normalized": "jessica_martinez384@gmail.com"
+      },
+      "address": {
+        "original": "456 Main Ave, Boston, WA",
+        "format": "US",
+        "street": "456 Main Ave",
+        "city": "Boston",
+        "state": "WA",
+        "normalized": "456 main ave, boston, wa"
+      },
+      "postal_code": {
+        "original": "46421",
+        "format": "US_5_DIGIT",
+        "normalized": "46421"
+      },
+      "phone": {
+        "original": "+1-359-420-6514",
+        "country_code": "+1",
+        "area_code": "359",
+        "number": "420-6514",
+        "normalized_format": "+1-359-420-6514"
+      },
+      "date_of_birth": {
+        "original": "1987-04-18",
+        "iso_format": "1987-04-18",
+        "year": 1987,
+        "month": 4,
+        "day": 18,
+        "age": 38,
+        "japanese_era": "昭和61"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_003",
+    "language": "English",
+    "normalized_personal_info": {
+      "name": {
+        "original": "Jane Rodriguez",
+        "format": "WESTERN",
+        "first_name": "Jane",
+        "last_name": "Rodriguez",
+        "full_name": "Jane Rodriguez",
+        "alphabetic": true
+      },
+      "email": {
+        "original": "jane_rodriguez400@techmail.jp",
+        "local_part": "jane_rodriguez400",
+        "domain": "techmail",
+        "tld": "jp",
+        "normalized": "jane_rodriguez400@techmail.jp"
+      },
+      "address": {
+        "original": "789 Tech Blvd, Austin, NY",
+        "format": "US",
+        "street": "789 Tech Blvd",
+        "city": "Austin",
+        "state": "NY",
+        "normalized": "789 tech blvd, austin, ny"
+      },
+      "postal_code": {
+        "original": "19116",
+        "format": "US_5_DIGIT",
+        "normalized": "19116"
+      },
+      "phone": {
+        "original": "+1-246-877-4733",
+        "country_code": "+1",
+        "area_code": "246",
+        "number": "877-4733",
+        "normalized_format": "+1-246-877-4733"
+      },
+      "date_of_birth": {
+        "original": "1991-06-29",
+        "iso_format": "1991-06-29",
+        "year": 1991,
+        "month": 6,
+        "day": 29,
+        "age": 34,
+        "japanese_era": "平成3"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_004",
+    "language": "English",
+    "normalized_personal_info": {
+      "name": {
+        "original": "David Johnson",
+        "format": "WESTERN",
+        "first_name": "David",
+        "last_name": "Johnson",
+        "full_name": "David Johnson",
+        "alphabetic": true
+      },
+      "email": {
+        "original": "david_johnson723@yahoo.com",
+        "local_part": "david_johnson723",
+        "domain": "yahoo",
+        "tld": "com",
+        "normalized": "david_johnson723@yahoo.com"
+      },
+      "address": {
+        "original": "654 Digital Ln, New York, NY",
+        "format": "US",
+        "street": "654 Digital Ln",
+        "city": "New York",
+        "state": "NY",
+        "normalized": "654 digital ln, new york, ny"
+      },
+      "postal_code": {
+        "original": "70589",
+        "format": "US_5_DIGIT",
+        "normalized": "70589"
+      },
+      "phone": {
+        "original": "+1-588-476-4598",
+        "country_code": "+1",
+        "area_code": "588",
+        "number": "476-4598",
+        "normalized_format": "+1-588-476-4598"
+      },
+      "date_of_birth": {
+        "original": "1992-04-10",
+        "iso_format": "1992-04-10",
+        "year": 1992,
+        "month": 4,
+        "day": 10,
+        "age": 33,
+        "japanese_era": "平成4"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_005",
+    "language": "English",
+    "normalized_personal_info": {
+      "name": {
+        "original": "Jessica Miller",
+        "format": "WESTERN",
+        "first_name": "Jessica",
+        "last_name": "Miller",
+        "full_name": "Jessica Miller",
+        "alphabetic": true
+      },
+      "email": {
+        "original": "jessica_miller758@company.com",
+        "local_part": "jessica_miller758",
+        "domain": "company",
+        "tld": "com",
+        "normalized": "jessica_miller758@company.com"
+      },
+      "address": {
+        "original": "456 Main Ave, Seattle, NY",
+        "format": "US",
+        "street": "456 Main Ave",
+        "city": "Seattle",
+        "state": "NY",
+        "normalized": "456 main ave, seattle, ny"
+      },
+      "postal_code": {
+        "original": "42325",
+        "format": "US_5_DIGIT",
+        "normalized": "42325"
+      },
+      "phone": {
+        "original": "+1-962-774-9830",
+        "country_code": "+1",
+        "area_code": "962",
+        "number": "774-9830",
+        "normalized_format": "+1-962-774-9830"
+      },
+      "date_of_birth": {
+        "original": "1990-11-23",
+        "iso_format": "1990-11-23",
+        "year": 1990,
+        "month": 11,
+        "day": 23,
+        "age": 35,
+        "japanese_era": "平成2"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_001",
+    "language": "Japanese",
+    "normalized_personal_info": {
+      "name": {
+        "original": "佐藤翔太",
+        "format": "JAPANESE",
+        "full_name": "佐藤翔太",
+        "character_count": 4,
+        "japanese_chars": true
+      },
+      "email": {
+        "original": "佐藤翔太710@gmail.com",
+        "local_part": "佐藤翔太710",
+        "domain": "gmail",
+        "tld": "com",
+        "normalized": "佐藤翔太710@gmail.com"
+      },
+      "address": {
+        "original": "埼玉県中央区10-11-12オフィス401号",
+        "format": "JAPANESE",
+        "normalized": "埼玉県中央区10-11-12オフィス401号",
+        "character_count": 22
+      },
+      "postal_code": {
+        "original": "357-1188",
+        "format": "JAPAN_7_DIGIT",
+        "prefix": "357",
+        "suffix": "1188",
+        "normalized": "357-1188"
+      },
+      "phone": {
+        "original": "091-9797-5371",
+        "country_code": "+81",
+        "area_code": "091",
+        "number": "9797-5371",
+        "normalized_format": "+81-091-9797-5371"
+      },
+      "date_of_birth": {
+        "original": "1992-08-18",
+        "iso_format": "1992-08-18",
+        "year": 1992,
+        "month": 8,
+        "day": 18,
+        "age": 33,
+        "japanese_era": "平成4"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_002",
+    "language": "Japanese",
+    "normalized_personal_info": {
+      "name": {
+        "original": "高橋大輔",
+        "format": "JAPANESE",
+        "full_name": "高橋大輔",
+        "character_count": 4,
+        "japanese_chars": true
+      },
+      "email": {
+        "original": "高橋大輔723@yahoo.com",
+        "local_part": "高橋大輔723",
+        "domain": "yahoo",
+        "tld": "com",
+        "normalized": "高橋大輔723@yahoo.com"
+      },
+      "address": {
+        "original": "神奈川県港区4-5-6オフィス401号",
+        "format": "JAPANESE",
+        "normalized": "神奈川県港区4-5-6オフィス401号",
+        "character_count": 19
+      },
+      "postal_code": {
+        "original": "897-9689",
+        "format": "JAPAN_7_DIGIT",
+        "prefix": "897",
+        "suffix": "9689",
+        "normalized": "897-9689"
+      },
+      "phone": {
+        "original": "090-6310-9005",
+        "country_code": "+81",
+        "area_code": "090",
+        "number": "6310-9005",
+        "normalized_format": "+81-090-6310-9005"
+      },
+      "date_of_birth": {
+        "original": "1985-06-09",
+        "iso_format": "1985-06-09",
+        "year": 1985,
+        "month": 6,
+        "day": 9,
+        "age": 40,
+        "japanese_era": "昭和59"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_003",
+    "language": "Japanese",
+    "normalized_personal_info": {
+      "name": {
+        "original": "佐藤次郎",
+        "format": "JAPANESE",
+        "full_name": "佐藤次郎",
+        "character_count": 4,
+        "japanese_chars": true
+      },
+      "email": {
+        "original": "佐藤次郎775@company.com",
+        "local_part": "佐藤次郎775",
+        "domain": "company",
+        "tld": "com",
+        "normalized": "佐藤次郎775@company.com"
+      },
+      "address": {
+        "original": "神奈川県港区10-11-12ビル301号",
+        "format": "JAPANESE",
+        "normalized": "神奈川県港区10-11-12ビル301号",
+        "character_count": 20
+      },
+      "postal_code": {
+        "original": "652-4295",
+        "format": "JAPAN_7_DIGIT",
+        "prefix": "652",
+        "suffix": "4295",
+        "normalized": "652-4295"
+      },
+      "phone": {
+        "original": "094-7537-7118",
+        "country_code": "+81",
+        "area_code": "094",
+        "number": "7537-7118",
+        "normalized_format": "+81-094-7537-7118"
+      },
+      "date_of_birth": {
+        "original": "1994-10-29",
+        "iso_format": "1994-10-29",
+        "year": 1994,
+        "month": 10,
+        "day": 29,
+        "age": 31,
+        "japanese_era": "平成6"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_004",
+    "language": "Japanese",
+    "normalized_personal_info": {
+      "name": {
+        "original": "山田太郎",
+        "format": "JAPANESE",
+        "full_name": "山田太郎",
+        "character_count": 4,
+        "japanese_chars": true
+      },
+      "email": {
+        "original": "山田太郎334@gmail.com",
+        "local_part": "山田太郎334",
+        "domain": "gmail",
+        "tld": "com",
+        "normalized": "山田太郎334@gmail.com"
+      },
+      "address": {
+        "original": "東京都港区1-2-3オフィス401号",
+        "format": "JAPANESE",
+        "normalized": "東京都港区1-2-3オフィス401号",
+        "character_count": 18
+      },
+      "postal_code": {
+        "original": "343-5562",
+        "format": "JAPAN_7_DIGIT",
+        "prefix": "343",
+        "suffix": "5562",
+        "normalized": "343-5562"
+      },
+      "phone": {
+        "original": "097-4510-9834",
+        "country_code": "+81",
+        "area_code": "097",
+        "number": "4510-9834",
+        "normalized_format": "+81-097-4510-9834"
+      },
+      "date_of_birth": {
+        "original": "1987-12-20",
+        "iso_format": "1987-12-20",
+        "year": 1987,
+        "month": 12,
+        "day": 20,
+        "age": 38,
+        "japanese_era": "昭和61"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_005",
+    "language": "Japanese",
+    "normalized_personal_info": {
+      "name": {
+        "original": "渡辺優子",
+        "format": "JAPANESE",
+        "full_name": "渡辺優子",
+        "character_count": 4,
+        "japanese_chars": true
+      },
+      "email": {
+        "original": "渡辺優子984@gmail.com",
+        "local_part": "渡辺優子984",
+        "domain": "gmail",
+        "tld": "com",
+        "normalized": "渡辺優子984@gmail.com"
+      },
+      "address": {
+        "original": "大阪府渋谷区10-11-12オフィス401号",
+        "format": "JAPANESE",
+        "normalized": "大阪府渋谷区10-11-12オフィス401号",
+        "character_count": 22
+      },
+      "postal_code": {
+        "original": "447-2790",
+        "format": "JAPAN_7_DIGIT",
+        "prefix": "447",
+        "suffix": "2790",
+        "normalized": "447-2790"
+      },
+      "phone": {
+        "original": "093-4139-4116",
+        "country_code": "+81",
+        "area_code": "093",
+        "number": "4139-4116",
+        "normalized_format": "+81-093-4139-4116"
+      },
+      "date_of_birth": {
+        "original": "1997-01-11",
+        "iso_format": "1997-01-11",
+        "year": 1997,
+        "month": 1,
+        "day": 11,
+        "age": 28,
+        "japanese_era": "平成9"
+      }
+    }
+  }
+]

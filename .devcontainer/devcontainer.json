@@ -8,16 +8,28 @@
         "vscode": {
             "extensions": [
                 "ms-python.python",
-                "ms-python.vscode-pylance"
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
-                "python.linting.enabled": true,
-                "python.formatting.provider": "black"
+                // Ruff設定
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.ruff": "explicit",
+                        "source.organizeImports.ruff": "explicit"
+                    }
+                },
+                // Ruffを優先するため、既存のlinterを無効化
+                "python.linting.enabled": false,
+                "ruff.lint.enable": true,
+                "ruff.format.enable": true
             }
         }
     },
-    "postCreateCommand": "pip install --no-cache-dir -r requirements.txt",
+    "postCreateCommand": "pip install -r requirements.txt",
     "remoteUser": "vscode",
     "workspaceFolder": "/workspaces/pdfmasking",
     "mounts": [

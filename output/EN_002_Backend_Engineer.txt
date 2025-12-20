@@ -1,0 +1,43 @@
+Jessica Martinez
+
+Email: ****
+
+Phone: +1-359-***-****
+
+Address: 456 Main Ave, Boston, WA
+
+Postal Code: 46421
+
+Date of Birth: 1987-04-18
+
+PROFESSIONAL SUMMARY
+
+Experienced Backend Engineer with expertise in Python, Spring Boot, .NET.
+
+EDUCATION
+
+Stanford University - Bachelor of Science in Computer Science (2016)
+
+WORK EXPERIENCE
+
+Apple - Backend Engineer (2***-****)
+
+Responsible for backend engineer tasks using modern technologies.
+
+Figma - Senior Backend Engineer (2022-nn)
+
+Leading technical initiatives and mentoring junior engineers in backend engineer domain.
+
+TECHNICAL SKILLS
+
+Python, Spring Boot, .NET, FastAPI, Go
+
+CERTIFICATIONS
+
+(cid:127) AWS Certified Solutions Architect
+
+(cid:127) Cloud Practitioner Certification
+
+(cid:127) CISSP
+
+

@@ -1,0 +1,422 @@
+[
+  {
+    "resume_id": "EN_001",
+    "language": "English",
+    "annotations": {
+      "名前 (name)": {
+        "value": "Jane Smith",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "jane_smith859@outlook.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "456 Main Ave, New York, NY",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "23434",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "+1-892-958-9935",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1986-12-14",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_002",
+    "language": "English",
+    "annotations": {
+      "名前 (name)": {
+        "value": "Jessica Martinez",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "jessica_martinez384@gmail.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "456 Main Ave, Boston, WA",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "46421",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "+1-359-420-6514",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1987-04-18",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_003",
+    "language": "English",
+    "annotations": {
+      "名前 (name)": {
+        "value": "Jane Rodriguez",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "jane_rodriguez400@techmail.jp",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "789 Tech Blvd, Austin, NY",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "19116",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "+1-246-877-4733",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1991-06-29",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_004",
+    "language": "English",
+    "annotations": {
+      "名前 (name)": {
+        "value": "David Johnson",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "david_johnson723@yahoo.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "654 Digital Ln, New York, NY",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "70589",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "+1-588-476-4598",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1992-04-10",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "EN_005",
+    "language": "English",
+    "annotations": {
+      "名前 (name)": {
+        "value": "Jessica Miller",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "jessica_miller758@company.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "456 Main Ave, Seattle, NY",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "42325",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "+1-962-774-9830",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1990-11-23",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_001",
+    "language": "Japanese",
+    "annotations": {
+      "名前 (name)": {
+        "value": "佐藤翔太",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "佐藤翔太710@gmail.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "埼玉県中央区10-11-12オフィス401号",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "357-1188",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "091-9797-5371",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1992-08-18",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_002",
+    "language": "Japanese",
+    "annotations": {
+      "名前 (name)": {
+        "value": "高橋大輔",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "高橋大輔723@yahoo.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "神奈川県港区4-5-6オフィス401号",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "897-9689",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "090-6310-9005",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1985-06-09",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_003",
+    "language": "Japanese",
+    "annotations": {
+      "名前 (name)": {
+        "value": "佐藤次郎",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "佐藤次郎775@company.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "神奈川県港区10-11-12ビル301号",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "652-4295",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "094-7537-7118",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1994-10-29",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_004",
+    "language": "Japanese",
+    "annotations": {
+      "名前 (name)": {
+        "value": "山田太郎",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "山田太郎334@gmail.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "東京都港区1-2-3オフィス401号",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "343-5562",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "097-4510-9834",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1987-12-20",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  },
+  {
+    "resume_id": "JP_005",
+    "language": "Japanese",
+    "annotations": {
+      "名前 (name)": {
+        "value": "渡辺優子",
+        "type": "PERSON_NAME",
+        "japanese_label": "名前",
+        "english_label": "Name"
+      },
+      "メールアドレス (email)": {
+        "value": "渡辺優子984@gmail.com",
+        "type": "EMAIL",
+        "japanese_label": "メールアドレス",
+        "english_label": "Email Address"
+      },
+      "住所 (address)": {
+        "value": "大阪府渋谷区10-11-12オフィス401号",
+        "type": "ADDRESS",
+        "japanese_label": "住所",
+        "english_label": "Address"
+      },
+      "郵便番号 (postal_code)": {
+        "value": "447-2790",
+        "type": "POSTAL_CODE",
+        "japanese_label": "郵便番号",
+        "english_label": "Postal Code"
+      },
+      "電話番号 (phone)": {
+        "value": "093-4139-4116",
+        "type": "PHONE",
+        "japanese_label": "電話番号",
+        "english_label": "Phone Number"
+      },
+      "生年月日 (date_of_birth)": {
+        "value": "1997-01-11",
+        "type": "DATE_OF_BIRTH",
+        "japanese_label": "生年月日",
+        "english_label": "Date of Birth"
+      }
+    }
+  }
+]

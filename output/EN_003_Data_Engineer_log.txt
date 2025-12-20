@@ -1,0 +1,16 @@
+
+============================================================
+Masking Log - 2025-12-19 13:58:45
+============================================================
+[EMAIL_ADDRESS] "jane_rodriguez400@techmail.jp" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "877-4733" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 375-383)
+Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-20 12:32:59
+============================================================
+[EMAIL_ADDRESS] "jane_rodriguez400@techmail.jp" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "877-4733" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 375-383)
+Total: 3 entities masked

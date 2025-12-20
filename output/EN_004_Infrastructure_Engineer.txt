@@ -1,0 +1,43 @@
+David Johnson
+
+Email: ****
+
+Phone: +1-588-***-****
+
+Address: 654 Digital Ln, New York, NY
+
+Postal Code: 70589
+
+Date of Birth: 1992-04-10
+
+PROFESSIONAL SUMMARY
+
+Experienced Infrastructure Engineer with expertise in Kubernetes, Docker, Terraform.
+
+EDUCATION
+
+University of Tokyo - Bachelor of Science in Computer Science (2013)
+
+WORK EXPERIENCE
+
+Microsoft - Infrastructure Engineer (2***-****)
+
+Responsible for infrastructure engineer tasks using modern technologies.
+
+VMware - Senior Infrastructure Engineer (2021-nn)
+
+Leading technical initiatives and mentoring junior engineers in infrastructure engineer domain.
+
+TECHNICAL SKILLS
+
+Kubernetes, Docker, Terraform, GCP, Azure
+
+CERTIFICATIONS
+
+(cid:127) AWS Certified Solutions Architect
+
+(cid:127) Cloud Practitioner Certification
+
+(cid:127) GCP Professional Data Engineer
+
+

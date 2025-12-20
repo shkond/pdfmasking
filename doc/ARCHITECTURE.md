@@ -5,6 +5,22 @@
 This project masks PII (Personal Identifiable Information) in PDF and Word documents.
 It supports both English and Japanese text.
 
+## Architecture Principles
+
+### Dependency Injection (DI)
+
+The system uses DI for the Domain and Application layers:
+
+- **Domain Layer (`core/masker.py`)**: `Masker` class accepts dependencies via constructor
+- **Application Layer (`core/masking_service.py`)**: `MaskingService` orchestrates the workflow
+- **Infrastructure Layer**: Recognizers, extractors can be directly instantiated
+
+### Single Source of Truth
+
+- **Configuration**: All config loading through `config/` package
+- **Analyzer Factory**: All analyzer creation through `core/analyzer.py`
+- **Recognizer Registry**: All recognizer management through `recognizers/registry.py`
+
 ## Target PII Types (8)
 
 | Entity Type | Japanese | Entity Code |
@@ -25,24 +41,27 @@ pdfmasking/
 ├── main.py                    # CLI entry point
 ├── config.yaml                # Configuration file
 │
-├── config/                    # Configuration loading
-│   ├── __init__.py
+├── config/                    # Configuration (Single Source of Truth)
+│   ├── __init__.py            # Re-exports load_config, get_*
 │   └── loader.py              # load_config, get_transformer_config, etc.
 │
-├── core/                      # Core masking logic
+├── core/                      # Domain + Application Layer (DI-enabled)
 │   ├── __init__.py
-│   ├── masker.py              # PIIMasker class, mask_pii_in_text
+│   ├── masker.py              # Masker class (Domain Layer)
+│   ├── masking_service.py     # MaskingService, MaskingServiceFactory (Application Layer)
+│   ├── masking_result.py      # MaskingResult dataclass
 │   ├── analyzer.py            # create_analyzer, create_multilingual_analyzer
+│   ├── protocols.py           # LoggerProtocol, TextExtractorProtocol, etc.
 │   └── processors/
 │       ├── __init__.py
-│       ├── text.py            # preprocess_text
+│       ├── text.py            # preprocess_text, TextPreprocessor
 │       ├── result.py          # deduplicate_results, merge_results
-│       └── dual_detection.py  # dual_detection_analyze
+│       └── hybrid_detection.py # Hybrid detection logic
 │
-├── file_io/                        # File I/O
+├── file_io/                   # Adapter Layer
 │   ├── __init__.py
-│   ├── extractors.py          # extract_text (PDF/Word)
-│   └── file_processor.py      # process_file
+│   ├── extractors.py          # TextExtractor (PDF/Word extraction)
+│   └── file_processor.py      # Thin adapter → MaskingServiceFactory.create()
 │
 ├── masking_logging/           # Logging utilities
 │   ├── __init__.py
@@ -55,28 +74,68 @@ pdfmasking/
 │   ├── japanese_ner.py        # GiNZA NER recognizers
 │   └── transformer_ner.py     # Transformer NER recognizers
 │
+├── model_registry.py          # ModelRegistry for Transformer model management
+│
 └── tests/                     # Test suite
-    ├── test_japanese_patterns.py
-    ├── test_log_output.py
-    ├── test_recognizer_registry.py
-    └── test_transformer_ner.py
+    ├── unit/
+    ├── integration/
+    └── accuracy/
+```
+
+## Layer Architecture
+
+```mermaid
+graph TB
+    subgraph "Adapter Layer"
+        CLI[main.py]
+        FP[file_processor.py]
+    end
+    
+    subgraph "Application Layer"
+        MS[MaskingService]
+        MSF[MaskingServiceFactory]
+    end
+    
+    subgraph "Domain Layer"
+        M[Masker]
+        MR[MaskingResult]
+    end
+    
+    subgraph "Infrastructure"
+        CFG[config/]
+        ANA[core/analyzer.py]
+        REG[recognizers/registry.py]
+        EXT[file_io/extractors.py]
+        LOG[masking_logging/]
+    end
+    
+    CLI --> FP
+    FP --> MSF
+    MSF --> MS
+    MS --> M
+    MS --> EXT
+    MS --> LOG
+    M --> ANA
+    M --> CFG
+    ANA --> REG
+    REG --> CFG
 ```
 
 ## Module Dependencies
 
 ```mermaid
 graph TD
-    main[main.py] --> core[core/]
-    main --> io[io/]
-    main --> recognizers[recognizers/]
-    main --> masking_logging[masking_logging/]
+    main[main.py] --> file_io[file_io/]
     
+    file_io --> core[core/masking_service.py]
+    
+    core --> masker[core/masker.py]
     core --> config[config/]
-    core --> recognizers
-    core --> masking_logging
     
-    io --> core
-    io --> masking_logging
+    masker --> analyzer[core/analyzer.py]
+    masker --> config
+    
+    analyzer --> recognizers[recognizers/registry.py]
     
     recognizers --> config
 ```
@@ -84,43 +143,138 @@ graph TD
 ## Key Components
 
 ### config/loader.py
+
+Configuration loading (Single Source of Truth):
+
 - `load_config()`: Load config.yaml
-- `get_transformer_config()`: Get Transformer settings
+- `get_transformer_config()`: Get Transformer settings (includes models_registry, models_defaults)
+- `get_detection_strategy()`: Get entity routing strategy
 - `get_entities_to_mask()`: Get target entity types
 - `get_entity_categories()`: Get entity category mappings
 
 ### core/masker.py
-- `PIIMasker`: Main class for PII masking
-- `mask_pii_in_text()`: Function-based API for masking
+
+Domain layer with Dependency Injection:
+
+```python
+class Masker:
+    def __init__(
+        self,
+        anonymizer: AnonymizerProtocol | None = None,
+        logger: LoggerProtocol | None = None,
+        config: dict[str, Any] | None = None
+    ):
+        ...
+    
+    def analyze(self, text: str, language: str = "auto") -> list:
+        ...
+    
+    def mask(self, text: str, language: str = "auto") -> MaskingResult:
+        ...
+```
+
+### core/masking_service.py
+
+Application layer for file-based processing:
+
+```python
+class MaskingService:
+    def __init__(self, extractor, masker, logger):
+        ...
+    
+    def process_file(self, input_path, output_path, log_path, language, verbose) -> MaskingResult:
+        ...
+
+class MaskingServiceFactory:
+    @staticmethod
+    def create(config=None, use_preprocessor=False, use_ner=False) -> MaskingService:
+        ...
+```
 
 ### core/analyzer.py
-- `create_analyzer()`: Create single-language analyzer
+
+Analyzer factory functions:
+
+- `create_analyzer(language)`: Create single-language analyzer
 - `create_multilingual_analyzer()`: Create en+ja analyzer
 - `create_japanese_analyzer()`: Create Japanese-specific analyzer
 
-### core/processors/
-- `text.py`: Text preprocessing for PDF-extracted text
-- `result.py`: Deduplication and merging of detection results
-- `dual_detection.py`: Pattern + Transformer consensus logic
-
 ### recognizers/registry.py
+
+Recognizer management:
+
 - `RecognizerRegistry`: Centralized recognizer management
-- `RecognizerConfig`: Recognizer metadata
+- `RecognizerConfig`: Recognizer metadata (type, language, entity_type)
 - `create_default_registry()`: Factory for default recognizers
 
-### io/
-- `extractors.py`: PDF and Word text extraction
-- `file_processor.py`: Single file processing logic
+### file_io/file_processor.py
+
+Thin adapter that delegates to MaskingService:
+
+```python
+def process_file(input_path, output_path, log_path, language, verbose, use_preprocessor, use_ner):
+    service = MaskingServiceFactory.create(use_preprocessor=use_preprocessor, use_ner=use_ner)
+    service.process_file(input_path, output_path, log_path, language, verbose)
+```
 
 ## Detection Modes
 
 ### Standard Mode
+
 Uses pattern-based recognizers for Japanese-specific patterns.
 
+### Hybrid Detection Mode
+
+When `transformer.enabled: true` in config.yaml:
+1. Pattern recognizers handle: PHONE, ZIP, DATE, AGE, GENDER, EMAIL
+2. Transformer NER handles: PERSON, ADDRESS
+
 ### Dual Detection Mode
-When `transformer.require_dual_detection: true` in config.yaml:
+
+When `transformer.require_dual_detection: true`:
 1. Runs pattern-based analysis
 2. Runs Transformer-based analysis
 3. Only masks entities detected by BOTH
 
 This reduces false positives for name/address entities.
+
+## Usage Examples
+
+### Using MaskingService (Recommended)
+
+```python
+from core.masking_service import MaskingServiceFactory
+
+service = MaskingServiceFactory.create()
+result = service.process_file(
+    input_path=Path("document.pdf"),
+    output_path=Path("output/masked.txt"),
+    log_path=Path("output/log.txt"),
+    language="ja",
+    verbose=True
+)
+```
+
+### Using Masker Directly
+
+```python
+from core.masker import Masker
+from presidio_anonymizer import AnonymizerEngine
+from config import load_config
+
+masker = Masker(
+    anonymizer=AnonymizerEngine(),
+    config=load_config()
+)
+result = masker.mask("山田太郎、電話：090-1234-5678", language="ja")
+print(result.masked_text)
+```
+
+### Using Analyzer
+
+```python
+from core.analyzer import create_analyzer
+
+analyzer = create_analyzer(language="ja")
+results = analyzer.analyze(text, language="ja", entities=["JP_PERSON", "PHONE_NUMBER_JP"])
+```

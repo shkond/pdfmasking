@@ -97,18 +97,20 @@ python main.py resume.docx --lang ja -o output.txt
 pdfmasking/
 ├── main.py                    # CLIエントリーポイント
 ├── config.yaml                # 設定ファイル
-├── config/                    # 設定読み込み
-│   └── loader.py              
-├── core/                      # マスキングコアロジック
-│   ├── masker.py              # PIIMasker
-│   ├── analyzer.py            # Analyzer作成
+├── config/                    # 設定管理（単一ソース）
+│   ├── __init__.py            # load_config, get_* をエクスポート
+│   └── loader.py              # 設定読み込み関数
+├── core/                      # ドメイン・アプリケーション層
+│   ├── masker.py              # Masker (ドメイン層、DI対応)
+│   ├── masking_service.py     # MaskingService (アプリケーション層)
+│   ├── analyzer.py            # Analyzer作成ファクトリ
 │   └── processors/            # テキスト・結果処理
-├── file_io/                        # ファイル入出力
+├── file_io/                   # アダプター層
 │   ├── extractors.py          # PDF/Word抽出
-│   └── file_processor.py      
+│   └── file_processor.py      # MaskingServiceへの委譲
 ├── masking_logging/           # ロギング
 ├── recognizers/               # PII認識器
-│   ├── registry.py            # Registry
+│   ├── registry.py            # RecognizerRegistry
 │   ├── japanese_patterns.py   # パターンベース
 │   ├── japanese_ner.py        # GiNZA NER
 │   └── transformer_ner.py     # Transformer NER

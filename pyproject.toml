@@ -1,0 +1,50 @@
+[tool.ruff]
+line-length = 100  # ML系は88より少し長めが一般的
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E", "W",   # pycodestyle
+  "F",        # pyflakes
+  "I",        # isort
+  "B",        # bugbear
+  "C4",       # comprehensions
+  "UP",       # pyupgrade
+  "SIM",      # simplify
+  "RUF",      # Ruff固有
+  "NPY002",   # numpy legacy random (重要!)
+  "PERF",     # パフォーマンス
+  "PL",       # pylint (ただし一部除外)
+]
+
+ignore = [
+  "E501",     # 行長 (formatterに任せる)
+  "PLR0913",  # 引数が多い (モデル設定で必要)
+  "PLR0915",  # 文が多い (データ処理)
+  "PLR2004",  # マジックナンバー (閾値等)
+  "B008",     # 関数呼び出しのデフォルト引数
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "PLR2004"]
+"debug_*.py" = ["T201"]  # print許可
+
+[tool.ruff.lint.isort]
+section-order = [
+  "future",
+  "standard-library", 
+  "third-party",
+  "first-party",
+  "local-folder"
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration"]
+markers = [
+    "accuracy: marks tests as accuracy tests (deselect with '-m not accuracy')",
+    "slow: marks tests as slow (deselect with '-m not slow')",
+]
