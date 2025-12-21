@@ -1,0 +1,98 @@
+Source File: English Resume Sample.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | PERSON               | 0.85  | TARO YAMAMOTO
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | (090) 1234-5678
+TransformerNERRecognizer            | LOCATION             | 1.00  | Tokyo
+SpacyRecognizer                     | LOCATION             | 0.85  | Tokyo
+TransformerNERRecognizer            | LOCATION             | 1.00  | Japan
+SpacyRecognizer                     | LOCATION             | 0.85  | Japan
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Computer Science
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | NLP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Master of Engineering
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Computer Science Toyohashi University of Technology
+TransformerNERRecognizer            | ORGANIZATION         | 1.00  | Toyohashi University of Technology
+TransformerNERRecognizer            | LOCATION             | 1.00  | Aichi
+SpacyRecognizer                     | LOCATION             | 0.85  | Aichi
+TransformerNERRecognizer            | LOCATION             | 1.00  | Japan
+SpacyRecognizer                     | LOCATION             | 0.85  | Japan
+SpacyRecognizer                     | DATE_TIME            | 0.85  | March 2026
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Information Technology
+TransformerNERRecognizer            | ORGANIZATION         | 1.00  | National Institute of Technology
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | National Institute of Technology
+TransformerNERRecognizer            | LOCATION             | 1.00  | Aichi
+SpacyRecognizer                     | LOCATION             | 0.85  | Aichi
+TransformerNERRecognizer            | LOCATION             | 1.00  | Japan
+SpacyRecognizer                     | LOCATION             | 0.85  | Japan
+SpacyRecognizer                     | DATE_TIME            | 0.85  | March 2022
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Specialized
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Personal Projects & Freelance
+SpacyRecognizer                     | DATE_TIME            | 0.85  | March 2023
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | YouTube
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Google Drive API
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OAuth
+SpacyRecognizer                     | DATE_TIME            | 0.85  | monthly
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Mutagen
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | MCP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Microsoft Graph API
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | LLM
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | NLP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AI
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Machine Learning Research
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Toyohashi University of Technology
+SpacyRecognizer                     | DATE_TIME            | 0.85  | October 2023
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | PyTorch
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | TensorFlow
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | NLP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Mentored 2
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Tech Solutions Company
+SpacyRecognizer                     | LOCATION             | 0.85  | Tokyo
+SpacyRecognizer                     | LOCATION             | 0.85  | Japan
+SpacyRecognizer                     | DATE_TIME            | 0.85  | June 2023
+SpacyRecognizer                     | DATE_TIME            | 0.85  | August
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | API
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SQL
+SpacyRecognizer                     | DATE_TIME            | 0.85  | daily
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2-week
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Java
+SpacyRecognizer                     | NRP                  | 0.85  | C++
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SQL
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AI & Machine Learning
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | TensorFlow
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | PyTorch
+SpacyRecognizer                     | LOCATION             | 0.85  | Keras
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Computer Vision
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | LLM Integration
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | ASP.NET
+UrlRecognizer                       | URL                  | 0.50  | ASP.NET
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | React
+SpacyRecognizer                     | DATE_TIME            | 0.85  | Node.js
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Microsoft Azure
+SpacyRecognizer                     | PERSON               | 0.85  | Docker
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | GitHub  Database & Tools: PostgreSQL
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Elasticsearch
+SpacyRecognizer                     | PERSON               | 0.85  | Git
+SpacyRecognizer                     | PERSON               | 0.85  | Jupyter Notebook
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AWS
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | API Development & Integration, Dependency Injection
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Automated YouTube Content Pipeline
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2024
+SpacyRecognizer                     | LOCATION             | 0.85  | YouTube
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OAuth2
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Google API
+SpacyRecognizer                     | PERSON               | 0.85  | Docker
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2024
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Mutagen
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | MCP
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2024
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Google Cloud Professional Cloud Architect
+SpacyRecognizer                     | PERSON               | 0.85  | Dean
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Toyohashi University of Technology
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Best Project Award
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AI & Machine Learning Showcase
+SpacyRecognizer                     | NRP                  | 0.85  | Japanese

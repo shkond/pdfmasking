@@ -1,0 +1,22 @@
+Source File: document.pdf
+Detected Language: ja
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+JapaneseNameRecognizer              | JP_PERSON            | 0.85  | 山田 太郎
+JapaneseNameRecognizer              | JP_PERSON            | 0.85  | やまだ たろう
+JapaneseBirthDateRecognizer         | DATE_OF_BIRTH_JP     | 1.00  | 1995年4月15日
+JapaneseAgeRecognizer               | JP_AGE               | 0.80  | 29歳
+JapaneseGenderRecognizer            | JP_GENDER            | 0.70  | 男性
+JapaneseZipCodeRecognizer           | JP_ZIP_CODE          | 0.60  | 100-0001
+JapaneseAddressRecognizer           | JP_ADDRESS           | 0.70  | 東京都千代田区千代田1-1
+JapanesePhoneRecognizer             | PHONE_NUMBER_JP      | 0.80  | 090-1234-5678
+JapaneseZipCodeRecognizer           | JP_ZIP_CODE          | 0.60  | 090-1234
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 090-1234-5678
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | taro.yamada@example.com
+UrlRecognizer                       | URL                  | 0.50  | example.com
+TransformerNERRecognizer            | JP_ADDRESS           | 0.94  | 東京都立第一高等学校
+TransformerNERRecognizer            | JP_ORGANIZATION      | 0.97  | 東京工業大学
+TransformerNERRecognizer            | JP_ORGANIZATION      | 0.93  | 株式会社サンプルテック
+UrlRecognizer                       | URL                  | 0.50  | ASP.NET
+UrlRecognizer                       | URL                  | 0.50  | ASP.NET

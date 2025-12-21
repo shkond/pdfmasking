@@ -1,0 +1,27 @@
+Source File: EN_001_Frontend_Engineer.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+TransformerNERRecognizer            | PERSON               | 0.97  | Jane Smith
+SpacyRecognizer                     | PERSON               | 0.85  | Jane Smith
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | jane_smith859@outlook.com
+UrlRecognizer                       | URL                  | 0.50  | outlook.com
+TransformerNERRecognizer            | LOCATION             | 0.98  | Main Ave
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Main Ave
+TransformerNERRecognizer            | LOCATION             | 1.00  | New York
+SpacyRecognizer                     | LOCATION             | 0.85  | New York
+TransformerNERRecognizer            | LOCATION             | 1.00  | NY
+SpacyRecognizer                     | LOCATION             | 0.85  | NY
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 23434  Date of Birth:
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1986-12-14
+DateRecognizer                      | DATE_TIME            | 0.60  | 1986-12-14
+SpacyRecognizer                     | PERSON               | 0.85  | Webpack
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | University of Melbourne - Bachelor of Science in Computer Science
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Microsoft - Frontend Engineer
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2015-2021
+TransformerNERRecognizer            | ORGANIZATION         | 1.00  | Oracle
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2021-nn
+SpacyRecognizer                     | PERSON               | 0.85  | Webpack
+TransformerNERRecognizer            | ORGANIZATION         | 0.95  | Ku

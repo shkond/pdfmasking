@@ -16,3 +16,21 @@ Masking Log - 2025-12-20 12:33:29
 [JP_ZIP_CODE] "343-5562" (score: 0.60, pos: 96-104)
 [JP_ZIP_CODE] "016-2024" (score: 0.60, pos: 250-258)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-21 05:04:29
+============================================================
+[EMAIL_ADDRESS] "nnnn334@gmail.com" (score: 1.00, pos: 13-30)
+[PHONE_NUMBER_JP] "097-4510-9834" (score: 0.70, pos: 39-52)
+[JP_ZIP_CODE] "343-5562" (score: 0.60, pos: 96-104)
+[JP_ZIP_CODE] "016-2024" (score: 0.60, pos: 250-258)
+Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-21 09:23:29
+============================================================
+[EMAIL_ADDRESS] "nnnn334@gmail.com" (score: 1.00, pos: 13-30)
+[PHONE_NUMBER_JP] "097-4510-9834" (score: 0.70, pos: 39-52)
+[JP_ZIP_CODE] "343-5562" (score: 0.60, pos: 96-104)
+[JP_ZIP_CODE] "016-2024" (score: 0.60, pos: 250-258)
+Total: 4 entities masked

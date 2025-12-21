@@ -1,0 +1,21 @@
+Source File: JP_005_セキュリティエンジニア.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnn  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | nnnn984@gmail.com
+UrlRecognizer                       | URL                  | 0.50  | gmail.com
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 093-4139-4116
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1997-01-11
+DateRecognizer                      | DATE_TIME            | 0.60  | 1997-01-11
+SpacyRecognizer                     | LOCATION             | 0.85  | SIEM
+SpacyRecognizer                     | PERSON               | 0.85  | Firewallnnnnnnnn  nn  nnnn - nnnnnnnnnnnnnn
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2012
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016-2023
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SoftBank
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SIEM
+SpacyRecognizer                     | LOCATION             | 0.85  | Firewall
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Linux
+TransformerNERRecognizer            | ORGANIZATION         | 0.88  | SS
+TransformerNERRecognizer            | ORGANIZATION         | 0.83  | G

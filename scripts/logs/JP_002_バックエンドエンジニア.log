@@ -1,0 +1,25 @@
+Source File: JP_002_バックエンドエンジニア.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnn  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | nnnn723@yahoo.com
+UrlRecognizer                       | URL                  | 0.50  | yahoo.com
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 090-6310-9005
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1985-06-09
+DateRecognizer                      | DATE_TIME            | 0.60  | 1985-06-09
+TransformerNERRecognizer            | ORGANIZATION         | 0.86  | Python
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+TransformerNERRecognizer            | ORGANIZATION         | 0.95  | Spring Boot
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2015
+TransformerNERRecognizer            | LOCATION             | 0.99  | Japan
+SpacyRecognizer                     | LOCATION             | 0.85  | Japan
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016-2021
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Java
+TransformerNERRecognizer            | ORGANIZATION         | 0.86  | Python
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+TransformerNERRecognizer            | ORGANIZATION         | 0.92  | Spring Boot
+SpacyRecognizer                     | PERSON               | 0.85  | Spring Boot
+SpacyRecognizer                     | PERSON               | 0.85  | Node.js  nn
+TransformerNERRecognizer            | ORGANIZATION         | 0.88  | GCP

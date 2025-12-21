@@ -32,7 +32,6 @@ TRANSFORMER_AVAILABLE = False
 try:
     from recognizers.transformer_ner import (
         TransformerNERRecognizer,
-        create_transformer_recognizer,
     )
     TRANSFORMER_AVAILABLE = True
 except ImportError:
@@ -243,43 +242,46 @@ def create_default_registry(
 
     # === Transformer-based recognizers (if available and enabled) ===
     if use_transformer and TRANSFORMER_AVAILABLE:
-        # English model config
-        en_model_config = transformer_section.get("english", {})
-        en_model_name = en_model_config.get("model_name", "dslim/bert-base-NER")
-        en_entities = en_model_config.get("entities", ["PERSON", "LOCATION", "ORGANIZATION"])
-
-        # Japanese model config
-        ja_model_config = transformer_section.get("japanese", {})
-        ja_model_name = ja_model_config.get("model_name", "knosing/japanese_ner_model")
-        ja_entities = ja_model_config.get("entities", ["JP_PERSON", "JP_ADDRESS", "JP_ORGANIZATION"])
+        # Get models registry and defaults from app_config
+        models_config = app_config.get("models", {})
+        models_registry = models_config.get("registry", {})
+        models_defaults = models_config.get("defaults", {})
 
         # English Transformer recognizer
-        registry.register(RecognizerConfig(
-            recognizer=create_transformer_recognizer(
-                model_config=en_model_config,
+        en_model_id = models_defaults.get("en")
+        if en_model_id and en_model_id in models_registry:
+            en_model_config = models_registry[en_model_id]
+            registry.register(RecognizerConfig(
+                recognizer=create_transformer_recognizer(
+                    model_config=en_model_config,
+                    language="en",
+                    transformer_config=transformer_section,
+                    model_id=en_model_id
+                ),
+                type="ner_transformer",
                 language="en",
-                transformer_config=transformer_section
-            ),
-            type="ner_transformer",
-            language="en",
-            entity_type=",".join(en_entities),
-            description=f"English NER via {en_model_name}",
-            requires_nlp=False
-        ))
+                entity_type=",".join(en_model_config.get("entities", [])),
+                description=en_model_config.get("description", f"English NER via {en_model_id}"),
+                requires_nlp=False
+            ))
 
         # Japanese Transformer recognizer
-        registry.register(RecognizerConfig(
-            recognizer=create_transformer_recognizer(
-                model_config=ja_model_config,
+        ja_model_id = models_defaults.get("ja")
+        if ja_model_id and ja_model_id in models_registry:
+            ja_model_config = models_registry[ja_model_id]
+            registry.register(RecognizerConfig(
+                recognizer=create_transformer_recognizer(
+                    model_config=ja_model_config,
+                    language="ja",
+                    transformer_config=transformer_section,
+                    model_id=ja_model_id
+                ),
+                type="ner_transformer",
                 language="ja",
-                transformer_config=transformer_section
-            ),
-            type="ner_transformer",
-            language="ja",
-            entity_type=",".join(ja_entities),
-            description=f"Japanese NER via {ja_model_name}",
-            requires_nlp=False
-        ))
+                entity_type=",".join(ja_model_config.get("entities", [])),
+                description=ja_model_config.get("description", f"Japanese NER via {ja_model_id}"),
+                requires_nlp=False
+            ))
     elif use_transformer and not TRANSFORMER_AVAILABLE:
         warnings.warn(
             "Transformer recognizers requested but 'torch' and 'transformers' libraries are not available. "
@@ -287,3 +289,43 @@ def create_default_registry(
         )
 
     return registry
+
+
+def create_transformer_recognizer(
+    model_config: dict,
+    language: str,
+    transformer_config: dict,
+    model_id: str | None = None
+) -> TransformerNERRecognizer:
+    """
+    設定駆動のTransformer認識器ファクトリー
+    
+    Args:
+        model_config: モデル設定 (model_name, tokenizer_name, entities, label_mapping)
+        language: 言語コード ("en" or "ja")
+        transformer_config: Transformer全体設定 (min_confidence, device)
+        model_id: モデルID（ロギング・識別用、省略可）
+        
+    Returns:
+        設定に基づいたTransformerNERRecognizer
+    """
+    # Get label mapping from model_config first, then fallback to transformer_config
+    label_mapping = model_config.get("label_mapping")
+    if label_mapping is None:
+        label_mapping = transformer_config.get("label_mapping", {}).get(language, {})
+
+    model_name = model_config.get("model_name")
+    if model_id:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.debug(f"[{model_id}] Creating recognizer: {model_name}")
+
+    return TransformerNERRecognizer(
+        model_name=model_name,
+        tokenizer_name=model_config.get("tokenizer_name"),
+        supported_language=language,
+        supported_entities=model_config.get("entities", []),
+        min_confidence=transformer_config.get("min_confidence", 0.8),
+        device=transformer_config.get("device", "cpu"),
+        label_mapping=label_mapping
+    )

@@ -14,3 +14,19 @@ Masking Log - 2025-12-20 12:32:44
 [JP_ZIP_CODE] "958-9935" (score: 0.60, pos: 60-68)
 [JP_ZIP_CODE] "015-2021" (score: 0.60, pos: 383-391)
 Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-21 05:03:35
+============================================================
+[EMAIL_ADDRESS] "jane_smith859@outlook.com" (score: 1.00, pos: 19-44)
+[JP_ZIP_CODE] "958-9935" (score: 0.60, pos: 60-68)
+[JP_ZIP_CODE] "015-2021" (score: 0.60, pos: 383-391)
+Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-21 09:22:52
+============================================================
+[EMAIL_ADDRESS] "jane_smith859@outlook.com" (score: 1.00, pos: 19-44)
+[JP_ZIP_CODE] "958-9935" (score: 0.60, pos: 60-68)
+[JP_ZIP_CODE] "015-2021" (score: 0.60, pos: 383-391)
+Total: 3 entities masked

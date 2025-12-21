@@ -1,0 +1,34 @@
+Source File: EN_004_Infrastructure_Engineer.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+TransformerNERRecognizer            | PERSON               | 0.99  | David Johnson
+SpacyRecognizer                     | PERSON               | 0.85  | David Johnson
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | david_johnson723@yahoo.com
+UrlRecognizer                       | URL                  | 0.50  | yahoo.com
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | +1-588-476-4598
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Digital Ln
+TransformerNERRecognizer            | LOCATION             | 1.00  | New York
+SpacyRecognizer                     | LOCATION             | 0.85  | New York
+TransformerNERRecognizer            | LOCATION             | 1.00  | NY
+SpacyRecognizer                     | LOCATION             | 0.85  | NY
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 70589  Date of
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1992-04-10
+DateRecognizer                      | DATE_TIME            | 0.60  | 1992-04-10
+SpacyRecognizer                     | LOCATION             | 0.85  | Kubernetes
+SpacyRecognizer                     | PERSON               | 0.85  | Docker
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Terraform
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | University of Tokyo - Bachelor of Science in Computer Science
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2013
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Microsoft - Infrastructure Engineer
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2017-2024
+TransformerNERRecognizer            | ORGANIZATION         | 0.90  | VMware
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2021-nn
+SpacyRecognizer                     | PERSON               | 0.85  | Docker
+TransformerNERRecognizer            | ORGANIZATION         | 0.89  | Terraform
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Terraform
+TransformerNERRecognizer            | ORGANIZATION         | 0.90  | GCP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | GCP
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Azure
+TransformerNERRecognizer            | ORGANIZATION         | 0.87  | Cloud Prac

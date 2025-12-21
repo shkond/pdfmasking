@@ -1,0 +1,29 @@
+Source File: EN_003_Data_Engineer.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+TransformerNERRecognizer            | PERSON               | 1.00  | Jane Rodriguez
+SpacyRecognizer                     | PERSON               | 0.85  | Jane Rodriguez  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | jane_rodriguez400@techmail.jp
+UrlRecognizer                       | URL                  | 0.50  | techmail.jp
+SpacyRecognizer                     | LOCATION             | 0.85  | Tech Blvd
+TransformerNERRecognizer            | LOCATION             | 0.99  | Austin
+SpacyRecognizer                     | LOCATION             | 0.85  | Austin
+TransformerNERRecognizer            | LOCATION             | 1.00  | NY
+SpacyRecognizer                     | LOCATION             | 0.85  | NY
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 19116  Date of
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1991-06-29
+DateRecognizer                      | DATE_TIME            | 0.60  | 1991-06-29
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | BigQuery
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Spark
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Hadoop
+TransformerNERRecognizer            | ORGANIZATION         | 0.99  | Stanford University
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Stanford University - Bachelor of Science in Computer Science
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2013
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Apple - Data Engineer
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2018-2023
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | BigQuery
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Spark
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Hadoop
+SpacyRecognizer                     | PERSON               | 0.85  | Kafka

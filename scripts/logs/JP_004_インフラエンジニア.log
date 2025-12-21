@@ -1,0 +1,25 @@
+Source File: JP_004_インフラエンジニア.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnn  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | nnnn334@gmail.com
+UrlRecognizer                       | URL                  | 0.50  | gmail.com
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 097-4510-9834  Address
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 097-4510-9834
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1987-12-20
+DateRecognizer                      | DATE_TIME            | 0.60  | 1987-12-20
+TransformerNERRecognizer            | ORGANIZATION         | 0.93  | A
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AWS
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2019
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016-2024
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnnnnnnnnnnnnnnnnnnnnnnnnn  Rakuten
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2021-nn
+TransformerNERRecognizer            | ORGANIZATION         | 0.85  | AWS
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | AWS
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Terraform
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Kubernetes
+TransformerNERRecognizer            | ORGANIZATION         | 0.81  | Kubernetes
+TransformerNERRecognizer            | ORGANIZATION         | 0.85  | GCP
+TransformerNERRecognizer            | ORGANIZATION         | 0.86  | A

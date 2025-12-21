@@ -1,0 +1,33 @@
+Source File: EN_005_Security_Engineer.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+TransformerNERRecognizer            | PERSON               | 0.99  | Jessica Miller
+SpacyRecognizer                     | PERSON               | 0.85  | Jessica Miller
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | jessica_miller758@company.com
+UrlRecognizer                       | URL                  | 0.50  | company.com
+TransformerNERRecognizer            | LOCATION             | 0.98  | Main Ave
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Main Ave
+TransformerNERRecognizer            | LOCATION             | 1.00  | Seattle
+SpacyRecognizer                     | LOCATION             | 0.85  | Seattle
+TransformerNERRecognizer            | LOCATION             | 1.00  | NY
+SpacyRecognizer                     | LOCATION             | 0.85  | NY
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1990-11-23
+DateRecognizer                      | DATE_TIME            | 0.60  | 1990-11-23
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OWASP
+SpacyRecognizer                     | LOCATION             | 0.85  | Linux
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OAuth2
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | University of Melbourne - Bachelor of Science in Computer Science
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2018-2023
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Cisco - Senior
+TransformerNERRecognizer            | ORGANIZATION         | 0.82  | C
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2021-nn
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OWASP
+SpacyRecognizer                     | LOCATION             | 0.85  | Linux
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | OAuth2
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SSL/TLS
+TransformerNERRecognizer            | ORGANIZATION         | 0.80  | SS
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Penetration Testing
+TransformerNERRecognizer            | ORGANIZATION         | 0.82  | GCP

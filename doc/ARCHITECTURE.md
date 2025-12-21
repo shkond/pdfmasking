@@ -31,8 +31,7 @@ The system uses DI for the Domain and Application layers:
 | Phone | 電話番号 | `PHONE_NUMBER_JP` |
 | Birth Date | 生年月日 | `DATE_OF_BIRTH_JP` |
 | Address | 住所 | `JP_ADDRESS`, `LOCATION` |
-| Gender | 性別 | `JP_GENDER` |
-| Age | 年齢 | `JP_AGE` |
+
 
 ## Directory Structure
 

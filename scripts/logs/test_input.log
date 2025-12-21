@@ -1,0 +1,8 @@
+Source File: test_input.txt
+Detected Language: ja
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+JapaneseAddressRecognizer           | JP_ADDRESS           | 0.70  | 東京都港区六本木
+JapanesePhoneRecognizer             | PHONE_NUMBER_JP      | 0.70  | 03-1234-5678
+JapaneseZipCodeRecognizer           | JP_ZIP_CODE          | 0.60  | 234-5678

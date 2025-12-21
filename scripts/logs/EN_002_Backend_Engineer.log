@@ -1,0 +1,29 @@
+Source File: EN_002_Backend_Engineer.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+TransformerNERRecognizer            | PERSON               | 1.00  | Jessica Martinez
+SpacyRecognizer                     | PERSON               | 0.85  | Jessica Martinez
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | jessica_martinez384@gmail.com
+UrlRecognizer                       | URL                  | 0.50  | gmail.com
+TransformerNERRecognizer            | LOCATION             | 0.97  | Main Ave
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Main Ave
+TransformerNERRecognizer            | LOCATION             | 0.99  | Boston
+SpacyRecognizer                     | LOCATION             | 0.85  | Boston
+TransformerNERRecognizer            | LOCATION             | 1.00  | WA
+SpacyRecognizer                     | LOCATION             | 0.85  | WA
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1987-04-18
+DateRecognizer                      | DATE_TIME            | 0.60  | 1987-04-18
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Python
+TransformerNERRecognizer            | ORGANIZATION         | 0.94  | Spring Boot
+SpacyRecognizer                     | PERSON               | 0.85  | Spring Boot
+TransformerNERRecognizer            | ORGANIZATION         | 0.99  | Stanford University
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Stanford University - Bachelor of Science in Computer Science
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Apple - Backend Engineer
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2017-2023
+TransformerNERRecognizer            | ORGANIZATION         | 0.98  | Spring Boot
+SpacyRecognizer                     | PERSON               | 0.85  | Spring Boot
+TransformerNERRecognizer            | ORGANIZATION         | 0.87  | FastAP
+TransformerNERRecognizer            | ORGANIZATION         | 0.93  | C

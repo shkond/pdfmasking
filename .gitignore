@@ -9,3 +9,7 @@ models/*
 Presidio
 models/*
 *pyc
+venv_linux/
+.venv/
+venv/
+venv*/

@@ -1,0 +1,29 @@
+Source File: JP_003_データエンジニア.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnn  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | nnnn775@company.com
+UrlRecognizer                       | URL                  | 0.50  | company.com
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 094-7537-7118
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1994-10-29
+DateRecognizer                      | DATE_TIME            | 0.60  | 1994-10-29
+TransformerNERRecognizer            | ORGANIZATION         | 0.98  | SQL
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SQL
+TransformerNERRecognizer            | ORGANIZATION         | 0.91  | Snowflake
+SpacyRecognizer                     | PERSON               | 0.85  | Snowflakennnnnnnn  nn  nnnn - nnnnnnnnnnnnnn
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2017
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Honda
+TransformerNERRecognizer            | ORGANIZATION         | 0.83  | Honda
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016-2022
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Toyota
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnnnnnnnnnnnnnnnnnnnnnnnnn
+TransformerNERRecognizer            | ORGANIZATION         | 0.89  | Python
+TransformerNERRecognizer            | ORGANIZATION         | 0.96  | SQL
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | SQL
+TransformerNERRecognizer            | ORGANIZATION         | 0.93  | Snowflake
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Snowflake, Spark
+TransformerNERRecognizer            | ORGANIZATION         | 0.85  | Spark
+TransformerNERRecognizer            | ORGANIZATION         | 0.88  | BigQ
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | BigQuery

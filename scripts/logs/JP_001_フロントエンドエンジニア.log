@@ -1,0 +1,19 @@
+Source File: JP_001_フロントエンドエンジニア.pdf
+Detected Language: en
+--------------------------------------------------------------------------------
+RECOGNIZER                          | ENTITY TYPE          | SCORE | TEXT
+--------------------------------------------------------------------------------
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | nnnn  Email
+EmailRecognizer                     | EMAIL_ADDRESS        | 1.00  | nnnn710@gmail.com
+UrlRecognizer                       | URL                  | 0.50  | gmail.com
+PhoneRecognizer                     | PHONE_NUMBER         | 0.40  | 091-9797-5371
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 1992-08-18
+DateRecognizer                      | DATE_TIME            | 0.60  | 1992-08-18
+TransformerNERRecognizer            | ORGANIZATION         | 0.99  | G
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2014
+SpacyRecognizer                     | DATE_TIME            | 0.85  | 2016-2024
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | Sony
+TransformerNERRecognizer            | ORGANIZATION         | 0.97  | G
+SpacyRecognizer                     | ORGANIZATION         | 0.85  | HTML5
+TransformerNERRecognizer            | ORGANIZATION         | 0.94  | A
+TransformerNERRecognizer            | ORGANIZATION         | 0.97  | G
