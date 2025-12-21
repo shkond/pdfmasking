@@ -67,6 +67,30 @@ python batch_process.py --dir C:\path\to\resumes
 - ✓ Person names (山田太郎)
 - ✓ Addresses (東京都渋谷区...)
 
+### Optional: ML Mode (Transformer / GPT PII Masker)
+
+This project supports an additional “ML path” which can use either:
+
+- Transformer NER (TokenClassification)
+- GPT PII Masker (CausalLM: `cameltech/japanese-gpt-1b-PII-masking`)
+
+Enable it in `config.yaml`:
+
+```yaml
+transformer:
+	enabled: true
+
+models:
+	defaults:
+		ja: gpt_pii_masker_ja   # or knosing_ner_ja
+```
+
+Notes:
+
+- ML mode requires `torch` + `transformers`.
+- GPT PII masker is GPU-first (`gpt_masker.require_gpu: true` by default).
+- GPT output is converted back to Presidio spans via span recovery; ambiguous matches are discarded for safety.
+
 ## Testing
 
 Create a test file `test_resume.txt`:

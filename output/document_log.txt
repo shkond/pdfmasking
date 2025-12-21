@@ -75,3 +75,26 @@ Masking Log - 2025-12-21 09:22:42
 [PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 134-147)
 [EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
 Total: 6 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:53:53
+============================================================
+[DATE_OF_BIRTH_JP] "1995年4月15日" (score: 1.00, pos: 74-84)
+[JP_AGE] "29歳" (score: 0.80, pos: 85-88)
+[JP_GENDER] "男性" (score: 1.00, pos: 99-101)
+[JP_ZIP_CODE] "100-0001" (score: 0.95, pos: 104-112)
+[PHONE_NUMBER_JP] "090-1234-5678" (score: 1.00, pos: 134-147)
+[EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
+Total: 6 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "山田 太郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "taro.yamada@example.com" (score: 1.00, pos: 157-180)
+[JP_ADDRESS] "東京都千代田区" (score: 0.80, pos: 60-67)
+[DATE_OF_BIRTH_JP] "1995年4月15日" (score: 0.90, pos: 74-84)
+[JP_ZIP_CODE] "100-0001" (score: 0.80, pos: 104-112)
+[PHONE_NUMBER_JP] "090-1234-5678" (score: 0.80, pos: 134-147)
+Total: 6 entities masked

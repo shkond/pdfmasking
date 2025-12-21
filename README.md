@@ -4,16 +4,30 @@
 
 ## 概要
 
-このシステムは、Presidio と GiNZA を使用して、日本語の履歴書（PDF・Word）から個人情報を自動的に検出・マスキングします。
+このシステムは、Presidio を中心に Pattern / GiNZA(spaCy) /（任意で）機械学習モデルを組み合わせて、日本語の履歴書（PDF・Word）から個人情報を自動的に検出・マスキングします。
+
+機械学習（ML）モデルは設定で切り替えできます:
+
+- Transformer NER（TokenClassification）
+- GPT PII Masker（CausalLM: cameltech/japanese-gpt-1b-PII-masking）
 
 ## 対応している個人情報
 
-- **氏名・ふりがな** (JP_PERSON)
-- **住所** (JP_ADDRESS)
-- **電話番号** (PHONE_NUMBER_JP)
-- **郵便番号** (JP_ZIP_CODE)
-- **生年月日** (DATE_OF_BIRTH_JP)
-- **メールアドレス** (EMAIL_ADDRESS)
+主に以下を対象にしています（設定で増減可能）:
+
+- **氏名・ふりがな** (`JP_PERSON`)
+- **住所** (`JP_ADDRESS`)
+- **電話番号** (`PHONE_NUMBER_JP`)
+- **郵便番号** (`JP_ZIP_CODE`)
+- **生年月日** (`DATE_OF_BIRTH_JP`)
+- **メールアドレス** (`EMAIL_ADDRESS`)
+- **年齢** (`JP_AGE`)
+- **性別** (`JP_GENDER`)
+
+任意で以下も設定に含めています:
+
+- **組織名** (`JP_ORGANIZATION`)
+- **顧客ID** (`CUSTOMER_ID_JP`)
 
 ## インストール
 
@@ -113,6 +127,7 @@ pdfmasking/
 │   ├── registry.py            # RecognizerRegistry
 │   ├── japanese_patterns.py   # パターンベース
 │   ├── japanese_ner.py        # GiNZA NER
+│   ├── gpt_pii_masker.py       # GPT PII masker (CausalLM, span recovery)
 │   └── transformer_ner.py     # Transformer NER
 └── tests/
 ```
@@ -129,6 +144,27 @@ pdfmasking/
 | 住所 | `JP_ADDRESS`, `LOCATION` |
 | 性別 | `JP_GENDER` |
 | 年齢 | `JP_AGE` |
+
+※ `JP_ORGANIZATION` / `CUSTOMER_ID_JP` も設定に含めています（必要に応じて有効化）。
+
+### MLモデル切替（Transformer / GPT）
+
+ML経路は `config.yaml` の `transformer.enabled` で有効化されます。
+（歴史的命名の都合で `transformer` というキー名ですが、GPT PII masker の有効化もこのフラグで制御されています）
+
+切替は `models.defaults.ja` を変更します:
+
+```yaml
+transformer:
+	enabled: true
+
+models:
+	defaults:
+		ja: gpt_pii_masker_ja   # または knosing_ner_ja
+```
+
+GPT PII masker は生成系モデルのため、Presidio互換の `start/end` を満たすためにタグ→元文への位置復元を行います。
+復元に失敗した候補は誤マスク防止のため破棄し、`masking` ログに理由付きで記録します。
 
 ### パターンベース認識器
 
@@ -197,3 +233,5 @@ python -m pip install ginza ja-ginza
 - spacy
 - ginza
 - ja-ginza
+- torch（ML使用時）
+- transformers（ML使用時）

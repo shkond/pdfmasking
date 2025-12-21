@@ -8,6 +8,18 @@ Masking Log - 2025-12-19 13:59:23
 [JP_ZIP_CODE] "016-2022" (score: 0.60, pos: 251-259)
 Total: 4 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "鈴木 一郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn775@company.com" (score: 1.00, pos: 13-32)
+[JP_ADDRESS] "京都府京都市" (score: 0.80, pos: 60-66)
+[DATE_OF_BIRTH_JP] "1988-11-11" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "652-4295" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "094-7537-7118" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:33:26
 ============================================================
@@ -34,3 +46,24 @@ Masking Log - 2025-12-21 09:23:25
 [JP_ZIP_CODE] "652-4295" (score: 0.60, pos: 100-108)
 [JP_ZIP_CODE] "016-2022" (score: 0.60, pos: 251-259)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:41
+============================================================
+[EMAIL_ADDRESS] "nnnn775@company.com" (score: 1.00, pos: 13-32)
+[PHONE_NUMBER_JP] "094-7537-7118" (score: 0.70, pos: 41-54)
+[JP_ZIP_CODE] "652-4295" (score: 0.60, pos: 100-108)
+[JP_ZIP_CODE] "016-2022" (score: 0.60, pos: 251-259)
+Total: 4 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "鈴木 一郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn775@company.com" (score: 1.00, pos: 13-32)
+[JP_ADDRESS] "京都府京都市" (score: 0.80, pos: 60-66)
+[DATE_OF_BIRTH_JP] "1988-11-11" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "652-4295" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "094-7537-7118" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

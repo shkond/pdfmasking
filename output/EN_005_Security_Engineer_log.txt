@@ -7,6 +7,18 @@ Masking Log - 2025-12-19 13:58:59
 [JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 383-391)
 Total: 3 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "Jessica Miller" (score: 1.00, pos: 0-13)
+[EMAIL_ADDRESS] "jessica_miller758@company.com" (score: 1.00, pos: 23-52)
+[JP_ADDRESS] "神奈川県横浜市" (score: 0.80, pos: 60-68)
+[DATE_OF_BIRTH_JP] "1991-03-03" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "220-0001" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "080-7777-8888" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:33:10
 ============================================================
@@ -30,3 +42,23 @@ Masking Log - 2025-12-21 09:23:09
 [JP_ZIP_CODE] "774-9830" (score: 0.60, pos: 68-76)
 [JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 383-391)
 Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:24
+============================================================
+[EMAIL_ADDRESS] "jessica_miller758@company.com" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "774-9830" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 383-391)
+Total: 3 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "Jessica Miller" (score: 1.00, pos: 0-13)
+[EMAIL_ADDRESS] "jessica_miller758@company.com" (score: 1.00, pos: 23-52)
+[JP_ADDRESS] "神奈川県横浜市" (score: 0.80, pos: 60-68)
+[DATE_OF_BIRTH_JP] "1991-03-03" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "220-0001" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "080-7777-8888" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

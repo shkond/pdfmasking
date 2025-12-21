@@ -7,6 +7,18 @@ Masking Log - 2025-12-19 13:58:39
 [JP_ZIP_CODE] "017-2023" (score: 0.60, pos: 384-392)
 Total: 3 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "Jessica Martinez" (score: 1.00, pos: 0-16)
+[EMAIL_ADDRESS] "jessica_martinez384@gmail.com" (score: 1.00, pos: 25-54)
+[JP_ADDRESS] "大阪府大阪市" (score: 0.80, pos: 60-67)
+[DATE_OF_BIRTH_JP] "1989-12-31" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "530-0001" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "080-1111-2222" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:32:47
 ============================================================
@@ -30,3 +42,23 @@ Masking Log - 2025-12-21 09:22:56
 [JP_ZIP_CODE] "420-6514" (score: 0.60, pos: 70-78)
 [JP_ZIP_CODE] "017-2023" (score: 0.60, pos: 384-392)
 Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:08
+============================================================
+[EMAIL_ADDRESS] "jessica_martinez384@gmail.com" (score: 1.00, pos: 25-54)
+[JP_ZIP_CODE] "420-6514" (score: 0.60, pos: 70-78)
+[JP_ZIP_CODE] "017-2023" (score: 0.60, pos: 384-392)
+Total: 3 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "Jessica Martinez" (score: 1.00, pos: 0-16)
+[EMAIL_ADDRESS] "jessica_martinez384@gmail.com" (score: 1.00, pos: 25-54)
+[JP_ADDRESS] "大阪府大阪市" (score: 0.80, pos: 60-67)
+[DATE_OF_BIRTH_JP] "1989-12-31" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "530-0001" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "080-1111-2222" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

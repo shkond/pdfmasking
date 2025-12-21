@@ -21,7 +21,7 @@ The system uses DI for the Domain and Application layers:
 - **Analyzer Factory**: All analyzer creation through `core/analyzer.py`
 - **Recognizer Registry**: All recognizer management through `recognizers/registry.py`
 
-## Target PII Types (8)
+## Target PII Types
 
 | Entity Type | Japanese | Entity Code |
 |-------------|----------|-------------|
@@ -31,6 +31,13 @@ The system uses DI for the Domain and Application layers:
 | Phone | 電話番号 | `PHONE_NUMBER_JP` |
 | Birth Date | 生年月日 | `DATE_OF_BIRTH_JP` |
 | Address | 住所 | `JP_ADDRESS`, `LOCATION` |
+
+In practice we also support (config-driven):
+
+- `JP_AGE` (年齢)
+- `JP_GENDER` (性別)
+- `JP_ORGANIZATION` (組織名)
+- `CUSTOMER_ID_JP` (顧客ID)
 
 
 ## Directory Structure
@@ -71,9 +78,10 @@ pdfmasking/
 │   ├── registry.py            # RecognizerRegistry, create_default_registry
 │   ├── japanese_patterns.py   # Pattern-based recognizers
 │   ├── japanese_ner.py        # GiNZA NER recognizers
+│   ├── gpt_pii_masker.py       # GPT PII masker (CausalLM, span recovery)
 │   └── transformer_ner.py     # Transformer NER recognizers
 │
-├── model_registry.py          # ModelRegistry for Transformer model management
+├── model_registry.py          # ModelRegistry for config-driven ML model management
 │
 └── tests/                     # Test suite
     ├── unit/
@@ -225,8 +233,12 @@ Uses pattern-based recognizers for Japanese-specific patterns.
 ### Hybrid Detection Mode
 
 When `transformer.enabled: true` in config.yaml:
-1. Pattern recognizers handle: PHONE, ZIP, DATE, AGE, GENDER, EMAIL
-2. Transformer NER handles: PERSON, ADDRESS
+1. Pattern/GiNZA recognizers handle rule/NER-based entities.
+2. One ML recognizer is enabled based on `models.defaults.<lang>`:
+    - `type: transformer` → Transformer NER (TokenClassification)
+    - `type: gpt_pii_masker` → GPT PII Masker (CausalLM)
+
+Note: the config key is historically named `transformer.enabled`, but it gates the whole “ML path” (including GPT).
 
 ### Dual Detection Mode
 
@@ -236,6 +248,26 @@ When `transformer.require_dual_detection: true`:
 3. Only masks entities detected by BOTH
 
 This reduces false positives for name/address entities.
+
+### GPT PII Masker Notes (CausalLM)
+
+The GPT masker produces a tagged (masked) output and then performs **span recovery** to map each tagged item back to a `(start, end)` span in the original text.
+
+Design constraints:
+
+- Presidio integration requires `(start, end)` → span recovery is mandatory
+- If span recovery is ambiguous or fails, the candidate is discarded (fail-closed)
+- Discard reasons are logged via the `masking` logger
+
+Operational notes:
+
+- The model is loaded lazily (to keep unit tests/light runs fast)
+- GPU is assumed for production; see `gpt_masker.require_gpu` in `config.yaml`
+
+### PDF Extraction Noise Guard
+
+PDF text extraction sometimes yields stray tokens (e.g., punctuation/decoration) which NER may misclassify as persons.
+We apply a best-effort filter in `core/masker.py` to drop obviously non-meaningful `JP_PERSON/PERSON` entities.
 
 ## Usage Examples
 

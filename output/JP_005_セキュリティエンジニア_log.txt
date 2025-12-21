@@ -8,6 +8,18 @@ Masking Log - 2025-12-19 13:59:35
 [JP_ZIP_CODE] "016-2023" (score: 0.60, pos: 272-280)
 Total: 4 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "伊藤 三郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn984@gmail.com" (score: 1.00, pos: 13-30)
+[JP_ADDRESS] "宮城県仙台市" (score: 0.80, pos: 60-67)
+[DATE_OF_BIRTH_JP] "1994-09-09" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "447-2790" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "093-4139-4116" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:33:33
 ============================================================
@@ -34,3 +46,24 @@ Masking Log - 2025-12-21 09:23:33
 [JP_ZIP_CODE] "447-2790" (score: 0.60, pos: 100-108)
 [JP_ZIP_CODE] "016-2023" (score: 0.60, pos: 272-280)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:51
+============================================================
+[EMAIL_ADDRESS] "nnnn984@gmail.com" (score: 1.00, pos: 13-30)
+[PHONE_NUMBER_JP] "093-4139-4116" (score: 0.70, pos: 39-52)
+[JP_ZIP_CODE] "447-2790" (score: 0.60, pos: 100-108)
+[JP_ZIP_CODE] "016-2023" (score: 0.60, pos: 272-280)
+Total: 4 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "伊藤 三郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn984@gmail.com" (score: 1.00, pos: 13-30)
+[JP_ADDRESS] "宮城県仙台市" (score: 0.80, pos: 60-67)
+[DATE_OF_BIRTH_JP] "1994-09-09" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "447-2790" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "093-4139-4116" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

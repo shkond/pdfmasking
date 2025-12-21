@@ -38,6 +38,16 @@ try:
 except ImportError:
     pass
 
+# Conditional import for GPT-based PII masker (requires torch and transformers)
+GPT_MASKER_AVAILABLE = False
+try:
+    from .gpt_pii_masker import (
+        GPTPIIMaskerRecognizer,
+    )
+    GPT_MASKER_AVAILABLE = True
+except ImportError:
+    pass
+
 __all__ = [
     # Pattern recognizers
     "JapanesePhoneRecognizer",
@@ -56,10 +66,16 @@ __all__ = [
     "create_default_registry",
     "GINZA_AVAILABLE",
     "TRANSFORMER_AVAILABLE",
+    "GPT_MASKER_AVAILABLE",
 ]
 
 if TRANSFORMER_AVAILABLE:
     __all__.extend([
         "TransformerNERRecognizer",
         "create_transformer_recognizer",
+    ])
+
+if GPT_MASKER_AVAILABLE:
+    __all__.extend([
+        "GPTPIIMaskerRecognizer",
     ])
