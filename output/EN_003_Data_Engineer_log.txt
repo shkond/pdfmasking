@@ -7,6 +7,18 @@ Masking Log - 2025-12-19 13:58:45
 [JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 375-383)
 Total: 3 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "Jane Rodriguez" (score: 1.00, pos: 0-13)
+[EMAIL_ADDRESS] "jane_rodriguez400@techmail.jp" (score: 1.00, pos: 23-52)
+[JP_ADDRESS] "愛知県名古屋市" (score: 0.80, pos: 60-68)
+[DATE_OF_BIRTH_JP] "1992-05-20" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "460-0008" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "070-3333-4444" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:32:59
 ============================================================
@@ -30,3 +42,23 @@ Masking Log - 2025-12-21 09:23:00
 [JP_ZIP_CODE] "877-4733" (score: 0.60, pos: 68-76)
 [JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 375-383)
 Total: 3 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:14
+============================================================
+[EMAIL_ADDRESS] "jane_rodriguez400@techmail.jp" (score: 1.00, pos: 23-52)
+[JP_ZIP_CODE] "877-4733" (score: 0.60, pos: 68-76)
+[JP_ZIP_CODE] "018-2023" (score: 0.60, pos: 375-383)
+Total: 3 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "Jane Rodriguez" (score: 1.00, pos: 0-13)
+[EMAIL_ADDRESS] "jane_rodriguez400@techmail.jp" (score: 1.00, pos: 23-52)
+[JP_ADDRESS] "愛知県名古屋市" (score: 0.80, pos: 60-68)
+[DATE_OF_BIRTH_JP] "1992-05-20" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "460-0008" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "070-3333-4444" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

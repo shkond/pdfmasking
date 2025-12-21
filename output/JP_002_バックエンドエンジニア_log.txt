@@ -8,6 +8,18 @@ Masking Log - 2025-12-19 13:59:17
 [JP_ZIP_CODE] "016-2021" (score: 0.60, pos: 267-275)
 Total: 4 entities masked
 
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "佐藤 花子" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn723@yahoo.com" (score: 1.00, pos: 13-30)
+[JP_ADDRESS] "北海道札幌市" (score: 0.80, pos: 60-66)
+[DATE_OF_BIRTH_JP] "1993-02-14" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "897-9689" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "090-6310-9005" (score: 0.80, pos: 120-133)
+Total: 6 entities masked
+
 ============================================================
 Masking Log - 2025-12-20 12:33:23
 ============================================================
@@ -34,3 +46,24 @@ Masking Log - 2025-12-21 09:23:20
 [JP_ZIP_CODE] "897-9689" (score: 0.60, pos: 97-105)
 [JP_ZIP_CODE] "016-2021" (score: 0.60, pos: 267-275)
 Total: 4 entities masked
+
+============================================================
+Masking Log - 2025-12-21 12:54:36
+============================================================
+[EMAIL_ADDRESS] "nnnn723@yahoo.com" (score: 1.00, pos: 13-30)
+[PHONE_NUMBER_JP] "090-6310-9005" (score: 0.80, pos: 39-52)
+[JP_ZIP_CODE] "897-9689" (score: 0.60, pos: 97-105)
+[JP_ZIP_CODE] "016-2021" (score: 0.60, pos: 267-275)
+Total: 4 entities masked
+
+
+============================================================
+Masking Log - 2025-12-21 13:01:00
+============================================================
+[JP_PERSON] "佐藤 花子" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "nnnn723@yahoo.com" (score: 1.00, pos: 13-30)
+[JP_ADDRESS] "北海道札幌市" (score: 0.80, pos: 60-66)
+[DATE_OF_BIRTH_JP] "1993-02-14" (score: 0.80, pos: 80-90)
+[JP_ZIP_CODE] "897-9689" (score: 0.80, pos: 100-108)
+[PHONE_NUMBER_JP] "090-6310-9005" (score: 0.80, pos: 120-133)
+Total: 6 entities masked

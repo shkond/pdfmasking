@@ -101,13 +101,13 @@ def hybrid_detection_analyze(
             app_config=app_config
         )
         
-        # Get Transformer recognizers directly (avoid AnalyzerEngine default recognizers)
-        transformer_recognizers = [
+        # Get ML recognizers directly (avoid AnalyzerEngine default recognizers)
+        ml_recognizers = [
             config.recognizer for config in transformer_registry.configs
-            if config.type == "ner_transformer"
+            if config.type in {"ner_transformer", "ner_gpt_masker"}
         ]
         
-        for recognizer in transformer_recognizers:
+        for recognizer in ml_recognizers:
             # Match language
             if language == "auto" or recognizer.supported_language == language:
                 try:
@@ -117,6 +117,6 @@ def hybrid_detection_analyze(
                     )
                     all_results.extend(results)
                 except Exception as e:
-                    warnings.warn(f"Transformer analysis failed: {e}")
+                    warnings.warn(f"ML analysis failed: {e}")
 
     return all_results

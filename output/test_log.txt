@@ -1,0 +1,11 @@
+
+============================================================
+Masking Log - 2025-12-21 13:00:00
+============================================================
+[JP_PERSON] "テスト 太郎" (score: 0.90, pos: 0-5)
+[EMAIL_ADDRESS] "test@example.com" (score: 1.00, pos: 10-26)
+[JP_ADDRESS] "東京都渋谷区" (score: 0.80, pos: 30-36)
+[DATE_OF_BIRTH_JP] "2000-01-01" (score: 0.80, pos: 40-50)
+[JP_ZIP_CODE] "150-0001" (score: 0.80, pos: 60-68)
+[PHONE_NUMBER_JP] "090-0000-0000" (score: 0.80, pos: 70-83)
+Total: 6 entities masked

@@ -1,5 +1,7 @@
 """Centralized registry for managing recognizers with clear categorization."""
 
+from __future__ import annotations
+
 import warnings
 from dataclasses import dataclass
 from typing import Any, Literal
@@ -37,7 +39,17 @@ try:
 except ImportError:
     pass
 
-RecognizerType = Literal["pattern", "ner_ginza", "ner_presidio", "ner_transformer"]
+# Try to import GPT PII masker recognizer
+GPT_MASKER_AVAILABLE = False
+try:
+    from recognizers.gpt_pii_masker import (
+        GPTPIIMaskerRecognizer,
+    )
+    GPT_MASKER_AVAILABLE = True
+except ImportError:
+    pass
+
+RecognizerType = Literal["pattern", "ner_ginza", "ner_presidio", "ner_transformer", "ner_gpt_masker"]
 
 
 @dataclass
@@ -117,7 +129,7 @@ class RecognizerRegistry:
     def summary(self) -> str:
         """Generate a human-readable summary of registered recognizers."""
         lines = ["Recognizer Registry Summary:"]
-        for rtype in ["pattern", "ner_ginza", "ner_presidio", "ner_transformer"]:
+        for rtype in ["pattern", "ner_ginza", "ner_presidio", "ner_transformer", "ner_gpt_masker"]:
             configs = self.get_by_type(rtype)
             if configs:
                 lines.append(f"\n{rtype.upper()}:")
@@ -240,51 +252,43 @@ def create_default_registry(
             requires_nlp=True
         ))
 
-    # === Transformer-based recognizers (if available and enabled) ===
-    if use_transformer and TRANSFORMER_AVAILABLE:
+    # === ML-based recognizers (Transformer NER / GPT masker), driven by config ===
+    if use_transformer and (TRANSFORMER_AVAILABLE or GPT_MASKER_AVAILABLE):
         # Get models registry and defaults from app_config
         models_config = app_config.get("models", {})
         models_registry = models_config.get("registry", {})
         models_defaults = models_config.get("defaults", {})
 
-        # English Transformer recognizer
+        gpt_section = app_config.get("gpt_masker", {})
+
+        # English default model
         en_model_id = models_defaults.get("en")
         if en_model_id and en_model_id in models_registry:
             en_model_config = models_registry[en_model_id]
-            registry.register(RecognizerConfig(
-                recognizer=create_transformer_recognizer(
-                    model_config=en_model_config,
-                    language="en",
-                    transformer_config=transformer_section,
-                    model_id=en_model_id
-                ),
-                type="ner_transformer",
+            _register_ml_model(
+                registry=registry,
+                model_id=en_model_id,
+                model_config=en_model_config,
                 language="en",
-                entity_type=",".join(en_model_config.get("entities", [])),
-                description=en_model_config.get("description", f"English NER via {en_model_id}"),
-                requires_nlp=False
-            ))
+                transformer_config=transformer_section,
+                gpt_config=gpt_section,
+            )
 
-        # Japanese Transformer recognizer
+        # Japanese default model
         ja_model_id = models_defaults.get("ja")
         if ja_model_id and ja_model_id in models_registry:
             ja_model_config = models_registry[ja_model_id]
-            registry.register(RecognizerConfig(
-                recognizer=create_transformer_recognizer(
-                    model_config=ja_model_config,
-                    language="ja",
-                    transformer_config=transformer_section,
-                    model_id=ja_model_id
-                ),
-                type="ner_transformer",
+            _register_ml_model(
+                registry=registry,
+                model_id=ja_model_id,
+                model_config=ja_model_config,
                 language="ja",
-                entity_type=",".join(ja_model_config.get("entities", [])),
-                description=ja_model_config.get("description", f"Japanese NER via {ja_model_id}"),
-                requires_nlp=False
-            ))
-    elif use_transformer and not TRANSFORMER_AVAILABLE:
+                transformer_config=transformer_section,
+                gpt_config=gpt_section,
+            )
+    elif use_transformer and not (TRANSFORMER_AVAILABLE or GPT_MASKER_AVAILABLE):
         warnings.warn(
-            "Transformer recognizers requested but 'torch' and 'transformers' libraries are not available. "
+            "ML recognizers requested but required libraries are not available. "
             "Install them with: pip install torch transformers"
         )
 
@@ -328,4 +332,85 @@ def create_transformer_recognizer(
         min_confidence=transformer_config.get("min_confidence", 0.8),
         device=transformer_config.get("device", "cpu"),
         label_mapping=label_mapping
+    )
+
+
+def create_gpt_pii_masker_recognizer(
+    model_config: dict,
+    language: str,
+    gpt_config: dict,
+    model_id: str | None = None,
+) -> GPTPIIMaskerRecognizer:
+    """Config-driven factory for GPTPIIMaskerRecognizer."""
+    # Merge global config with model-specific overrides
+    device = model_config.get("device", gpt_config.get("device", "cuda"))
+    require_gpu = model_config.get("require_gpu", gpt_config.get("require_gpu", True))
+    generation_config = model_config.get("generation_config", gpt_config.get("generation_config"))
+
+    if model_id:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.debug(f"[{model_id}] Creating GPT PII masker: {model_config.get('model_name')}")
+
+    return GPTPIIMaskerRecognizer(
+        model_name=model_config.get("model_name"),
+        supported_language=language,
+        supported_entities=model_config.get("entities", []),
+        device=device,
+        require_gpu=require_gpu,
+        generation_config=generation_config,
+    )
+
+
+def _register_ml_model(
+    *,
+    registry: RecognizerRegistry,
+    model_id: str,
+    model_config: dict,
+    language: str,
+    transformer_config: dict,
+    gpt_config: dict,
+) -> None:
+    """Register one ML recognizer (Transformer or GPT) based on model_config['type']."""
+    model_type = model_config.get("type", "transformer")
+
+    if model_type == "transformer":
+        if not TRANSFORMER_AVAILABLE:
+            warnings.warn(
+                f"Transformer model '{model_id}' configured but transformer dependencies are unavailable."
+            )
+            return
+        recognizer = create_transformer_recognizer(
+            model_config=model_config,
+            language=language,
+            transformer_config=transformer_config,
+            model_id=model_id,
+        )
+        recognizer_type: RecognizerType = "ner_transformer"
+    elif model_type == "gpt_pii_masker":
+        if not GPT_MASKER_AVAILABLE:
+            warnings.warn(
+                f"GPT masker model '{model_id}' configured but dependencies are unavailable."
+            )
+            return
+        recognizer = create_gpt_pii_masker_recognizer(
+            model_config=model_config,
+            language=language,
+            gpt_config=gpt_config,
+            model_id=model_id,
+        )
+        recognizer_type = "ner_gpt_masker"
+    else:
+        warnings.warn(f"Unknown model type '{model_type}' for model '{model_id}'.")
+        return
+
+    registry.register(
+        RecognizerConfig(
+            recognizer=recognizer,
+            type=recognizer_type,
+            language=language,
+            entity_type=",".join(model_config.get("entities", [])),
+            description=model_config.get("description", f"ML recognizer via {model_id}"),
+            requires_nlp=False,
+        )
     )

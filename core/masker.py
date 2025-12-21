@@ -9,6 +9,8 @@ Layer: Domain
 Dependencies: Protocols from core.protocols
 """
 
+import re
+
 from datetime import datetime
 from typing import Any
 
@@ -29,6 +31,30 @@ from core.processors.hybrid_detection import hybrid_detection_analyze
 from core.processors.result import deduplicate_results, merge_results
 from core.processors.text import preprocess_text
 from core.protocols import AnonymizerProtocol, LoggerProtocol, NullLogger
+
+
+_PERSON_TEXT_RE = re.compile(r"[A-Za-z\u3040-\u30FF\u4E00-\u9FFF]")
+
+
+def _is_meaningful_entity(entity_text: str, entity_type: str) -> bool:
+    """Best-effort filter to drop obvious garbage entities.
+
+    Some PDF extractions include stray punctuation tokens (e.g., "~") that
+    can be falsely tagged as a person by NER. Those inflate counts and cause
+    downstream masking/logging noise.
+    """
+    if not entity_text:
+        return False
+    stripped = entity_text.strip()
+    if not stripped:
+        return False
+
+    if entity_type in {"JP_PERSON", "PERSON"}:
+        # Require at least one plausible name character.
+        if not _PERSON_TEXT_RE.search(stripped):
+            return False
+
+    return True
 
 
 def build_operators(config: dict[str, Any]) -> dict:
@@ -136,7 +162,9 @@ class Masker:
                 allow_list=self._allow_list
             )
         else:
-            all_entities = pattern_entities
+            # When ML detection is disabled, fall back to rule-based / spaCy / GiNZA
+            # for *all* entities to avoid dropping PERSON/ADDRESS/etc.
+            all_entities = list(dict.fromkeys([*pattern_entities, *transformer_entities]))
             
             if language == "auto":
                 analyzer = create_multilingual_analyzer(use_ginza=True, use_transformer=False)
@@ -153,6 +181,10 @@ class Masker:
                     text=text, language=language, entities=all_entities, allow_list=self._allow_list
                 )
         
+        results = [
+            r for r in results
+            if _is_meaningful_entity(text[r.start:r.end], getattr(r, "entity_type", ""))
+        ]
         return deduplicate_results(results, text)
     
     def mask(

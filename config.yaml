@@ -51,14 +51,20 @@ context_scoring:
 entities_to_mask:
 - JP_PERSON
 - JP_ADDRESS
+- JP_ORGANIZATION
 - PHONE_NUMBER_JP
 - JP_ZIP_CODE
 - DATE_OF_BIRTH_JP
 - JP_AGE
 - JP_GENDER
+- CUSTOMER_ID_JP
 - EMAIL_ADDRESS
 - PERSON
 - LOCATION
+- PHONE_NUMBER
+- ZIP_CODE
+- DATE
+- ADDRESS
 entity_categories:
   location:
   - LOCATION
@@ -73,18 +79,34 @@ entity_categories:
   - PERSON
   - JP_PERSON
   - PER
+  identifier:
+  - CUSTOMER_ID_JP
 masking:
   default_mask: '****'
   entity_masks:
     DATE_OF_BIRTH_JP: '****/**/**'
     JP_ADDRESS: '****'
     JP_PERSON: '****'
+    JP_ORGANIZATION: '****'
     JP_ZIP_CODE: '***-****'
     PHONE_NUMBER_JP: '***-****-****'
+    CUSTOMER_ID_JP: '****'
 transformer:
   device: cpu
   enabled: false
   min_confidence: 0.8
+
+# GPT PII masker (AutoModelForCausalLM) settings
+gpt_masker:
+  # Production is GPU-first
+  device: cuda
+  require_gpu: true
+  generation_config:
+    max_new_tokens: 256
+    num_beams: 3
+    num_return_sequences: 1
+    early_stopping: true
+    repetition_penalty: 3.0
 
 # 検出戦略: エンティティごとに使用するRecognizerを指定
 detection_strategy:
@@ -92,8 +114,8 @@ detection_strategy:
   transformer_entities:
     - JP_PERSON
     - JP_ADDRESS
-    - PERSON
-    - LOCATION
+    - JP_ORGANIZATION
+    - CUSTOMER_ID_JP
   # Pattern/GiNZA認識器が担当するエンティティ（ルールベース）
   pattern_entities:
     - PHONE_NUMBER_JP
@@ -155,6 +177,30 @@ models:
         I-ORG: JP_ORGANIZATION
       description: "Japanese NER - knosing/japanese_ner_model"
 
+    # 日本語 GPT PIIマスキングモデル
+    gpt_pii_masker_ja:
+      type: gpt_pii_masker
+      model_name: cameltech/japanese-gpt-1b-PII-masking
+      language: ja
+      device: cuda
+      require_gpu: true
+      generation_config:
+        max_new_tokens: 256
+        num_beams: 3
+        num_return_sequences: 1
+        early_stopping: true
+        repetition_penalty: 3.0
+      entities:
+        - JP_PERSON
+        - DATE_OF_BIRTH_JP
+        - PHONE_NUMBER_JP
+        - EMAIL_ADDRESS
+        - CUSTOMER_ID_JP
+        - JP_ADDRESS
+        - JP_ZIP_CODE
+        - JP_ORGANIZATION
+      description: "Japanese GPT PII Masking - cameltech/japanese-gpt-1b-PII-masking"
+
   # 言語ごとのデフォルトモデルID
   defaults:
     en: bert_ner_en
@@ -187,8 +233,10 @@ candidate_extraction:
     - PHONE_NUMBER
     - JP_ZIP_CODE
     - US_ZIP_CODE
+    - CUSTOMER_ID_JP
     - JP_ADDRESS
     - LOCATION
+    - JP_ORGANIZATION
     - JP_PERSON
     - PERSON
     - DATE_OF_BIRTH_JP
